@@ -1,6 +1,6 @@
-# FileExplorer
+# ConspectsManager
 
-Ladies and gentelman, here comes **the best FileExplorer** available.
+Ladies and gentelman, here comes **the best Conspects Manager** available.
 
 We come together as **żuczki** (beetles, almost like this famous band, but we are probably better at programming. Probably).
 
@@ -21,14 +21,20 @@ We come together as **żuczki** (beetles, almost like this famous band, but we a
 
 **[Szymon](https://github.com/Szyntos), [Olgierd](https://github.com/olgierdjw) and [Mikołaj](https://github.com/MikolajLH)** are our backend developers.
 
-## Another File Explorer?
+## Conspects Manager?
 Yup.
 
-But in our program not only can you traverse through directories but also **create copies, import templates or edit markdowns**. It will be like your best friend at the party - he will twist and shout along with you!
+If you are a person who create templates or conspects, our program will twist and shout along with you! Not only will it give you a possibility to traverse through directories but also **create copies, import templates or edit markdowns**. 
 
 ## Technical informations
 
-React.js and Django.
+Beetles march under moon's gentle light,
+
+**React.js and Django** join forces by night.
+
+Front-end flair, back-end grace,
+
+Together, they weave the web's embrace.
 
 
 ## How to use?

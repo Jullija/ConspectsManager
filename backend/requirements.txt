@@ -2,3 +2,4 @@ Django
 djangorestframework
 django-filter
 markdown
+django-extensions

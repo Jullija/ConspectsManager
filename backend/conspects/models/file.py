@@ -10,4 +10,3 @@ class File(TimeStampedModel):
                                  blank=False,
                                  null=False)
     content = models.BinaryField()
-    attachment = models.BooleanField(default=False)  # used for files that cannot be displayed

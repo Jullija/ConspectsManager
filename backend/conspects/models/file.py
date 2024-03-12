@@ -10,3 +10,7 @@ class File(TimeStampedModel):
                                  blank=False,
                                  null=False)
     content = models.BinaryField()
+
+    def __str__(self):
+        return f"{self.name} | {self.file_type}"
+

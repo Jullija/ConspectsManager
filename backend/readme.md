@@ -16,3 +16,9 @@ Make django migrations
 
 Run server
 ```python manage.py runserver```
+
+To use Django admin panel you have to create superuser.
+
+run ```python manage.py createsuperuser```
+
+Than you can login into ```http://127.0.0.1:8000/admin``` with created superuser account.

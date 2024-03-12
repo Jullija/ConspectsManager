@@ -118,3 +118,9 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# Extension that can be previewed
+PREVIEWABLE_EXTENSIONS = ["jpg", "png", "pdf"]
+
+# Extension that can be edited
+EDITABLE_EXTENSIONS = ["md", "txt"]

@@ -1,4 +1,4 @@
-export const getEditions = (courseID: number) => {
+export const getEditions = (courseId: number) => {
   return [
     { name: "edition 1", id: 1 },
     { name: "edition 2", id: 2 },

@@ -8,6 +8,7 @@ import Edition from "../screens/Edition/Edition";
 import AddEdition from "../screens/AddEdition/AddEdition";
 import AddCourse from "../screens/AddCourse/AddCourse";
 import Root from "../components/Root";
+import PageNotFound from "../screens/PageNotFound/PageNotFound";
 
 const routes = createBrowserRouter([
   {
@@ -46,6 +47,10 @@ const routes = createBrowserRouter([
       {
         path: "/add-edition/:courseId",
         element: <AddEdition />,
+      },
+      {
+        path: "*",
+        element: <PageNotFound />,
       },
     ],
   },

@@ -1,5 +1,3 @@
-import { Course } from "../types/types";
-
 export const getEditions = (courseID: number) => {
   return [
     { name: "edition 1", id: 1 },

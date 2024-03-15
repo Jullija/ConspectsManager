@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 
 const CoursesList = () => {
   const [courses, setCourses] = useState<Course[]>();
+
   useEffect(() => {
     setCourses(getCourses());
   }, []);

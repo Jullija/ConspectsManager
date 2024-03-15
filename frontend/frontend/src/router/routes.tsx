@@ -38,7 +38,7 @@ const routes = createBrowserRouter([
     element: <AccessRightsPanel />,
   },
   {
-    path: "/add-edition",
+    path: "/add-edition/:id",
     element: <AddEdition />,
   },
 ]);

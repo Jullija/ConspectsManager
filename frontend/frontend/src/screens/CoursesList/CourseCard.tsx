@@ -1,4 +1,4 @@
-import { Link, useNavigate, useNavigation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Course } from "../../types/types";
 
 interface CourseCardProps {

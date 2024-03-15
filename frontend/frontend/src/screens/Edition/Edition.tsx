@@ -1,9 +1,17 @@
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 const Edition = () => {
-  const { id } = useParams();
+  const params = useParams();
+  const id = Number(params.id);
 
-  return <p>Edition id: {id}</p>;
+  return (
+    <>
+      <p>Edition editionId: {id}</p>
+      <Link to={`/access-rights-panel/${id}`}>
+        <button>access rights</button>
+      </Link>
+    </>
+  );
 };
 
 export default Edition;

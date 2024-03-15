@@ -6,12 +6,12 @@ import EditionCard from "./EditionCard";
 
 const Course = () => {
   const params = useParams();
-  const id = Number(params.id);
+  const courseId = Number(params.id);
 
   const [editions, setEditions] = useState<Edition[]>();
 
   useEffect(() => {
-    setEditions(getEditions(id));
+    setEditions(getEditions(courseId));
   }, []);
 
   return (
@@ -22,8 +22,8 @@ const Course = () => {
         gap: 20,
       }}
     >
-      <p>Course id: {id} </p>
-      <Link to={"/add-edition"}>
+      <p>Course courseId: {courseId} </p>
+      <Link to={`/add-edition/${courseId}`}>
         <button>add edition</button>
       </Link>
       {editions?.map((edition) => (

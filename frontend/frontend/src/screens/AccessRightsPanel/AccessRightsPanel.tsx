@@ -1,9 +1,26 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const AccessRightsPanel = () => {
-  const { id } = useParams();
+  const params = useParams();
+  const editionId = Number(params.id);
 
-  return <p>AccessRightsPanel id: {id}</p>;
+  const navigate = useNavigate();
+
+  const handleCancel = () => {
+    navigate(`/edition/${editionId}`);
+  };
+
+  const handleConfrim = () => {
+    navigate(`/edition/${editionId}`);
+  };
+
+  return (
+    <>
+      <p>AccessRightsPanel editionId: {editionId}</p>
+      <button onClick={handleCancel}>cancel</button>
+      <button onClick={handleConfrim}>confirm</button>
+    </>
+  );
 };
 
 export default AccessRightsPanel;

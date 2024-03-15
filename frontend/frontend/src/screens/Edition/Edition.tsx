@@ -2,12 +2,15 @@ import { Link, useParams } from "react-router-dom";
 
 const Edition = () => {
   const params = useParams();
-  const id = Number(params.id);
+  const editionId = Number(params.editionId);
+  const courseId = Number(params.courseId);
 
   return (
     <>
-      <p>Edition editionId: {id}</p>
-      <Link to={`/access-rights-panel/${id}`}>
+      <p>
+        Edition courseId: {courseId} editionId: {courseId}
+      </p>
+      <Link to={`/access-rights-panel/${courseId}/${editionId}`}>
         <button>access rights</button>
       </Link>
     </>

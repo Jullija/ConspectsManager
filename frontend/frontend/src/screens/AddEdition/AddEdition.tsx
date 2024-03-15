@@ -2,7 +2,7 @@ import { useNavigate, useParams } from "react-router-dom";
 
 const AddEdition = () => {
   const params = useParams();
-  const courseId = Number(params.id);
+  const courseId = Number(params.courseId);
 
   const navigate = useNavigate();
 

@@ -13,6 +13,7 @@ const CoursesList = () => {
 
   return (
     <>
+      <p>CourseList</p>
       <Link to="/add-course">
         <button>add course</button>
       </Link>

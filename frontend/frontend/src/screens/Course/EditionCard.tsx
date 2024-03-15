@@ -3,9 +3,10 @@ import { Edition } from "../../types/types";
 
 interface EditionCardProps {
   edition: Edition;
+  courseId: number;
 }
 
-const EditionCard = ({ edition }: EditionCardProps) => {
+const EditionCard = ({ edition, courseId }: EditionCardProps) => {
   return (
     <div
       style={{
@@ -14,7 +15,7 @@ const EditionCard = ({ edition }: EditionCardProps) => {
       }}
     >
       {edition.name}
-      <Link to={`/edition/${edition.id}`}>
+      <Link to={`/edition/${courseId}/${edition.id}`}>
         <button>edit</button>
       </Link>
     </div>

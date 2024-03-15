@@ -6,7 +6,7 @@ import EditionCard from "./EditionCard";
 
 const Course = () => {
   const params = useParams();
-  const courseId = Number(params.id);
+  const courseId = Number(params.courseId);
 
   const [editions, setEditions] = useState<Edition[]>();
 
@@ -19,7 +19,7 @@ const Course = () => {
       style={{
         display: "flex",
         flexDirection: "column",
-        gap: 20,
+        rowGap: 20,
       }}
     >
       <p>Course courseId: {courseId} </p>
@@ -27,7 +27,7 @@ const Course = () => {
         <button>add edition</button>
       </Link>
       {editions?.map((edition) => (
-        <EditionCard edition={edition} />
+        <EditionCard edition={edition} courseId={courseId} />
       ))}
     </div>
   );

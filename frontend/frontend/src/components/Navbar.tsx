@@ -15,14 +15,14 @@ const Navbar = () => {
       <a href="/add-course">
         <p>/add-course</p>
       </a>
-      <a href="/edition/1">
-        <p>/edition/1</p>
+      <a href="/edition/1/1">
+        <p>/edition/1/1</p>
       </a>
-      <a href="/add-edition">
-        <p>/add-edition</p>
+      <a href="/add-edition/1">
+        <p>/add-edition/1</p>
       </a>
-      <a href="/access-rights-panel/1">
-        <p>/access-rights-panel/1</p>
+      <a href="/access-rights-panel/1/1">
+        <p>/access-rights-panel/1/1</p>
       </a>
     </div>
   );

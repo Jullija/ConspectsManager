@@ -4,14 +4,7 @@ import routes from "./router/routes";
 import Navbar from "./components/Navbar";
 
 function App() {
-  return (
-    <>
-      <Navbar />
-      <div style={{ margin: 20 }}>
-        <RouterProvider router={routes} />
-      </div>
-    </>
-  );
+  return <RouterProvider router={routes} />;
 }
 
 export default App;

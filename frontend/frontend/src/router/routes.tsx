@@ -6,6 +6,7 @@ import Course from "../screens/Course/Course";
 import AccessRightsPanel from "../screens/AccessRightsPanel/AccessRightsPanel";
 import Edition from "../screens/Edition/Edition";
 import AddEdition from "../screens/AddEdition/AddEdition";
+import AddCourse from "../screens/AddCourse/AddCourse";
 
 const routes = createBrowserRouter([
   {
@@ -19,6 +20,10 @@ const routes = createBrowserRouter([
   {
     path: "/courses-list",
     element: <CoursesList />,
+  },
+  {
+    path: "/add-course",
+    element: <AddCourse />,
   },
   {
     path: "/course/:id",

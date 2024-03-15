@@ -1,13 +1,15 @@
 import { RouterProvider } from "react-router-dom";
 import "./App.css";
 import routes from "./router/routes";
-import Root from "./screens/Root";
+import Navbar from "./components/Navbar";
 
 function App() {
   return (
     <>
-      <Root />
-      <RouterProvider router={routes} />
+      <Navbar />
+      <div style={{ margin: 20 }}>
+        <RouterProvider router={routes} />
+      </div>
     </>
   );
 }

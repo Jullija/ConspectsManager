@@ -3,6 +3,7 @@ import { Course } from "../../types/types";
 import { getCourses } from "../../api/courses";
 import CourseCard from "./CourseCard";
 import { Link } from "react-router-dom";
+import { pathGenerator } from "../../router/paths";
 
 const CoursesList = () => {
   const [courses, setCourses] = useState<Course[]>();
@@ -14,7 +15,7 @@ const CoursesList = () => {
   return (
     <>
       <p>CourseList</p>
-      <Link to="/add-course">
+      <Link to={pathGenerator.AddCourse}>
         <button>add course</button>
       </Link>
       <div

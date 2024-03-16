@@ -9,47 +9,48 @@ import AddEdition from "../screens/AddEdition/AddEdition";
 import AddCourse from "../screens/AddCourse/AddCourse";
 import Root from "../components/Root";
 import PageNotFound from "../screens/PageNotFound/PageNotFound";
+import { browserRouterPaths } from "./paths";
 
 const routes = createBrowserRouter([
   {
-    path: "/",
+    path: browserRouterPaths.Default,
     element: <Root />,
     children: [
       {
-        path: "/",
+        path: browserRouterPaths.Default,
         element: <Login />,
         index: true,
       },
       {
-        path: "/login",
+        path: browserRouterPaths.Login,
         element: <Login />,
       },
       {
-        path: "/courses-list",
+        path: browserRouterPaths.CoursesList,
         element: <CoursesList />,
       },
       {
-        path: "/add-course",
+        path: browserRouterPaths.AddCourse,
         element: <AddCourse />,
       },
       {
-        path: "/course/:courseId",
+        path: browserRouterPaths.Course,
         element: <Course />,
       },
       {
-        path: "/edition/:courseId/:editionId",
+        path: browserRouterPaths.Edition,
         element: <Edition />,
       },
       {
-        path: "/access-rights-panel/:courseId/:editionId",
+        path: browserRouterPaths.AccessRights,
         element: <AccessRightsPanel />,
       },
       {
-        path: "/add-edition/:courseId",
+        path: browserRouterPaths.AddEdition,
         element: <AddEdition />,
       },
       {
-        path: "*",
+        path: browserRouterPaths.PageNotFound,
         element: <PageNotFound />,
       },
     ],

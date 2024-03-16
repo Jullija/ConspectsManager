@@ -1,14 +1,15 @@
 import { useNavigate } from "react-router-dom";
+import { pathGenerator } from "../../router/paths";
 
 const AddCourse = () => {
   const navigate = useNavigate();
 
   const handleCancel = () => {
-    navigate("/courses-list");
+    navigate(pathGenerator.CoursesList);
   };
 
   const handleConfrim = () => {
-    navigate("/courses-list");
+    navigate(pathGenerator.CoursesList);
   };
 
   return (

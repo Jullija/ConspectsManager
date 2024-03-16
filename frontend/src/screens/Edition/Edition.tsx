@@ -1,4 +1,5 @@
 import { Link, useParams } from "react-router-dom";
+import { pathGenerator } from "../../router/paths";
 
 const Edition = () => {
   const params = useParams();
@@ -10,10 +11,10 @@ const Edition = () => {
       <p>
         Edition courseId: {courseId} editionId: {courseId}
       </p>
-      <Link to={`/course/${courseId}`}>
+      <Link to={pathGenerator.Course(courseId)}>
         <button>go back to course</button>
       </Link>
-      <Link to={`/access-rights-panel/${courseId}/${editionId}`}>
+      <Link to={pathGenerator.AccessRights(courseId, editionId)}>
         <button>access rights</button>
       </Link>
     </>

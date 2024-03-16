@@ -1,4 +1,5 @@
 import { useNavigate, useParams } from "react-router-dom";
+import { pathGenerator } from "../../router/paths";
 
 const AddEdition = () => {
   const params = useParams();
@@ -7,11 +8,11 @@ const AddEdition = () => {
   const navigate = useNavigate();
 
   const handleCancel = () => {
-    navigate(`/course/${courseId}`);
+    navigate(pathGenerator.Course(courseId));
   };
 
   const handleConfrim = () => {
-    navigate(`/course/${courseId}`);
+    navigate(pathGenerator.Course(courseId));
   };
 
   return (

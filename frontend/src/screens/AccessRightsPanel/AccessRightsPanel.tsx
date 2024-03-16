@@ -1,4 +1,5 @@
 import { useNavigate, useParams } from "react-router-dom";
+import { pathGenerator } from "../../router/paths";
 
 const AccessRightsPanel = () => {
   const params = useParams();
@@ -8,11 +9,11 @@ const AccessRightsPanel = () => {
   const navigate = useNavigate();
 
   const handleCancel = () => {
-    navigate(`/edition/${courseId}/${editionId}`);
+    navigate(pathGenerator.Edition(courseId, editionId));
   };
 
   const handleConfrim = () => {
-    navigate(`/edition/${courseId}/${editionId}`);
+    navigate(pathGenerator.Edition(courseId, editionId));
   };
 
   return (

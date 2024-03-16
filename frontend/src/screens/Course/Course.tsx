@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import { Edition } from "../../types/types";
 import { getEditions } from "../../api/editions";
 import EditionCard from "./EditionCard";
+import { pathGenerator } from "../../router/paths";
 
 const Course = () => {
   const params = useParams();
@@ -23,7 +24,7 @@ const Course = () => {
       }}
     >
       <p>Course courseId: {courseId} </p>
-      <Link to={`/add-edition/${courseId}`}>
+      <Link to={pathGenerator.AddEdition(courseId)}>
         <button>add edition</button>
       </Link>
       {editions?.map((edition) => (

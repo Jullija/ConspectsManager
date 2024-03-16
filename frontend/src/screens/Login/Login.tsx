@@ -1,10 +1,11 @@
 import { useNavigate } from "react-router-dom";
+import { pathGenerator } from "../../router/paths";
 
 const Login = () => {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate("/courses-list");
+    navigate(pathGenerator.CoursesList);
   };
   return (
     <>

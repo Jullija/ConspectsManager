@@ -5,4 +5,4 @@ from django_extensions.db.models import TimeStampedModel
 
 class Template(TimeStampedModel):
     name = models.CharField(max_length=255)
-    content_structure = JSONField() # idk if this will work
+    content_structure = JSONField()  # idk if this will work

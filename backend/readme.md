@@ -13,6 +13,8 @@ Make django migrations
 ```python manage.py makemigrations```
 ```python manage.py migrate```
 
+Add example data
+```python manage.py init_data```
 
 Run server
 ```python manage.py runserver```

@@ -1,5 +1,5 @@
-from django_extensions.db.models import TimeStampedModel
 from django.db import models
+from django_extensions.db.models import TimeStampedModel
 
 
 class File(TimeStampedModel):
@@ -13,4 +13,3 @@ class File(TimeStampedModel):
 
     def __str__(self):
         return f"{self.name} | {self.file_type}"
-

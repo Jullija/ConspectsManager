@@ -11,3 +11,6 @@ class Edition(TimeStampedModel):
     )
     year = models.IntegerField(null=False, blank=False)
     name = models.CharField(max_length=255, null=False, blank=False)
+
+    def __str__(self):
+        return f"{self.name} | {self.year} | {self.parent_subject}"

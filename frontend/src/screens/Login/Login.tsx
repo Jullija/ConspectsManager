@@ -5,7 +5,7 @@ const Login = () => {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate(pathGenerator.CoursesList);
+    navigate(pathGenerator.SubjectsList);
   };
   return (
     <>

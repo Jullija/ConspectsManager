@@ -4,17 +4,17 @@ import { pathGenerator } from "../../router/paths";
 const Edition = () => {
   const params = useParams();
   const editionId = Number(params.editionId);
-  const courseId = Number(params.courseId);
+  const subjectId = Number(params.subjectId);
 
   return (
     <>
       <p>
-        Edition courseId: {courseId} editionId: {courseId}
+        Edition subjectId: {subjectId} editionId: {subjectId}
       </p>
-      <Link to={pathGenerator.Course(courseId)}>
-        <button>go back to course</button>
+      <Link to={pathGenerator.subject(subjectId)}>
+        <button>go back to subject</button>
       </Link>
-      <Link to={pathGenerator.AccessRights(courseId, editionId)}>
+      <Link to={pathGenerator.AccessRights(subjectId, editionId)}>
         <button>access rights</button>
       </Link>
     </>

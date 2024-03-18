@@ -1,4 +1,4 @@
-import { Edition } from "../types/types";
+import { Edition } from "../utils/types";
 
 export const getEditions = (subjectId: number):Edition[] => {
   return [

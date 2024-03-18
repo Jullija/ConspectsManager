@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Subject } from "../../types/types";
+import { Subject } from "../../utils/types";
 import { pathGenerator } from "../../router/paths";
 
 interface SubjectCardProps {

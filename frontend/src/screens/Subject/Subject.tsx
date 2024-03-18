@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { Edition } from "../../types/types";
+import { Edition } from "../../utils/types";
 import { getEditions } from "../../api/editions";
 import EditionCard from "./EditionCard";
 import { pathGenerator } from "../../router/paths";

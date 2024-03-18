@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Edition } from "../../types/types";
+import { Edition } from "../../utils/types";
 import { pathGenerator } from "../../router/paths";
 
 interface EditionCardProps {

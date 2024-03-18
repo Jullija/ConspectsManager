@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Subject } from "../../types/types";
+import { Subject } from "../../utils/types";
 import { Link } from "react-router-dom";
 import { pathGenerator } from "../../router/paths";
 import SubjectCard from "./SubjectCard";

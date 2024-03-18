@@ -4,10 +4,10 @@ import { pathGenerator } from "../../router/paths";
 
 interface EditionCardProps {
   edition: Edition;
-  courseId: number;
+  subjectId: number;
 }
 
-const EditionCard = ({ edition, courseId }: EditionCardProps) => {
+const EditionCard = ({ edition, subjectId }: EditionCardProps) => {
   return (
     <div
       style={{
@@ -16,7 +16,7 @@ const EditionCard = ({ edition, courseId }: EditionCardProps) => {
       }}
     >
       {edition.name}
-      <Link to={pathGenerator.Edition(courseId, edition.id)}>
+      <Link to={pathGenerator.Edition(subjectId, edition.id)}>
         <button>edit</button>
       </Link>
     </div>

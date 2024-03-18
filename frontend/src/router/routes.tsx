@@ -1,12 +1,12 @@
 import { createBrowserRouter } from "react-router-dom";
 
 import Login from "../screens/Login/Login";
-import CoursesList from "../screens/CoursesList/CoursesList";
-import Course from "../screens/Course/Course";
+import SubjectsList from "../screens/SubjectsList/SubjectsList";
+import Subject from "../screens/Subject/Subject";
 import AccessRightsPanel from "../screens/AccessRightsPanel/AccessRightsPanel";
 import Edition from "../screens/Edition/Edition";
 import AddEdition from "../screens/AddEdition/AddEdition";
-import AddCourse from "../screens/AddCourse/AddCourse";
+import AddSubject from "../screens/AddSubject/AddSubject";
 import Root from "../components/Root";
 import PageNotFound from "../screens/PageNotFound/PageNotFound";
 import { browserRouterPaths } from "./paths";
@@ -26,16 +26,16 @@ const routes = createBrowserRouter([
         element: <Login />,
       },
       {
-        path: browserRouterPaths.CoursesList,
-        element: <CoursesList />,
+        path: browserRouterPaths.SubjectsList,
+        element: <SubjectsList />,
       },
       {
-        path: browserRouterPaths.AddCourse,
-        element: <AddCourse />,
+        path: browserRouterPaths.AddSubject,
+        element: <AddSubject />,
       },
       {
-        path: browserRouterPaths.Course,
-        element: <Course />,
+        path: browserRouterPaths.Subject,
+        element: <Subject />,
       },
       {
         path: browserRouterPaths.Edition,

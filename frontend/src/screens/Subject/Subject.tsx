@@ -5,14 +5,14 @@ import { getEditions } from "../../api/editions";
 import EditionCard from "./EditionCard";
 import { pathGenerator } from "../../router/paths";
 
-const Course = () => {
+const Subject = () => {
   const params = useParams();
-  const courseId = Number(params.courseId);
+  const subjectId = Number(params.subjectId);
 
   const [editions, setEditions] = useState<Edition[]>();
 
   useEffect(() => {
-    setEditions(getEditions(courseId));
+    setEditions(getEditions(subjectId));
   }, []);
 
   return (
@@ -23,15 +23,15 @@ const Course = () => {
         rowGap: 20,
       }}
     >
-      <p>Course courseId: {courseId} </p>
-      <Link to={pathGenerator.AddEdition(courseId)}>
+      <p>subject subjectId: {subjectId} </p>
+      <Link to={pathGenerator.AddEdition(subjectId)}>
         <button>add edition</button>
       </Link>
       {editions?.map((edition) => (
-        <EditionCard edition={edition} courseId={courseId} />
+        <EditionCard edition={edition} subjectId={subjectId} />
       ))}
     </div>
   );
 };
 
-export default Course;
+export default Subject;

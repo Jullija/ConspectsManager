@@ -7,14 +7,14 @@ const Navbar = () => {
       <a href={pathGenerator.Login}>
         <p>/login</p>
       </a>
-      <a href={pathGenerator.CoursesList}>
-        <p>/courses-list</p>
+      <a href={pathGenerator.SubjectsList}>
+        <p>/subjects-list</p>
       </a>
-      <a href={pathGenerator.Course(1)}>
-        <p>/course/1</p>
+      <a href={pathGenerator.subject(1)}>
+        <p>/subject/1</p>
       </a>
-      <a href={pathGenerator.AddCourse}>
-        <p>/add-course</p>
+      <a href={pathGenerator.AddSubject}>
+        <p>/add-subject</p>
       </a>
       <a href={pathGenerator.Edition(1, 1)}>
         <p>/edition/1/1</p>

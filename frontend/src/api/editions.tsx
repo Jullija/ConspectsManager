@@ -1,10 +1,12 @@
-export const getEditions = (courseId: number) => {
+import { Edition } from "../types/types";
+
+export const getEditions = (subjectId: number):Edition[] => {
   return [
-    { name: "edition 1", id: 1 },
-    { name: "edition 2", id: 2 },
-    { name: "edition 3", id: 3 },
-    { name: "edition 4", id: 4 },
-    { name: "edition 5", id: 5 },
-    { name: "edition 6", id: 6 },
+    { name: "edition 1", year: 2023, subjectId: 1, id: 1 },
+    { name: "edition 2", year: 2023, subjectId: 1, id: 2 },
+    { name: "edition 3", year: 2023, subjectId: 1, id: 3 },
+    { name: "edition 4", year: 2023, subjectId: 1, id: 4 },
+    { name: "edition 5", year: 2023, subjectId: 1, id: 5 },
+    { name: "edition 6", year: 2023, subjectId: 1, id: 6 },
   ];
 };

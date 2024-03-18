@@ -3,21 +3,21 @@ import { pathGenerator } from "../../router/paths";
 
 const AddEdition = () => {
   const params = useParams();
-  const courseId = Number(params.courseId);
+  const subjectId = Number(params.subjectId);
 
   const navigate = useNavigate();
 
   const handleCancel = () => {
-    navigate(pathGenerator.Course(courseId));
+    navigate(pathGenerator.subject(subjectId));
   };
 
   const handleConfrim = () => {
-    navigate(pathGenerator.Course(courseId));
+    navigate(pathGenerator.subject(subjectId));
   };
 
   return (
     <>
-      <p>AddEdition id: {courseId}</p>
+      <p>AddEdition id: {subjectId}</p>
       <button onClick={handleCancel}>cancel</button>
       <button onClick={handleConfrim}>confirm</button>
     </>

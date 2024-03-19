@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 import { Subject } from "../../utils/types";
-import { Link } from "react-router-dom";
+import { Link, redirect } from "react-router-dom";
 import { pathGenerator } from "../../router/paths";
 import SubjectCard from "./SubjectCard";
 import { getSubjects } from "../../api/subjects";
+import CenteredMenu, { MenuItemType } from "./SubjectMenu";
+
+
 
 const SubjectsList = () => {
   const [subjects, setSubjects] = useState<Subject[]>();
@@ -12,19 +15,27 @@ const SubjectsList = () => {
     setSubjects(getSubjects());
   }, []);
 
+  const items: MenuItemType[] = [
+    { key: 'subjectSort', name: 'Sortuj po przedmiocie' },
+    { key: 'yearSort', name: 'Sortuj po roku' },
+    { key: 'addSubject', name: 'Dodaj przedmiot' },
+  ];
+  
+  
+  
+
   return (
     <>
-      <p>subjectList</p>
-      <Link to={pathGenerator.AddSubject}>
-        <button>add subject</button>
-      </Link>
+
+      <CenteredMenu items={items} />
+      
       <div
         style={{
           display: "flex",
           flexWrap: "wrap",
           gap: 20,
           justifyContent: "center",
-          marginTop: 20,
+          marginTop: 40,
         }}
       >
         {subjects?.map((subject, index) => {

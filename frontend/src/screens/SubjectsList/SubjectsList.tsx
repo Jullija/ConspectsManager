@@ -2,24 +2,22 @@ import { useEffect, useState } from 'react';
 import { Subject } from '../../utils/types';
 import SubjectCard from './SubjectCard';
 import { getSubjects } from '../../api/subjects';
-import CenteredMenu, { MenuItemType } from './SubjectMenu';
+import CenteredMenu from './SubjectMenu';
+import { Button } from 'semantic-ui-react';
+import { useNavigate } from 'react-router-dom';
+import { pathGenerator } from '../../router/paths';
 
 const SubjectsList = () => {
+  const navigate = useNavigate();
   const [subjects, setSubjects] = useState<Subject[]>();
 
   useEffect(() => {
     setSubjects(getSubjects());
   }, []);
 
-  const items: MenuItemType[] = [
-    { key: 'subjectSort', name: 'Sortuj po przedmiocie' },
-    { key: 'yearSort', name: 'Sortuj po roku' },
-    { key: 'addSubject', name: 'Dodaj przedmiot' }
-  ];
-
   return (
     <>
-      <CenteredMenu items={items} />
+      <CenteredMenu />
 
       <div
         style={{
@@ -28,12 +26,18 @@ const SubjectsList = () => {
           gap: 20,
           justifyContent: 'center',
           marginTop: 40
-        }}
-      >
+        }}>
         {subjects?.map((subject, index) => {
           return <SubjectCard subject={subject} key={index} />;
         })}
       </div>
+
+      <Button
+        onClick={() => {
+          navigate(pathGenerator.AddSubject);
+        }}>
+        dodaj przedmiot
+      </Button>
     </>
   );
 };

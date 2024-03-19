@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
 import { Subject } from "../../utils/types";
-import { Link, redirect } from "react-router-dom";
-import { pathGenerator } from "../../router/paths";
 import SubjectCard from "./SubjectCard";
 import { getSubjects } from "../../api/subjects";
 import CenteredMenu, { MenuItemType } from "./SubjectMenu";

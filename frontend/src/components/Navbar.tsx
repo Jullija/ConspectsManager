@@ -1,15 +1,14 @@
-import { pathGenerator } from "../router/paths";
+import { pathGenerator } from '../router/paths';
 
 const Navbar = () => {
   return (
     <div
       style={{
-        display: "flex",
+        display: 'flex',
         columnGap: 50,
-        justifyContent: "center",
-        borderBottom: "1px solid lightslategray",
-      }}
-    >
+        justifyContent: 'center',
+        borderBottom: '1px solid lightslategray'
+      }}>
       <a href={pathGenerator.Login}>
         <p>/login</p>
       </a>

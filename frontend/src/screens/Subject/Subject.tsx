@@ -1,12 +1,12 @@
-import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { Edition } from "../../utils/types";
-import { getEditions } from "../../api/editions";
-import EditionCard from "./EditionCard";
-import { pathGenerator } from "../../router/paths";
-import { titleFontSize } from "../../utils/sizes";
-import { Button } from "semantic-ui-react";
-import { colors } from "../../utils/colors";
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { Edition } from '../../utils/types';
+import { getEditions } from '../../api/editions';
+import EditionCard from './EditionCard';
+import { pathGenerator } from '../../router/paths';
+import { titleFontSize } from '../../utils/sizes';
+import { Button } from 'semantic-ui-react';
+import { colors } from '../../utils/colors';
 
 const Subject = () => {
   const params = useParams();
@@ -22,26 +22,21 @@ const Subject = () => {
   return (
     <div
       style={{
-        display: "flex",
-        flexDirection: "column",
-      }}
-    >
+        display: 'flex',
+        flexDirection: 'column'
+      }}>
       <div
         style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          margin: "24px 20px",
-        }}
-      >
-        <div style={{ fontSize: titleFontSize }}>
-          subject subjectId: {subjectId}
-        </div>
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          margin: '24px 20px'
+        }}>
+        <div style={{ fontSize: titleFontSize }}>subject subjectId: {subjectId}</div>
 
         <Button
           style={{ backgroundColor: colors.blue, color: colors.white }}
-          onClick={() => navigate(pathGenerator.AddEdition(subjectId))}
-        >
+          onClick={() => navigate(pathGenerator.AddEdition(subjectId))}>
           add edition
         </Button>
       </div>

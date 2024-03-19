@@ -1,5 +1,5 @@
-import { useNavigate } from "react-router-dom";
-import { pathGenerator } from "../../router/paths";
+import { useNavigate } from 'react-router-dom';
+import { pathGenerator } from '../../router/paths';
 
 const Login = () => {
   const navigate = useNavigate();

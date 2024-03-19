@@ -1,5 +1,5 @@
-import { Link, useParams } from "react-router-dom";
-import { pathGenerator } from "../../router/paths";
+import { Link, useParams } from 'react-router-dom';
+import { pathGenerator } from '../../router/paths';
 
 const Edition = () => {
   const params = useParams();

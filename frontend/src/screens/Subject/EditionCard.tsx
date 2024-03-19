@@ -1,6 +1,6 @@
-import { Link } from "react-router-dom";
-import { Edition } from "../../utils/types";
-import { pathGenerator } from "../../router/paths";
+import { Link } from 'react-router-dom';
+import { Edition } from '../../utils/types';
+import { pathGenerator } from '../../router/paths';
 
 interface EditionCardProps {
   edition: Edition;
@@ -11,8 +11,8 @@ const EditionCard = ({ edition, subjectId }: EditionCardProps) => {
   return (
     <div
       style={{
-        border: "1px solid blue",
-        padding: 20,
+        border: '1px solid blue',
+        padding: 20
       }}
     >
       {edition.name}

@@ -1,10 +1,8 @@
-import { useEffect, useState } from "react";
-import { Subject } from "../../utils/types";
-import SubjectCard from "./SubjectCard";
-import { getSubjects } from "../../api/subjects";
-import CenteredMenu, { MenuItemType } from "./SubjectMenu";
-
-
+import { useEffect, useState } from 'react';
+import { Subject } from '../../utils/types';
+import SubjectCard from './SubjectCard';
+import { getSubjects } from '../../api/subjects';
+import CenteredMenu, { MenuItemType } from './SubjectMenu';
 
 const SubjectsList = () => {
   const [subjects, setSubjects] = useState<Subject[]>();
@@ -16,24 +14,20 @@ const SubjectsList = () => {
   const items: MenuItemType[] = [
     { key: 'subjectSort', name: 'Sortuj po przedmiocie' },
     { key: 'yearSort', name: 'Sortuj po roku' },
-    { key: 'addSubject', name: 'Dodaj przedmiot' },
+    { key: 'addSubject', name: 'Dodaj przedmiot' }
   ];
-  
-  
-  
 
   return (
     <>
-
       <CenteredMenu items={items} />
-      
+
       <div
         style={{
-          display: "flex",
-          flexWrap: "wrap",
+          display: 'flex',
+          flexWrap: 'wrap',
           gap: 20,
-          justifyContent: "center",
-          marginTop: 40,
+          justifyContent: 'center',
+          marginTop: 40
         }}
       >
         {subjects?.map((subject, index) => {

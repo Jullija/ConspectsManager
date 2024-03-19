@@ -1,5 +1,5 @@
-import "../App.css";
-import { pathGenerator } from "../router/paths";
+import '../App.css';
+import { pathGenerator } from '../router/paths';
 
 const Navbar = () => {
   return (

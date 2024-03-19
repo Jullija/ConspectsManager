@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Edition } from "../../utils/types";
 import { getEditions } from "../../api/editions";
 import EditionCard from "./EditionCard";
@@ -11,6 +11,7 @@ import { colors } from "../../utils/colors";
 const Subject = () => {
   const params = useParams();
   const subjectId = Number(params.subjectId);
+  const navigate = useNavigate();
 
   const [editions, setEditions] = useState<Edition[]>();
 
@@ -34,18 +35,20 @@ const Subject = () => {
         }}
       >
         <div style={{ fontSize: titleFontSize }}>
-          subject subjectId: {subjectId}{" "}
+          subject subjectId: {subjectId}
         </div>
 
-        <Link to={pathGenerator.AddEdition(subjectId)}>
-          <Button style={{ backgroundColor: colors.blue, color: colors.white }}>
-            add edition
-          </Button>
-        </Link>
+        <Button
+          style={{ backgroundColor: colors.blue, color: colors.white }}
+          onClick={() => navigate(pathGenerator.AddEdition(subjectId))}
+        >
+          add edition
+        </Button>
       </div>
 
       {editions?.map((edition, index) => (
         <EditionCard
+          key={index}
           edition={edition}
           subjectId={subjectId}
           withBottomBorder={index !== editions.length - 1}

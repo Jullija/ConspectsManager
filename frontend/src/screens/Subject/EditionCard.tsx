@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Edition } from "../../utils/types";
 import { pathGenerator } from "../../router/paths";
 import { colors } from "../../utils/colors";
@@ -17,6 +17,7 @@ const EditionCard = ({
   subjectId,
   withBottomBorder,
 }: EditionCardProps) => {
+  const navigate = useNavigate();
   const [hovered, setHovered] = useState<boolean>(false);
 
   return (
@@ -30,7 +31,6 @@ const EditionCard = ({
         padding: 16,
         borderBottom: withBottomBorder ? "1px solid " + colors.grey : "none",
         color: colors.darkblue,
-        cursor: "pointer",
         transform: "opacity 0.3s",
       }}
     >
@@ -43,10 +43,18 @@ const EditionCard = ({
         {edition.name}
       </div>
       <div style={{ display: "flex", gap: 16 }}>
-        <Link to={pathGenerator.Edition(subjectId, edition.id)}>
-          <Button style={{ backgroundColor: colors.orange }}>edit</Button>
-        </Link>
-        <Button>delete</Button>
+        <Button
+          style={{ backgroundColor: colors.orange, color: colors.darkblue }}
+          onClick={() => navigate(pathGenerator.Edition(subjectId, edition.id))}
+        >
+          edit
+        </Button>
+
+        <Button
+          style={{ backgroundColor: colors.grey, color: colors.darkblue }}
+        >
+          delete
+        </Button>
       </div>
     </div>
   );

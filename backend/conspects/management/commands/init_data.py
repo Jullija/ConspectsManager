@@ -26,3 +26,8 @@ class Command(BaseCommand):
 
         sub_folder2 = Folder.objects.create(name="Problem plecakowy", edition=edition1)
         FolderFolder.objects.create(parent=folder2, child=sub_folder2)
+
+        with open("conspects/management/commands/sample_markdown.md", "r") as f:
+            content = f.read()
+        sample_file = File.objects.create(name="SampleFile", file_type="md", content=content.encode())
+        FolderFile.objects.create(folder=sub_folder2, file=sample_file)

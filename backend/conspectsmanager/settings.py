@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     "rest_framework",
     "users",
     "conspects",
+    "rest_framework_swagger",
+    "drf_yasg"
 ]
 
 MIDDLEWARE = [

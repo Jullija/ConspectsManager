@@ -1,9 +1,10 @@
 from rest_framework import viewsets
 from rest_framework.decorators import action
+from rest_framework.generics import ListCreateAPIView, CreateAPIView
 from rest_framework.response import Response
 
-from conspects.models import Edition
-from conspects.serializers import FolderStructureSerializer
+from conspects.models import Edition, Course
+from conspects.serializers import CourseSerializer, EditionSerializer, FolderSerializer
 
 
 # Create your views here.
@@ -26,8 +27,24 @@ class FilesViewSet(viewsets.ViewSet):
             return Response({"message": "Edition not found!"})
 
         folders = edition.folders.prefetch_related("files")
-        serializer = FolderStructureSerializer(folders, many=True)
         return Response(serializer.data)
 
     def post(self, request):
         return Response({"message": "Create a file!"})
+
+
+class RetrieveCreateCourseView(ListCreateAPIView):
+    queryset = Course.objects.all()
+    serializer_class = CourseSerializer
+
+
+class EditionListCreateAPIView(ListCreateAPIView):
+    serializer_class = EditionSerializer
+
+    def get_queryset(self):
+        course_id = self.kwargs['courseId']
+        return Edition.objects.filter(course_id=course_id)
+
+
+class FolderCreateAPIView(ListCreateAPIView):
+    serializer_class = FolderSerializer

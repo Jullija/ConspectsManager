@@ -1,16 +1,15 @@
 from django.db import models
-from django_extensions.db.models import TimeStampedModel
 
 
-class Edition(TimeStampedModel):
-    parent_subject = models.ForeignKey(
-        'Subject',
-        on_delete=models.CASCADE,
-        null=False,
-        blank=False
-    )
+class Edition(models.Model):
+    course = models.ForeignKey('conspects.Course', on_delete=models.CASCADE)
     year = models.IntegerField(null=False, blank=False)
     name = models.CharField(max_length=255, null=False, blank=False)
+    root_folder = models.ForeignKey('conspects.Folder', on_delete=models.CASCADE, null=True, blank=True,
+                                    related_name='+')
 
     def __str__(self):
-        return f"{self.name} | {self.year} | {self.parent_subject}"
+        return f"Course: {self.course} | Year: {self.year} | Name: {self.name}"
+
+    class Meta:
+        unique_together = (('course', 'name'),)

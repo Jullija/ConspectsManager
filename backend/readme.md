@@ -1,26 +1,18 @@
 ### Backend
 
-Create virtual environment
+Create and activate virtual environment
 ```python3 -m venv env```
 ```source env/bin/activate```
 
+Make runserver.sh executable:
+```chmod +x runserver.sh```
 
-Install pip requirements
-```pip install -r requirements.txt```
+Run ```./runserver.sh```  to:
+
+- Remove the SQLite database file
+- Install Python dependencies
+- Run Django migrations
+- Add example data to the database
+- Start the Django development server
 
 
-Make django migrations
-```python manage.py makemigrations```
-```python manage.py migrate```
-
-Add example data
-```python manage.py init_data```
-
-Run server
-```python manage.py runserver```
-
-To use Django admin panel you have to create superuser.
-
-run ```python manage.py createsuperuser```
-
-Than you can login into ```http://127.0.0.1:8000/admin``` with created superuser account.

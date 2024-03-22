@@ -11,9 +11,20 @@ const Login = () => {
     { key: "1", text: "Michael Scott", value: "Michael Scott" },
     { key: "2", text: "Prison Mike", value: "Prison Mike" }
   ]);
+  const [selectedUser, setSelectedUser] = useState('');
+  const [showSelectUserMessage, setShowSelectUserMessage] = useState(false);
+
+  const handleDropdownChange = (event: React.SyntheticEvent<HTMLElement>, data: DropdownProps) => {
+    setSelectedUser(data.value as string);
+    setShowSelectUserMessage(false);
+  };
   
   const handleClick = () => {
-    navigate(pathGenerator.SubjectsList);
+    if (selectedUser) {
+      navigate(pathGenerator.SubjectsList);
+    } else {
+      setShowSelectUserMessage(true); 
+    }
   };
 
   const handleAddition = (
@@ -28,7 +39,6 @@ const Login = () => {
   };
 
   return (
-    <>
     <div style={{ color: colors.darkblue }}>
       <div style={{ fontSize: titleFontSize, margin: '24px 20px' }}>Login</div>
         <div style={{ margin: '0 20px 24px 20px' }}>
@@ -40,15 +50,18 @@ const Login = () => {
             allowAdditions
             hideAdditions
             onAddItem={handleAddition}
+            onChange={handleDropdownChange} 
             options={loginOptions}
+            value={selectedUser} 
           />
         </div>
-      
+        
+        {showSelectUserMessage && <p style={{ color: colors.orange, position: 'absolute', margin: '0 20px',}}>Please select a user to proceed.</p>}
       <div style={{ display: 'flex', flexDirection: 'row', margin: '0 345px' }}>
+      
         <Button onClick={handleClick} style={{backgroundColor: colors.darkblue, color: colors.white }}>Login</Button>
       </div>
     </div>
-    </>
   );
 };
 

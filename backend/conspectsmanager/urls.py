@@ -19,6 +19,12 @@ from django.urls import path, include
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 from rest_framework import permissions
+from rest_framework.routers import DefaultRouter
+from conspects.views import FilesViewSet
+
+router = DefaultRouter()
+router.register(r'files', FilesViewSet)
+
 
 schema_view = get_schema_view(
     openapi.Info(title="Dzień dobry",
@@ -31,5 +37,5 @@ urlpatterns = [
     path("", include("users.urls", namespace="users")),
     path("", include("conspects.urls", namespace="conspects")),
     path('docs/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
-
+    path('', include(router.urls)),
 ]

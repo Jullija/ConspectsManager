@@ -2,12 +2,17 @@ from django.core.management.base import BaseCommand
 
 from conspects.models import Edition
 from conspects.models.course import Course
+from conspects.models.file import File
 
 
 class Command(BaseCommand):
     help = 'Initializes the database with some data'
 
     def handle(self, *args, **options):
+
+
+
+
         # Courses
         ASD = Course.objects.create(name="Algorytmy i struktury danych")
         SYSOPY = Course.objects.create(name="Systemy operacyjne")
@@ -27,3 +32,8 @@ class Command(BaseCommand):
         # Files
         ASD_2024_teoria.add_file(name="wstęp", extension="pdf", content=b"PDF content")
         ASD_2024_teoria.add_file(name="File1", extension="txt", content="Dzień dobry!".encode())
+        
+        # Sample Markdown
+        with open("conspects/management/commands/sample_markdown.md", "r") as f:
+            content = f.read()
+        sample_file = File.objects.create(name="SampleFile", extension="md", content=content.encode(), created_at="2022-01-01 12:00:00", folder=ASD_2024_teoria)

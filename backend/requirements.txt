@@ -1,4 +1,9 @@
 Django
+django-filter
+django-rest-swagger
+drf-yasg
 djangorestframework
 django-extensions
 django-cors-headers
+
+marko

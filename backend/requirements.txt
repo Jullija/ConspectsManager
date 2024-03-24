@@ -1,7 +1,4 @@
 Django
 djangorestframework
-django-filter
-markdown
 django-extensions
-django-rest-swagger
-drf-yasg
+django-cors-headers

@@ -1,8 +1,9 @@
-Django~=5.0.3
-djangorestframework~=3.15.0
+Django
 django-filter
-markdown
-django-extensions
 django-rest-swagger
 drf-yasg
-marko~=2.0.3
+djangorestframework
+django-extensions
+django-cors-headers
+
+marko

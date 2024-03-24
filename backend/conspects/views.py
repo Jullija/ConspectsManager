@@ -7,18 +7,19 @@ from django.http import HttpResponse
 from rest_framework.decorators import action
 from .models import File
 from .serializers import FileSerializer
-
 from conspects.models import Edition, Course
 from conspects.serializers import CourseSerializer, EditionSerializer, FolderSerializer
 
 
-# Create your views here.
 class ConceptsViewSet(viewsets.ViewSet):
     def list(self, request):
         return Response({"message": "All concepts!"})
 
-      
-class FilesViewSet(viewsets.ViewSet):
+
+class FilesViewSet(viewsets.ModelViewSet):
+    queryset = File.objects.all()
+    serializer_class = FileSerializer
+
     @action(detail=False, methods=["get"], url_name="edition")
     def per_edition(self, request):
         edition_id = request.get("id")
@@ -36,8 +37,8 @@ class FilesViewSet(viewsets.ViewSet):
 
     def post(self, request):
         return Response({"message": "Create a file!"})
-          @action(detail=True, methods=['get'])
 
+    @action(detail=True, methods=['get'])
     def raw_markdown(self, request, pk=None):
         """
         Custom action to fetch raw Markdown content.

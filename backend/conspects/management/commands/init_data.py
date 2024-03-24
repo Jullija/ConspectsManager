@@ -2,6 +2,7 @@ from django.core.management.base import BaseCommand
 
 from conspects.models import Edition
 from conspects.models.course import Course
+from conspects.models.file import File
 
 
 class Command(BaseCommand):
@@ -35,5 +36,4 @@ class Command(BaseCommand):
         # Sample Markdown
         with open("conspects/management/commands/sample_markdown.md", "r") as f:
             content = f.read()
-        sample_file = File.objects.create(name="SampleFile", file_type="md", content=content.encode())
-        FolderFile.objects.create(folder=sub_folder2, file=sample_file)
+        sample_file = File.objects.create(name="SampleFile", extension="md", content=content.encode(), created_at="2022-01-01 12:00:00", folder=ASD_2024_teoria)

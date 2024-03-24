@@ -7,6 +7,7 @@ import { pathGenerator } from '../../router/paths';
 import { titleFontSize } from '../../utils/sizes';
 import { Button } from 'semantic-ui-react';
 import { colors } from '../../utils/colors';
+import axios from 'axios';
 
 const Subject = () => {
   const params = useParams();
@@ -16,7 +17,17 @@ const Subject = () => {
   const [editions, setEditions] = useState<Edition[]>();
 
   useEffect(() => {
-    setEditions(getEditions(subjectId));
+    axios
+      .get(`http://127.0.0.1:8000/courses/${subjectId}/editions/`)
+      .then((res) => {
+        const editions: Edition[] = res.data.map((item: any) => {
+          return { name: item.name, year: item.year, subjectId: item.course, id: item.id };
+        });
+        setEditions(editions);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, []);
 
   return (

@@ -6,13 +6,21 @@ import CenteredMenu from './SubjectMenu';
 import { Button } from 'semantic-ui-react';
 import { useNavigate } from 'react-router-dom';
 import { pathGenerator } from '../../router/paths';
+import axios from 'axios';
 
 const SubjectsList = () => {
   const navigate = useNavigate();
   const [subjects, setSubjects] = useState<Subject[]>();
 
   useEffect(() => {
-    setSubjects(getSubjects());
+    axios
+      .get('http://127.0.0.1:8000/courses')
+      .then((res) => {
+        setSubjects(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, []);
 
   return (

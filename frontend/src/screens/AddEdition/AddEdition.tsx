@@ -1,9 +1,10 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { pathGenerator } from '../../router/paths';
-import { Button, Checkbox, Form, FormField } from 'semantic-ui-react';
+import { Button, Form, FormField } from 'semantic-ui-react';
 import { useState } from 'react';
 import { titleFontSize } from '../../utils/sizes';
 import { colors } from '../../utils/colors';
+import axios from 'axios';
 
 const AddEdition = () => {
   const params = useParams();
@@ -17,7 +18,19 @@ const AddEdition = () => {
     navigate(pathGenerator.subject(subjectId));
   };
 
-  const handleConfrim = () => {
+  const handleConfrim = async () => {
+    await axios
+      .post(`http://127.0.0.1:8000/courses/${subjectId}/editions/`, {
+        name: editionName,
+        year: 2000
+      })
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
     navigate(pathGenerator.subject(subjectId));
   };
 

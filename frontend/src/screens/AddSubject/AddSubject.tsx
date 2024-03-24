@@ -4,6 +4,7 @@ import { Form, FormField, Button } from 'semantic-ui-react';
 import { colors } from '../../utils/colors';
 import { titleFontSize } from '../../utils/sizes';
 import { useState } from 'react';
+import axios from 'axios';
 
 const AddSubject = () => {
   const navigate = useNavigate();
@@ -12,7 +13,17 @@ const AddSubject = () => {
     navigate(pathGenerator.SubjectsList);
   };
 
-  const handleConfrim = () => {
+  const handleConfrim = async () => {
+    //e.preventDefault();
+    await axios
+      .post(`http://127.0.0.1:8000/courses/`, { name: subjectName, description: 'whatever' })
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
     navigate(pathGenerator.SubjectsList);
   };
 
@@ -30,7 +41,6 @@ const AddSubject = () => {
             anuluj
           </Button>
           <Button
-            type="submit"
             onClick={handleConfrim}
             style={{ backgroundColor: colors.darkblue, color: colors.white }}>
             dodaj

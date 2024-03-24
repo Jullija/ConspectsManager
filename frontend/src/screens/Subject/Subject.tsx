@@ -1,34 +1,16 @@
-import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Edition } from '../../utils/types';
-import { getEditions } from '../../api/editions';
 import EditionCard from './EditionCard';
 import { pathGenerator } from '../../router/paths';
 import { titleFontSize } from '../../utils/sizes';
 import { Button } from 'semantic-ui-react';
 import { colors } from '../../utils/colors';
-import axios from 'axios';
+import useEditions from '../../hooks/editions';
 
 const Subject = () => {
   const params = useParams();
   const subjectId = Number(params.subjectId);
   const navigate = useNavigate();
-
-  const [editions, setEditions] = useState<Edition[]>();
-
-  useEffect(() => {
-    axios
-      .get(`http://127.0.0.1:8000/courses/${subjectId}/editions/`)
-      .then((res) => {
-        const editions: Edition[] = res.data.map((item: any) => {
-          return { name: item.name, year: item.year, subjectId: item.course, id: item.id };
-        });
-        setEditions(editions);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
+  const { isLoading, error, editions } = useEditions(subjectId);
 
   return (
     <div

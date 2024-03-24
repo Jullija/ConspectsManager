@@ -4,7 +4,7 @@ import { Button, Form, FormField } from 'semantic-ui-react';
 import { useState } from 'react';
 import { titleFontSize } from '../../utils/sizes';
 import { colors } from '../../utils/colors';
-import axios from 'axios';
+import useAddEdition from '../../hooks/addEdition';
 
 const AddEdition = () => {
   const params = useParams();
@@ -13,24 +13,14 @@ const AddEdition = () => {
   const navigate = useNavigate();
 
   const [editionName, setEditionName] = useState<string>('');
+  const { isLoading, error, addEdition } = useAddEdition(subjectId);
 
   const handleCancel = () => {
     navigate(pathGenerator.subject(subjectId));
   };
 
   const handleConfrim = async () => {
-    await axios
-      .post(`http://127.0.0.1:8000/courses/${subjectId}/editions/`, {
-        name: editionName,
-        year: 2000
-      })
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-
+    addEdition(editionName, 1999);
     navigate(pathGenerator.subject(subjectId));
   };
 
@@ -50,9 +40,9 @@ const AddEdition = () => {
             anuluj
           </Button>
           <Button
-            type="submit"
             onClick={handleConfrim}
-            style={{ backgroundColor: colors.darkblue, color: colors.white }}>
+            style={{ backgroundColor: colors.darkblue, color: colors.white }}
+            disabled={editionName === undefined || editionName === ''}>
             dodaj
           </Button>
         </div>

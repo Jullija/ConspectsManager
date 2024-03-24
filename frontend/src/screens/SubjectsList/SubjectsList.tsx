@@ -1,27 +1,13 @@
-import { useEffect, useState } from 'react';
-import { Subject } from '../../utils/types';
 import SubjectCard from './SubjectCard';
-import { getSubjects } from '../../api/subjects';
 import CenteredMenu from './SubjectMenu';
 import { Button } from 'semantic-ui-react';
 import { useNavigate } from 'react-router-dom';
 import { pathGenerator } from '../../router/paths';
-import axios from 'axios';
+import useCourses from '../../hooks/courses';
 
 const SubjectsList = () => {
   const navigate = useNavigate();
-  const [subjects, setSubjects] = useState<Subject[]>();
-
-  useEffect(() => {
-    axios
-      .get('http://127.0.0.1:8000/courses')
-      .then((res) => {
-        setSubjects(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
+  const { courses: subjects } = useCourses();
 
   return (
     <>

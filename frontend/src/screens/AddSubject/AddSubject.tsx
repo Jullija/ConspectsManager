@@ -4,27 +4,22 @@ import { Form, FormField, Button } from 'semantic-ui-react';
 import { colors } from '../../utils/colors';
 import { titleFontSize } from '../../utils/sizes';
 import { useState } from 'react';
-import axios from 'axios';
+import useAddSubject from '../../hooks/addSubject';
 
 const AddSubject = () => {
   const navigate = useNavigate();
   const [subjectName, setSubjectName] = useState<string>();
+  const { isLoading, error, addSubject } = useAddSubject();
+
   const handleCancel = () => {
     navigate(pathGenerator.SubjectsList);
   };
 
   const handleConfrim = async () => {
-    //e.preventDefault();
-    await axios
-      .post(`http://127.0.0.1:8000/courses/`, { name: subjectName, description: 'whatever' })
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-
-    navigate(pathGenerator.SubjectsList);
+    if (subjectName) {
+      addSubject(subjectName, 'asd');
+      navigate(pathGenerator.SubjectsList);
+    }
   };
 
   return (
@@ -42,7 +37,8 @@ const AddSubject = () => {
           </Button>
           <Button
             onClick={handleConfrim}
-            style={{ backgroundColor: colors.darkblue, color: colors.white }}>
+            style={{ backgroundColor: colors.darkblue, color: colors.white }}
+            disabled={subjectName === undefined || subjectName === ''}>
             dodaj
           </Button>
         </div>

@@ -75,3 +75,4 @@ class FileSerializer(serializers.ModelSerializer):
         model = File
         fields = ["id", "name", "extension", "content", "can_be_edited", "can_be_previewed", "is_attachment"]
         read_only_fields = ["can_be_edited", "can_be_previewed", "is_attachment"]
+

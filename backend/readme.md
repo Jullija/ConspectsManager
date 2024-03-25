@@ -7,7 +7,7 @@ Create and activate virtual environment
 Make runserver.sh executable:
 ```chmod +x runserver.sh```
 
-Run ```./runserver.sh```  to:
+Run ```./runserver.sh``` or ```runserver.bat``` (for windows) to:
 
 - Remove the SQLite database file
 - Install Python dependencies

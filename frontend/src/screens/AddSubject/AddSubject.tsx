@@ -4,12 +4,12 @@ import { Form, FormField, Button } from 'semantic-ui-react';
 import { colors } from '../../utils/colors';
 import { titleFontSize } from '../../utils/sizes';
 import { useState } from 'react';
-import useAddSubject from '../../hooks/addSubject';
+import { addSubject } from '../../api/subjects';
+import axios from 'axios';
 
 const AddSubject = () => {
   const navigate = useNavigate();
   const [subjectName, setSubjectName] = useState<string>();
-  const { isLoading, error, addSubject } = useAddSubject();
 
   const handleCancel = () => {
     navigate(pathGenerator.SubjectsList);
@@ -17,8 +17,19 @@ const AddSubject = () => {
 
   const handleConfrim = async () => {
     if (subjectName) {
-      addSubject(subjectName, 'asd');
-      navigate(pathGenerator.SubjectsList);
+      try {
+        // TODO: add description
+        await addSubject(subjectName, 'asd');
+        navigate(pathGenerator.SubjectsList);
+      } catch (error) {
+        navigate(
+          pathGenerator.ErrorPage(
+            axios.isAxiosError(error)
+              ? JSON.stringify(error.response?.data)
+              : 'Something went wrong :('
+          )
+        );
+      }
     }
   };
 

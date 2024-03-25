@@ -3,11 +3,20 @@ import CenteredMenu from './SubjectMenu';
 import { Button } from 'semantic-ui-react';
 import { useNavigate } from 'react-router-dom';
 import { pathGenerator } from '../../router/paths';
-import useCourses from '../../hooks/courses';
+import { useQuery } from 'react-query';
+import { getSubjects } from '../../api/subjects';
 
 const SubjectsList = () => {
   const navigate = useNavigate();
-  const { courses: subjects } = useCourses();
+  const { isLoading, error, data: subjects } = useQuery('subjects', getSubjects);
+
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
+
+  if (error) {
+    navigate(pathGenerator.ErrorPage('something went wrong'));
+  }
 
   return (
     <>

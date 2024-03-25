@@ -4,13 +4,22 @@ import { pathGenerator } from '../../router/paths';
 import { titleFontSize } from '../../utils/sizes';
 import { Button } from 'semantic-ui-react';
 import { colors } from '../../utils/colors';
-import useEditions from '../../hooks/editions';
+import { getEditions } from '../../api/editions';
+import { useQuery } from 'react-query';
 
 const Subject = () => {
   const params = useParams();
   const subjectId = Number(params.subjectId);
   const navigate = useNavigate();
-  const { isLoading, error, editions } = useEditions(subjectId);
+  const { isLoading, error, data: editions } = useQuery('editions', () => getEditions(subjectId));
+
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
+
+  if (error) {
+    navigate(pathGenerator.ErrorPage('something went wrong'));
+  }
 
   return (
     <div

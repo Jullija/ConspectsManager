@@ -1,5 +1,4 @@
 import { createBrowserRouter } from 'react-router-dom';
-
 import Login from '../screens/Login/Login';
 import SubjectsList from '../screens/SubjectsList/SubjectsList';
 import Subject from '../screens/Subject/Subject';
@@ -10,6 +9,7 @@ import AddSubject from '../screens/AddSubject/AddSubject';
 import Root from '../components/Root';
 import PageNotFound from '../screens/PageNotFound/PageNotFound';
 import { browserRouterPaths } from './paths';
+import ErrorPage from '../screens/ErrorPage/ErrorPage';
 
 const routes = createBrowserRouter([
   {
@@ -48,6 +48,10 @@ const routes = createBrowserRouter([
       {
         path: browserRouterPaths.AddEdition,
         element: <AddEdition />
+      },
+      {
+        path: browserRouterPaths.ErrorPage,
+        element: <ErrorPage />
       },
       {
         path: browserRouterPaths.PageNotFound,

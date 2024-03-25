@@ -4,7 +4,8 @@ import { Button, Form, FormField } from 'semantic-ui-react';
 import { useState } from 'react';
 import { titleFontSize } from '../../utils/sizes';
 import { colors } from '../../utils/colors';
-import useAddEdition from '../../hooks/addEdition';
+import { addEdition } from '../../api/editions';
+import axios from 'axios';
 
 const AddEdition = () => {
   const params = useParams();
@@ -12,16 +13,28 @@ const AddEdition = () => {
 
   const navigate = useNavigate();
 
-  const [editionName, setEditionName] = useState<string>('');
-  const { isLoading, error, addEdition } = useAddEdition(subjectId);
+  const [editionName, setEditionName] = useState<string>();
 
   const handleCancel = () => {
     navigate(pathGenerator.subject(subjectId));
   };
 
   const handleConfrim = async () => {
-    addEdition(editionName, 1999);
-    navigate(pathGenerator.subject(subjectId));
+    if (editionName) {
+      try {
+        // TODO: add year
+        await addEdition(subjectId, editionName, 1999);
+        navigate(pathGenerator.subject(subjectId));
+      } catch (error) {
+        navigate(
+          pathGenerator.ErrorPage(
+            axios.isAxiosError(error)
+              ? JSON.stringify(error.response?.data)
+              : 'Something went wrong :('
+          )
+        );
+      }
+    }
   };
 
   return (

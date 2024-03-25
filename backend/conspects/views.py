@@ -7,7 +7,8 @@ from django.http import HttpResponse
 from rest_framework.decorators import action
 from .models import File
 from .serializers import FileSerializer
-from conspects.models import Edition, Course
+from conspects.models import Edition, Course, Folder
+from rest_framework.generics import RetrieveUpdateDestroyAPIView
 from conspects.serializers import CourseSerializer, EditionSerializer, FolderSerializer
 
 
@@ -71,3 +72,16 @@ class EditionListCreateAPIView(ListCreateAPIView):
 
 class FolderCreateAPIView(ListCreateAPIView):
     serializer_class = FolderSerializer
+    queryset = Folder.objects.all()
+
+
+class EditionDetailAPIView(RetrieveUpdateDestroyAPIView):
+    queryset = Edition.objects.all()
+    serializer_class = EditionSerializer
+    lookup_url_kwarg = 'editionId'
+
+
+class FolderDetailAPIView(RetrieveUpdateDestroyAPIView):
+    queryset = Folder.objects.all()
+    serializer_class = FolderSerializer
+    lookup_url_kwarg = 'folderId'

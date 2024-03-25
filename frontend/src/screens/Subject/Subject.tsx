@@ -16,8 +16,15 @@ const Subject = () => {
   const [editions, setEditions] = useState<Edition[]>();
 
   useEffect(() => {
-    setEditions(getEditions(subjectId));
+    const fetchEditions = async () => {
+      const data = await getEditions(subjectId);
+      setEditions(data);
+    };
+
+    fetchEditions();
   }, []);
+
+  console.log(editions);
 
   return (
     <div

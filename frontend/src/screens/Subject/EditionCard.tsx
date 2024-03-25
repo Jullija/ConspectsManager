@@ -15,7 +15,7 @@ interface EditionCardProps {
 const EditionCard = ({ edition, subjectId, withBottomBorder }: EditionCardProps) => {
   const navigate = useNavigate();
   const [hovered, setHovered] = useState<boolean>(false);
-
+  console.log(edition, edition.id);
   return (
     <div
       onMouseEnter={() => setHovered(true)}

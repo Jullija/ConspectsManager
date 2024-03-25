@@ -1,6 +1,7 @@
 import React from 'react';
 import { useFile } from '../../context/FileContext';
 import TextFileComponent from './TextFileComponent';
+import MarkdownFile from './MarkdownFile';
 
 interface ContentViewProps {
   subjectId: number;
@@ -9,7 +10,7 @@ interface ContentViewProps {
 
 const ContentView: React.FC<ContentViewProps> = ({ subjectId, edition }) => {
   const { selectedFile } = useFile();
-
+  console.log(selectedFile);
   const renderFileDetails = () => {
     return (
       <>
@@ -58,70 +59,58 @@ const ContentView: React.FC<ContentViewProps> = ({ subjectId, edition }) => {
     }
 
     const fileDetails = renderFileDetails();
-
+    console.log(fileDetails);
     switch (selectedFile.extension) {
       case 'txt':
         return <TextFileComponent file={selectedFile} onSave={handleSave} />;
 
+      case 'md':
+        return <MarkdownFile file={selectedFile} onSave={handleSave} />;
       case 'jpg':
       case 'jpeg':
       case 'gif':
       case 'png':
         return (
-          <div>
-            {fileDetails}
-            <img
-              src={`data:image/${selectedFile.extension};base64,${selectedFile.content}`}
-              alt={selectedFile.name}
-              style={{ maxWidth: '100%' }}
-            />
-          </div>
+          <img
+            src={`data:image/${selectedFile.extension};base64,${selectedFile.content}`}
+            alt={selectedFile.name}
+            style={{ maxWidth: '100%' }}
+          />
         );
       case 'mp4':
         return (
-          <div>
-            {fileDetails}
-            <video
-              src={`data:video/${selectedFile.extension};base64,${selectedFile.content}`}
-              controls
-              style={{ maxWidth: '100%' }}
-            />
-          </div>
+          <video
+            src={`data:video/${selectedFile.extension};base64,${selectedFile.content}`}
+            controls
+            style={{ maxWidth: '100%' }}
+          />
         );
       case 'pdf': {
         const pdfDataUrl = `data:application/pdf;base64,${selectedFile.content}`;
         return (
-          <div>
-            {fileDetails}
-            <object
-              data={pdfDataUrl}
-              type="application/pdf"
-              width="100%"
-              height="500px"
-              style={{ minHeight: '500px' }}>
-              {' '}
-              PDF cannot be displayed, download it{' '}
-              <a href={pdfDataUrl} download={`${selectedFile.name}.pdf`}>
-                here
-              </a>
-              .
-            </object>
-          </div>
+          <object
+            data={pdfDataUrl}
+            type="application/pdf"
+            width="100%"
+            height="500px"
+            style={{ minHeight: '500px' }}>
+            {' '}
+            PDF cannot be displayed, download it{' '}
+            <a href={pdfDataUrl} download={`${selectedFile.name}.pdf`}>
+              here
+            </a>
+            .
+          </object>
         );
       }
       default:
         return (
-          <div>
-            {fileDetails}
-            <p>
-              Unsupported file type.{' '}
-              <a
-                href={`data:text/plain;base64,${selectedFile.content}`}
-                download={selectedFile.name}>
-                Download file
-              </a>
-            </p>
-          </div>
+          <p>
+            Unsupported file type.{' '}
+            <a href={`data:text/plain;base64,${selectedFile.content}`} download={selectedFile.name}>
+              Download file
+            </a>
+          </p>
         );
     }
   };
@@ -129,6 +118,7 @@ const ContentView: React.FC<ContentViewProps> = ({ subjectId, edition }) => {
   return (
     <div>
       <h2>Content View</h2>
+      {selectedFile ? renderFileDetails() : <p>No file selected.</p>}
       {renderFileContent()}
     </div>
   );

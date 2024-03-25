@@ -29,15 +29,15 @@ class Command(BaseCommand):
 
         # Creating files
         file_paths = {
-            "mark.md": "conspects/management/commands/sample_markdown.md",
-            "ggif.gif": "conspects/management/commands/ggif.gif",
-            "image1.png": "conspects/management/commands/image1.png",
-            "image2.jpg": "conspects/management/commands/image2.jpg",
-            "samplepdf.pdf": "conspects/management/commands/samplepdf.pdf",
-            "movie.mp4": "conspects/management/commands/movie.mp4",
-            "moovie.mp4": "conspects/management/commands/moovie.mp4",
-            "image3.png": "conspects/management/commands/image3.png",
-            "image4.png": "conspects/management/commands/image4.png",
+            "mark.md": "resources/mark.md",
+            "ggif.gif": "resources/ggif.gif",
+            "image1.png": "resources/image1.png",
+            "image2.jpg": "resources/image2.jpg",
+            "samplepdf.pdf": "resources/samplepdf.pdf",
+            "movie.mp4": "resources/movie.mp4",
+            "moovie.mp4": "resources/moovie.mp4",
+            "image3.png": "resources/image3.png",
+            "image4.png": "resources/image4.png",
         }
 
         for file_name, file_path in file_paths.items():

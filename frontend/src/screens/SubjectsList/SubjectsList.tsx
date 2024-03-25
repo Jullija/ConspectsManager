@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Subject } from '../../utils/types';
 import SubjectCard from './SubjectCard';
 import { getSubjects } from '../../api/subjects';
-import CenteredMenu from './SubjectMenu';
+import CenteredMenu from '../../components/Menu';
 import { Button } from 'semantic-ui-react';
 import { useNavigate } from 'react-router-dom';
 import { pathGenerator } from '../../router/paths';
@@ -17,8 +17,9 @@ const SubjectsList = () => {
 
   return (
     <>
-      <CenteredMenu />
-
+      <div style={{display: 'flex', justifyContent:"center"}}>
+        <CenteredMenu itemTitles={['Sortuj po przedmiocie', 'Sortuj po roku']}/>
+      </div>
       <div
         style={{
           display: 'flex',

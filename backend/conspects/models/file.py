@@ -6,7 +6,7 @@ from conspectsmanager import settings
 
 class File(models.Model):
     name = models.CharField(max_length=255, blank=False, null=False)
-    content = models.BinaryField(null=False, blank=True)
+    content = models.BinaryField(null=False, blank=True, editable=True)
     extension = models.CharField(max_length=255, blank=False, null=False)
     created_at = models.DateTimeField(auto_now_add=True)
     folder = models.ForeignKey('conspects.Folder', on_delete=models.CASCADE, null=False, blank=False,

@@ -23,7 +23,6 @@ from rest_framework.routers import DefaultRouter
 from conspects.views import FilesViewSet
 
 router = DefaultRouter()
-router.register(r'files', FilesViewSet)
 
 
 schema_view = get_schema_view(
@@ -37,5 +36,4 @@ urlpatterns = [
     path("", include("users.urls", namespace="users")),
     path("", include("conspects.urls", namespace="conspects")),
     path('docs/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
-    path('', include(router.urls)),
 ]

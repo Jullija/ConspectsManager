@@ -24,3 +24,10 @@ export const addEdition = async (
   );
   return response.data;
 };
+
+export const deleteEdition = async (subjectId: number, editionId: number): Promise<Edition> => {
+  const response: AxiosResponse<Edition> = await axios.delete(
+    baseUrl + `/courses/${subjectId}/editions/${editionId}`
+  );
+  return response.data;
+};

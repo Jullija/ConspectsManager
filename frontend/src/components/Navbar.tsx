@@ -1,35 +1,27 @@
 import { pathGenerator } from '../router/paths';
+import CenteredMenu from './Menu';
+
+
+const menuPaths = [
+  pathGenerator.Login,
+  pathGenerator.SubjectsList,
+  pathGenerator.subject(1), 
+  pathGenerator.AddSubject,
+  pathGenerator.Edition(1, 1), 
+  pathGenerator.AddEdition(1),
+  pathGenerator.AccessRights(1, 1),
+];
+
 
 const Navbar = () => {
   return (
     <div
       style={{
         display: 'flex',
-        columnGap: 50,
         justifyContent: 'center',
-        borderBottom: '1px solid lightslategray'
+        width: "100vw"
       }}>
-      <a href={pathGenerator.Login}>
-        <p>/login</p>
-      </a>
-      <a href={pathGenerator.SubjectsList}>
-        <p>/subjects-list</p>
-      </a>
-      <a href={pathGenerator.subject(1)}>
-        <p>/subject/1</p>
-      </a>
-      <a href={pathGenerator.AddSubject}>
-        <p>/add-subject</p>
-      </a>
-      <a href={pathGenerator.Edition(1, 1)}>
-        <p>/edition/1/1</p>
-      </a>
-      <a href={pathGenerator.AddEdition(1)}>
-        <p>/add-edition/1</p>
-      </a>
-      <a href={pathGenerator.AccessRights(1, 1)}>
-        <p>/access-rights-panel/1/1</p>
-      </a>
+      <CenteredMenu itemTitles={['Login', 'SubjectsList', 'Subject', 'Add subject', 'Edition', 'Add edition', 'Access right panel']} paths={menuPaths} styles={{width:"100vw"}} />
     </div>
   );
 };

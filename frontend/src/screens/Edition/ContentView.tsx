@@ -11,7 +11,6 @@ interface ContentViewProps {
 
 const ContentView: React.FC<ContentViewProps> = ({ subjectId, edition }) => {
   const { selectedFile } = useFile();
-  console.log(selectedFile);
   const [activeIndex, setActiveIndex] = useState(-1);
 
   const handleClick = () => {
@@ -67,7 +66,6 @@ const ContentView: React.FC<ContentViewProps> = ({ subjectId, edition }) => {
     }
 
     const fileDetails = renderFileDetails();
-    console.log(fileDetails);
     switch (selectedFile.extension) {
       case 'txt':
         return <TextFileComponent file={selectedFile} onSave={handleSave} />;

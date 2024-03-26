@@ -7,11 +7,13 @@ const basePaths = {
   Edition: '/edition',
   AccessRights: '/access-rights-panel',
   AddEdition: '/add-edition',
+  ErrorPage: '/error',
   PageNotFound: '*'
 };
 
 const subjectIdString = 'subjectId';
 const editionIdString = 'editionId';
+const errorMessageString = 'message';
 
 // do not use outside routes.tsx
 export const browserRouterPaths = {
@@ -23,6 +25,8 @@ export const browserRouterPaths = {
   Edition: basePaths.Edition + '/:' + subjectIdString + '/:' + editionIdString,
   AccessRights: basePaths.AccessRights + '/:' + subjectIdString + '/:' + editionIdString,
   AddEdition: basePaths.AddEdition + '/:' + subjectIdString,
+  // TODO: make message optional
+  ErrorPage: basePaths.ErrorPage + '/:' + errorMessageString,
   PageNotFound: basePaths.PageNotFound
 };
 
@@ -42,6 +46,9 @@ export const pathGenerator = {
   },
   AddEdition: (subjectId: number) => {
     return basePaths.AddEdition + '/' + subjectId;
+  },
+  ErrorPage: (message: string) => {
+    return basePaths.ErrorPage + '/' + message;
   },
   PageNotFound: basePaths.PageNotFound
 };

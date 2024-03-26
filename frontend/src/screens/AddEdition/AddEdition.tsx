@@ -1,9 +1,11 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { pathGenerator } from '../../router/paths';
-import { Button, Checkbox, Form, FormField } from 'semantic-ui-react';
+import { Button, Form, FormField } from 'semantic-ui-react';
 import { useState } from 'react';
 import { titleFontSize } from '../../utils/sizes';
 import { colors } from '../../utils/colors';
+import { addEdition } from '../../api/editions';
+import axios from 'axios';
 
 const AddEdition = () => {
   const params = useParams();
@@ -11,14 +13,28 @@ const AddEdition = () => {
 
   const navigate = useNavigate();
 
-  const [editionName, setEditionName] = useState<string>('');
+  const [editionName, setEditionName] = useState<string>();
 
   const handleCancel = () => {
     navigate(pathGenerator.subject(subjectId));
   };
 
-  const handleConfrim = () => {
-    navigate(pathGenerator.subject(subjectId));
+  const handleConfrim = async () => {
+    if (editionName) {
+      try {
+        // TODO: add year
+        await addEdition(subjectId, editionName, 1999);
+        navigate(pathGenerator.subject(subjectId));
+      } catch (error) {
+        navigate(
+          pathGenerator.ErrorPage(
+            axios.isAxiosError(error)
+              ? JSON.stringify(error.response?.data)
+              : 'Something went wrong :('
+          )
+        );
+      }
+    }
   };
 
   return (
@@ -37,9 +53,9 @@ const AddEdition = () => {
             anuluj
           </Button>
           <Button
-            type="submit"
             onClick={handleConfrim}
-            style={{ backgroundColor: colors.darkblue, color: colors.white }}>
+            style={{ backgroundColor: colors.darkblue, color: colors.white }}
+            disabled={editionName === undefined || editionName === ''}>
             dodaj
           </Button>
         </div>

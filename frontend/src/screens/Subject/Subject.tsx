@@ -24,8 +24,6 @@ const Subject = () => {
     fetchEditions();
   }, []);
 
-  console.log(editions);
-
   return (
     <div
       style={{

@@ -34,7 +34,7 @@ const TextFileComponent: React.FC<TextFileComponentProps> = ({ file, onSave }) =
           onChange={(e, { value }) =>
             typeof value === 'string' ? setContent(value) : setContent('')
           }
-          style={{ minHeight: 300, width: '100%' }}
+          style={{ minHeight: 300, width: '100%', height: '60vh' }}
         />
         <Button onClick={handleSave} primary>
           Save

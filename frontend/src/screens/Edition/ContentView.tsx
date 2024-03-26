@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useFile } from '../../context/FileContext';
 import TextFileComponent from './TextFileComponent';
 import MarkdownFile from './MarkdownFile';
+import { Accordion, Icon, Grid, Segment } from 'semantic-ui-react';
 
 interface ContentViewProps {
   subjectId: number;
@@ -11,6 +12,13 @@ interface ContentViewProps {
 const ContentView: React.FC<ContentViewProps> = ({ subjectId, edition }) => {
   const { selectedFile } = useFile();
   console.log(selectedFile);
+  const [activeIndex, setActiveIndex] = useState(-1);
+
+  const handleClick = () => {
+    // Toggle the accordion
+    setActiveIndex(activeIndex === 0 ? -1 : 0);
+  };
+
   const renderFileDetails = () => {
     return (
       <>
@@ -116,11 +124,38 @@ const ContentView: React.FC<ContentViewProps> = ({ subjectId, edition }) => {
   };
 
   return (
-    <div>
-      <h2>Content View</h2>
-      {selectedFile ? renderFileDetails() : <p>No file selected.</p>}
-      {renderFileContent()}
-    </div>
+    <Grid celled="internally">
+      {selectedFile && (
+        <Grid.Row>
+          <Grid.Column width={16}>
+            <Accordion fluid styled>
+              <Accordion.Title active={activeIndex === 0} onClick={handleClick}>
+                <Icon name="dropdown" />
+                {selectedFile.name}.{selectedFile.extension}
+              </Accordion.Title>
+              <Accordion.Content active={activeIndex === 0}>
+                <p>
+                  <strong>Can be edited:</strong> {selectedFile.can_be_edited ? 'Yes' : 'No'}
+                </p>
+                <p>
+                  <strong>Can be previewed:</strong> {selectedFile.can_be_previewed ? 'Yes' : 'No'}
+                </p>
+                <p>
+                  <strong>Is attachment:</strong> {selectedFile.is_attachment ? 'Yes' : 'No'}
+                </p>
+              </Accordion.Content>
+            </Accordion>
+          </Grid.Column>
+        </Grid.Row>
+      )}
+      <Grid.Row>
+        <Grid.Column width={16}>
+          <Segment>
+            {selectedFile ? renderFileContent() : <p>Select a file to view its content.</p>}
+          </Segment>
+        </Grid.Column>
+      </Grid.Row>
+    </Grid>
   );
 };
 

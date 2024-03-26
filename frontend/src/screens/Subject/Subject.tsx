@@ -1,23 +1,25 @@
-import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Edition } from '../../utils/types';
-import { getEditions } from '../../api/editions';
 import EditionCard from './EditionCard';
 import { pathGenerator } from '../../router/paths';
 import { titleFontSize } from '../../utils/sizes';
 import { Button } from 'semantic-ui-react';
 import { colors } from '../../utils/colors';
+import { getEditions } from '../../api/editions';
+import { useQuery } from 'react-query';
 
 const Subject = () => {
   const params = useParams();
   const subjectId = Number(params.subjectId);
   const navigate = useNavigate();
+  const { isLoading, error, data: editions } = useQuery('editions', () => getEditions(subjectId));
 
-  const [editions, setEditions] = useState<Edition[]>();
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
 
-  useEffect(() => {
-    setEditions(getEditions(subjectId));
-  }, []);
+  if (error) {
+    navigate(pathGenerator.ErrorPage('something went wrong'));
+  }
 
   return (
     <div

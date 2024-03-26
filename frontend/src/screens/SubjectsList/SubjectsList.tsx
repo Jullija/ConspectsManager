@@ -1,24 +1,27 @@
-import { useEffect, useState } from 'react';
-import { Subject } from '../../utils/types';
 import SubjectCard from './SubjectCard';
-import { getSubjects } from '../../api/subjects';
 import CenteredMenu from '../../components/Menu';
 import { Button } from 'semantic-ui-react';
 import { useNavigate } from 'react-router-dom';
 import { pathGenerator } from '../../router/paths';
+import { useQuery } from 'react-query';
+import { getSubjects } from '../../api/subjects';
 
 const SubjectsList = () => {
   const navigate = useNavigate();
-  const [subjects, setSubjects] = useState<Subject[]>();
+  const { isLoading, error, data: subjects } = useQuery('subjects', getSubjects);
 
-  useEffect(() => {
-    setSubjects(getSubjects());
-  }, []);
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
+
+  if (error) {
+    navigate(pathGenerator.ErrorPage('something went wrong'));
+  }
 
   return (
     <>
-      <div style={{display: 'flex', justifyContent:"center"}}>
-        <CenteredMenu itemTitles={['Sortuj po przedmiocie', 'Sortuj po roku']}/>
+      <div style={{ display: 'flex', justifyContent: 'center' }}>
+        <CenteredMenu itemTitles={['Sortuj po przedmiocie', 'Sortuj po roku']} />
       </div>
       <div
         style={{

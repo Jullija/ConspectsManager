@@ -1,6 +1,7 @@
 export type Subject = {
   name: string;
   id: number;
+  description: string;
 };
 
 export type Edition = {

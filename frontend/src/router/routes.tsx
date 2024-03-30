@@ -10,6 +10,7 @@ import Root from '../components/Root';
 import PageNotFound from '../screens/PageNotFound/PageNotFound';
 import { browserRouterPaths } from './paths';
 import ErrorPage from '../screens/ErrorPage/ErrorPage';
+import TemplatesList from '../screens/TemplatesList/TemplatesList';
 
 const routes = createBrowserRouter([
   {
@@ -48,6 +49,10 @@ const routes = createBrowserRouter([
       {
         path: browserRouterPaths.AddEdition,
         element: <AddEdition />
+      },
+      {
+        path: browserRouterPaths.TemplatesList,
+        element: <TemplatesList />
       },
       {
         path: browserRouterPaths.ErrorPage,

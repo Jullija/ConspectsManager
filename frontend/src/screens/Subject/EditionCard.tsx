@@ -5,32 +5,17 @@ import { colors } from '../../utils/colors';
 import { Button } from 'semantic-ui-react';
 import { subtitleFontSize } from '../../utils/sizes';
 import { useState } from 'react';
-import { deleteEdition } from '../../api/editions';
-import axios from 'axios';
 
 interface EditionCardProps {
   edition: Edition;
   subjectId: number;
   withBottomBorder: boolean;
+  handleDelete: (editionId: number) => void;
 }
 
-// TODO: subject will not update after delete -> refresh page needed
-const EditionCard = ({ edition, subjectId, withBottomBorder }: EditionCardProps) => {
+const EditionCard = ({ edition, subjectId, withBottomBorder, handleDelete }: EditionCardProps) => {
   const navigate = useNavigate();
   const [hovered, setHovered] = useState<boolean>(false);
-  const handleDelete = async () => {
-    try {
-      await deleteEdition(subjectId, edition.id);
-    } catch (error) {
-      navigate(
-        pathGenerator.ErrorPage(
-          axios.isAxiosError(error)
-            ? JSON.stringify(error.response?.data)
-            : 'Something went wrong :('
-        )
-      );
-    }
-  };
 
   return (
     <div
@@ -61,7 +46,7 @@ const EditionCard = ({ edition, subjectId, withBottomBorder }: EditionCardProps)
 
         <Button
           style={{ backgroundColor: colors.grey, color: colors.darkblue }}
-          onClick={handleDelete}>
+          onClick={() => handleDelete(edition.id)}>
           delete
         </Button>
       </div>

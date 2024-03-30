@@ -4,14 +4,20 @@ import { pathGenerator } from '../../router/paths';
 import { titleFontSize } from '../../utils/sizes';
 import { Button } from 'semantic-ui-react';
 import { colors } from '../../utils/colors';
-import { getEditions } from '../../api/editions';
+import { getEditions, deleteEdition } from '../../api/editions';
 import { useQuery } from 'react-query';
+import axios from 'axios';
 
 const Subject = () => {
   const params = useParams();
   const subjectId = Number(params.subjectId);
   const navigate = useNavigate();
-  const { isLoading, error, data: editions } = useQuery('editions', () => getEditions(subjectId));
+  const {
+    isLoading,
+    error,
+    data: editions,
+    refetch
+  } = useQuery('editions', () => getEditions(subjectId));
 
   if (isLoading) {
     return <p>Loading...</p>;
@@ -20,6 +26,21 @@ const Subject = () => {
   if (error) {
     navigate(pathGenerator.ErrorPage('something went wrong'));
   }
+
+  const handleDelete = async (editionId: number) => {
+    try {
+      await deleteEdition(subjectId, editionId);
+      refetch();
+    } catch (error) {
+      navigate(
+        pathGenerator.ErrorPage(
+          axios.isAxiosError(error)
+            ? JSON.stringify(error.response?.data)
+            : 'Something went wrong :('
+        )
+      );
+    }
+  };
 
   return (
     <div
@@ -49,6 +70,7 @@ const Subject = () => {
           edition={edition}
           subjectId={subjectId}
           withBottomBorder={index !== editions.length - 1}
+          handleDelete={handleDelete}
         />
       ))}
     </div>

@@ -10,10 +10,15 @@ interface EditionCardProps {
   edition: Edition;
   subjectId: number;
   withBottomBorder: boolean;
-  handleDelete: (editionId: number) => void;
+  handleDeleteClick: (editionId: number) => void;
 }
 
-const EditionCard = ({ edition, subjectId, withBottomBorder, handleDelete }: EditionCardProps) => {
+const EditionCard = ({
+  edition,
+  subjectId,
+  withBottomBorder,
+  handleDeleteClick
+}: EditionCardProps) => {
   const navigate = useNavigate();
   const [hovered, setHovered] = useState<boolean>(false);
 
@@ -46,7 +51,7 @@ const EditionCard = ({ edition, subjectId, withBottomBorder, handleDelete }: Edi
 
         <Button
           style={{ backgroundColor: colors.grey, color: colors.darkblue }}
-          onClick={() => handleDelete(edition.id)}>
+          onClick={() => handleDeleteClick(edition.id)}>
           delete
         </Button>
       </div>

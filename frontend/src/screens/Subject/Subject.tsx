@@ -7,6 +7,8 @@ import { colors } from '../../utils/colors';
 import { getEditions, deleteEdition } from '../../api/editions';
 import { useQuery } from 'react-query';
 import axios from 'axios';
+import ConfiramtionModal from '../../components/ConfirmationModal';
+import { useState } from 'react';
 
 const Subject = () => {
   const params = useParams();
@@ -27,7 +29,10 @@ const Subject = () => {
     navigate(pathGenerator.ErrorPage('something went wrong'));
   }
 
-  const handleDelete = async (editionId: number) => {
+  const [showConfirmationModal, setShowConfirmationModal] = useState<boolean>(false);
+  const [editionIdToDelete, setEditionIdToDelete] = useState<number>(-1);
+
+  const handleDeleteEdition = async (editionId: number) => {
     try {
       await deleteEdition(subjectId, editionId);
       refetch();
@@ -43,11 +48,7 @@ const Subject = () => {
   };
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column'
-      }}>
+    <div style={{ display: 'flex', flexDirection: 'column' }}>
       <div
         style={{
           display: 'flex',
@@ -56,23 +57,32 @@ const Subject = () => {
           margin: '24px 20px'
         }}>
         <div style={{ fontSize: titleFontSize }}>subject subjectId: {subjectId}</div>
-
         <Button
           style={{ backgroundColor: colors.blue, color: colors.white }}
           onClick={() => navigate(pathGenerator.AddEdition(subjectId))}>
           add edition
         </Button>
       </div>
-
       {editions?.map((edition, index) => (
         <EditionCard
           key={index}
           edition={edition}
           subjectId={subjectId}
           withBottomBorder={index !== editions.length - 1}
-          handleDelete={handleDelete}
+          handleDeleteClick={() => {
+            setEditionIdToDelete(edition.id);
+            setShowConfirmationModal(true);
+          }}
         />
       ))}
+      <ConfiramtionModal
+        open={showConfirmationModal}
+        onCloseClick={() => setShowConfirmationModal(false)}
+        onConfirmClick={async () => {
+          await handleDeleteEdition(editionIdToDelete);
+          setShowConfirmationModal(false);
+        }}
+      />
     </div>
   );
 };

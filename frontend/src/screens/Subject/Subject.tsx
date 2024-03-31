@@ -7,8 +7,6 @@ import { colors } from '../../utils/colors';
 import { getEditions, deleteEdition } from '../../api/editions';
 import { useQuery } from 'react-query';
 import axios from 'axios';
-import ConfiramtionModal from '../../components/ConfirmationModal';
-import { useState } from 'react';
 
 const Subject = () => {
   const params = useParams();
@@ -28,9 +26,6 @@ const Subject = () => {
   if (error) {
     navigate(pathGenerator.ErrorPage('something went wrong'));
   }
-
-  const [showConfirmationModal, setShowConfirmationModal] = useState<boolean>(false);
-  const [editionIdToDelete, setEditionIdToDelete] = useState<number>(-1);
 
   const handleDeleteEdition = async (editionId: number) => {
     try {
@@ -69,20 +64,9 @@ const Subject = () => {
           edition={edition}
           subjectId={subjectId}
           withBottomBorder={index !== editions.length - 1}
-          handleDeleteClick={() => {
-            setEditionIdToDelete(edition.id);
-            setShowConfirmationModal(true);
-          }}
+          handleDeleteEdition={handleDeleteEdition}
         />
       ))}
-      <ConfiramtionModal
-        open={showConfirmationModal}
-        onCloseClick={() => setShowConfirmationModal(false)}
-        onConfirmClick={async () => {
-          await handleDeleteEdition(editionIdToDelete);
-          setShowConfirmationModal(false);
-        }}
-      />
     </div>
   );
 };

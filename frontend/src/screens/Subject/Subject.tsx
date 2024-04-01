@@ -17,7 +17,10 @@ const Subject = () => {
     error,
     data: editions,
     refetch
-  } = useQuery('editions', () => getEditions(subjectId));
+  } = useQuery({
+    queryKey: ['editions', subjectId],
+    queryFn: () => getEditions(subjectId)
+  });
 
   if (isLoading) {
     return <p>Loading...</p>;

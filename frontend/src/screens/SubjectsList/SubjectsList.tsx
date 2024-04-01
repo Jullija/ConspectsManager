@@ -8,7 +8,11 @@ import { getSubjects } from '../../api/subjects';
 
 const SubjectsList = () => {
   const navigate = useNavigate();
-  const { isLoading, error, data: subjects } = useQuery('subjects', getSubjects);
+  const {
+    isLoading,
+    error,
+    data: subjects
+  } = useQuery({ queryKey: ['subjects'], queryFn: getSubjects });
 
   if (isLoading) {
     return <p>Loading...</p>;

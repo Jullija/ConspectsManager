@@ -1,11 +1,10 @@
-import axios, { AxiosResponse } from 'axios';
+import { AxiosResponse } from 'axios';
 import { Edition } from '../utils/types';
-
-const baseUrl = 'http://127.0.0.1:8000';
+import { axiosClient } from './axiosClient';
 
 export const getEditions = async (subjectId: number): Promise<Edition[]> => {
-  const response: AxiosResponse<Edition[]> = await axios.get(
-    baseUrl + `/courses/${subjectId}/editions/`
+  const response: AxiosResponse<Edition[]> = await axiosClient.get(
+    `/courses/${subjectId}/editions/`
   );
   return response.data;
 };
@@ -15,8 +14,8 @@ export const addEdition = async (
   name: string,
   year: number
 ): Promise<Edition> => {
-  const response: AxiosResponse<Edition> = await axios.post(
-    baseUrl + `/courses/${subjectId}/editions/`,
+  const response: AxiosResponse<Edition> = await axiosClient.post(
+    `/courses/${subjectId}/editions/`,
     {
       name: name,
       year: year
@@ -26,8 +25,8 @@ export const addEdition = async (
 };
 
 export const deleteEdition = async (subjectId: number, editionId: number): Promise<Edition> => {
-  const response: AxiosResponse<Edition> = await axios.delete(
-    baseUrl + `/courses/${subjectId}/editions/${editionId}`
+  const response: AxiosResponse<Edition> = await axiosClient.delete(
+    `/courses/${subjectId}/editions/${editionId}`
   );
   return response.data;
 };

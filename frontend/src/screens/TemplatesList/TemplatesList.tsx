@@ -1,26 +1,20 @@
+import { colors } from '../../utils/colors';
+import { titleFontSize } from '../../utils/sizes';
+import { Template } from '../../utils/types';
+import TemplateCard from './TemplateCard';
+
 const TemplatesList = () => {
-  const titles = [
-    'abc',
-    'abc',
-    'abc',
-    'abc',
-    'abc',
-    'abc',
-    'abc',
-    'abc',
-    'abc',
-    'abc',
-    'abc',
-    'abc',
-    'abc',
-    'abc',
-    'abc',
-    'abc'
+  const templates: Template[] = [
+    { title: 'template 1' },
+    { title: 'template 2' },
+    { title: 'template 3' }
   ];
 
   return (
     <>
-      <h1>templates</h1>
+      <div style={{ fontSize: titleFontSize, color: colors.darkblue, padding: '20px 0px' }}>
+        Templates
+      </div>
       <div
         style={{
           display: 'flex',
@@ -31,12 +25,8 @@ const TemplatesList = () => {
           marginBottom: 20,
           justifyContent: 'center'
         }}>
-        {titles.map((title, index) => (
-          <div
-            key={index}
-            style={{ padding: 20, width: 340, height: 400, border: '1px solid black' }}>
-            {index}. title
-          </div>
+        {templates.map((template, index) => (
+          <TemplateCard key={index} template={template} />
         ))}
       </div>
     </>

@@ -30,3 +30,7 @@ export interface Edition {
   root_folder: number;
   folders: Folder[];
 }
+
+export interface Template {
+  title: string;
+}

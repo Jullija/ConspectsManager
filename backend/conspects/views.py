@@ -2,6 +2,8 @@ import marko
 from django.db import IntegrityError
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.generics import ListCreateAPIView
@@ -39,20 +41,31 @@ class FilesViewSet(viewsets.ModelViewSet):
 
         return Response(serializer.data)
 
+    @swagger_auto_schema(
+        method='get',
+        manual_parameters=[
+            openapi.Parameter(
+                'id',
+                openapi.IN_QUERY,
+                description="ID of the edition to filter folders by",
+                type=openapi.TYPE_INTEGER
+            )
+        ]
+    )
     @action(detail=False, methods=["get"], url_name="edition")
     def per_edition(self, request):
-        serializer = self.get_serializer(data=request.data)
-        edition_id = request.get("id")
-        edition: Edition
+        edition_id = request.query_params.get("id")
         try:
             edition_id = int(edition_id)
-            edition = Edition.objects.find(id=edition_id)
+            edition = Edition.objects.get(id=edition_id)
         except ValueError:
-            return Response({"message": "Invalid edition id!"})
+            return Response({"message": "Invalid edition id!"}, status=400)
         except Edition.DoesNotExist:
-            return Response({"message": "Edition not found!"})
+            return Response({"message": "Edition not found!"}, status=404)
 
-        folders = edition.folders.prefetch_related("files")
+        files = File.objects.filter(folder__edition=edition).select_related('folder')
+        serializer = FileSerializer(files, many=True)
+
         return Response(serializer.data)
 
     def post(self, request):

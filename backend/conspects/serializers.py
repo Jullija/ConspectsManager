@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from conspects.models import File, Folder, Course, Edition
+from conspects.models import File, Folder, Course, Edition, Template
 
 
 class CourseSerializer(serializers.ModelSerializer):
@@ -76,3 +76,14 @@ class FileSerializer(serializers.ModelSerializer):
         fields = ["id", "name", "extension", "content", "can_be_edited", "can_be_previewed", "is_attachment"]
         read_only_fields = ["can_be_edited", "can_be_previewed", "is_attachment"]
 
+    def validate_edition(self, value):
+        if not Edition.objects.filter(id=value).exists():
+            raise serializers.ValidationError("Edition with id {} does not exist.".format(value))
+        return value
+
+
+class TemplateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Template
+        fields = ['id', 'edition', 'name', 'description', 'structure']
+        read_only_fields = ['structure']

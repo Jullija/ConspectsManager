@@ -1,15 +1,16 @@
 from django.urls import path, include
 from rest_framework import routers
 
-from conspects.views import RetrieveCreateCourseView,\
-    EditionListCreateAPIView, FolderCreateAPIView, FilesViewSet, EditionDetailAPIView, FolderDetailAPIView
+from conspects.views import RetrieveCreateCourseView, \
+    EditionListCreateAPIView, FolderCreateAPIView, FilesViewSet, EditionDetailAPIView, FolderDetailAPIView, \
+    TemplateViewSet
 
 app_name = "conspects"
 
 router = routers.DefaultRouter()
 router.register(r'files', FilesViewSet)
 
-# router.register(r"course", RetrieveCreateCourseView, basename="course")
+router.register(r"templates", TemplateViewSet)
 
 urlpatterns = [
     path('courses/', RetrieveCreateCourseView.as_view()),

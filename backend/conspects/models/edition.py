@@ -1,5 +1,7 @@
 from django.db import models
 
+import conspects.models as conspects_models
+
 
 class Edition(models.Model):
     course = models.ForeignKey('conspects.Course', on_delete=models.CASCADE)
@@ -13,3 +15,8 @@ class Edition(models.Model):
 
     class Meta:
         unique_together = (('course', 'name'),)
+
+    def new_template(self, name, description):
+        template = conspects_models.Template.objects.create(name=name, description=description, edition=self)
+        template.save_structure()
+        return template

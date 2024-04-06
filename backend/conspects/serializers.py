@@ -76,11 +76,6 @@ class FileSerializer(serializers.ModelSerializer):
         fields = ["id", "name", "extension", "content", "can_be_edited", "can_be_previewed", "is_attachment"]
         read_only_fields = ["can_be_edited", "can_be_previewed", "is_attachment"]
 
-    def validate_edition(self, value):
-        if not Edition.objects.filter(id=value).exists():
-            raise serializers.ValidationError("Edition with id {} does not exist.".format(value))
-        return value
-
 
 class TemplateSerializer(serializers.ModelSerializer):
     class Meta:

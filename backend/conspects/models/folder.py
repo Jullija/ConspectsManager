@@ -15,5 +15,13 @@ class Folder(models.Model):
     def add_file(self, name, extension, content):
         return conspects_models.File.objects.create(name=name, extension=extension, content=content, folder=self)
 
+    def is_descendant_of(self, potential_parent):
+        current_folder = self
+        while current_folder.parent:
+            if current_folder.parent == potential_parent:
+                return True
+            current_folder = current_folder.parent
+        return False
+
     def __str__(self):
         return self.name

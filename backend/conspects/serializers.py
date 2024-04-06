@@ -56,13 +56,21 @@ class FolderSerializer(serializers.ModelSerializer):
         read_only_fields = ["edition"]
 
     def validate(self, data):
-        parent_id = self.context['request'].data.get('parent-id')
-        try:
-            folder = Folder.objects.get(pk=parent_id)
-        except Folder.DoesNotExist:
-            raise serializers.ValidationError("parent folder not found")
-        data['parent'] = folder
-        data['edition'] = folder.edition
+        request = self.context['request']
+        parent_id = request.data.get('parent')
+
+        if parent_id is not None:
+            try:
+                parent_folder = Folder.objects.get(pk=parent_id)
+
+                if self.instance and (self.instance.pk == parent_folder.pk or parent_folder.is_descendant_of(self.instance)):
+                    raise serializers.ValidationError({"parent": "Cannot set a descendant as the new parent."})
+
+                data['parent'] = parent_folder
+                data['edition'] = parent_folder.edition
+            except Folder.DoesNotExist:
+                raise serializers.ValidationError({"parent": "Parent folder not found."})
+
         return data
 
     def get_files(self, obj):
@@ -73,7 +81,7 @@ class FolderSerializer(serializers.ModelSerializer):
 class FileSerializer(serializers.ModelSerializer):
     class Meta:
         model = File
-        fields = ["id", "name", "extension", "content", "can_be_edited", "can_be_previewed", "is_attachment"]
+        fields = ["id", "name", "extension", "content", "folder",  "can_be_edited", "can_be_previewed", "is_attachment"]
         read_only_fields = ["can_be_edited", "can_be_previewed", "is_attachment"]
 
 

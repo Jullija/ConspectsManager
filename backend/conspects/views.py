@@ -2,6 +2,8 @@ import marko
 from django.db import IntegrityError
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.generics import ListCreateAPIView
@@ -54,6 +56,47 @@ class FilesViewSet(viewsets.ModelViewSet):
         file = self.get_object()
         html_content = marko.convert(file.content.decode('utf-8'))
         return HttpResponse(html_content, content_type="text/html")
+
+    @swagger_auto_schema(
+        method='post',
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'destination_folder_id': openapi.Schema(type=openapi.TYPE_INTEGER,
+                                                        description='ID of the destination folder')
+            },
+        ),
+        responses={201: FileSerializer()}  # Instantiate the serializer
+    )
+    @action(detail=True, methods=['post'], url_path='copy_to_folder')
+    def copy_to_folder(self, request, pk=None):
+        file_to_copy = self.get_object()
+        destination_folder_id = request.data.get('destination_folder_id')
+
+        try:
+            destination_folder = Folder.objects.get(pk=destination_folder_id)
+
+            original_name = file_to_copy.name
+            new_name = original_name
+            counter = 1
+
+            while File.objects.filter(name=new_name, folder=destination_folder).exists():
+                new_name = f"{original_name} ({counter})"
+                counter += 1
+
+            file_copy = File.objects.create(
+                name=new_name,
+                content=file_to_copy.content,
+                extension=file_to_copy.extension,
+                folder=destination_folder
+            )
+            serializer = self.get_serializer(file_copy)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        except Folder.DoesNotExist:
+            return Response({"message": "Destination folder not found."}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({"message": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class RetrieveCreateCourseView(ListCreateAPIView):

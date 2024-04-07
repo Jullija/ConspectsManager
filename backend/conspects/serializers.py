@@ -84,6 +84,25 @@ class FileSerializer(serializers.ModelSerializer):
         fields = ["id", "name", "extension", "content", "folder",  "can_be_edited", "can_be_previewed", "is_attachment"]
         read_only_fields = ["can_be_edited", "can_be_previewed", "is_attachment"]
 
+    def validate(self, data):
+        instance = getattr(self, 'instance', None)
+
+        folder = data.get('folder', instance.folder if instance else None)
+        name = data.get('name', instance.name if instance else None)
+        extension = data.get('extension', instance.extension if instance else None)
+
+        # Check for files with the same name and extension in the same folder
+        queryset = File.objects.filter(folder=folder, name=name, extension=extension)
+
+        if instance:
+            queryset = queryset.exclude(pk=instance.pk)
+
+        if queryset.exists():
+            raise serializers.ValidationError(
+                "A file with this name and extension already exists in the selected folder.")
+
+        return data
+
 
 class TemplateSerializer(serializers.ModelSerializer):
     class Meta:

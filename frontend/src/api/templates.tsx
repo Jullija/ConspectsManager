@@ -29,7 +29,6 @@ export const addTemplate = async (
   return response.data;
 };
 
-// TODO: any -> template
 export const deleteTemplate = async (templateId: number): Promise<Template> => {
   const response: AxiosResponse<Template> = await axios.delete(
     baseUrl + `/templates/${templateId}/`

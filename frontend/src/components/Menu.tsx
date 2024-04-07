@@ -28,7 +28,7 @@ const CenteredMenu: React.FC<CenteredMenuProps> = ({ itemTitles, paths=[], style
           key={index}
           name={title}
           as="a"
-          style={{ ...getItemStyle(index === activeItemIndex), flexGrow: 1, borderRadius: "5px" }}
+          style={{ ...getItemStyle(index === activeItemIndex), flexGrow: 1, borderRadius: "5px", display:"flex", alignItems:"center", justifyContent: "center" }}
           onClick={() => {
             setActiveItemIndex(index);
             navigate(paths[index]); 

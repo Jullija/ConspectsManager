@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { pathGenerator } from '../../router/paths';
 import { useQuery } from 'react-query';
 import { getSubjects } from '../../api/subjects';
+import { colors } from '../../utils/colors';
 
 const SubjectsList = () => {
   const navigate = useNavigate();
@@ -29,7 +30,8 @@ const SubjectsList = () => {
           flexWrap: 'wrap',
           gap: 20,
           justifyContent: 'center',
-          marginTop: 40
+          marginTop: 40,
+          marginBottom: 40
         }}>
         {subjects?.map((subject, index) => {
           return <SubjectCard subject={subject} key={index} />;
@@ -39,10 +41,19 @@ const SubjectsList = () => {
       <Button
         onClick={() => {
           navigate(pathGenerator.AddSubject);
-        }}>
-        dodaj przedmiot
+        }}
+        style={{
+          position: "fixed",
+          right: 100,
+          zIndex: 100,
+          backgroundColor: colors.orange,
+        }}
+      >
+        Dodaj przedmiot
       </Button>
+
     </>
+ 
   );
 };
 

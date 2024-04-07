@@ -32,5 +32,13 @@ export interface Edition {
 }
 
 export interface Template {
-  title: string;
+  id: number;
+  name: string;
+  description: string;
+  folders: TemplateFolder[];
+}
+
+export interface TemplateFolder {
+  parent: string;
+  folder: string;
 }

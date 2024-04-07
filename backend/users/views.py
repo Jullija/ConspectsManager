@@ -9,6 +9,8 @@ from django.views.decorators.csrf import csrf_exempt
 import firebase_admin.auth as firebase_auth
 from rest_framework import viewsets
 from .models import User
+from .models import UserEdition
+from .serializers import UserEditionSerializer
 from .serializers import UserSerializer
 
 cred = credentials.Certificate('./resources/firebase_key.json')
@@ -37,9 +39,15 @@ def google_login(request):
     except firebase_admin.auth.InvalidIdTokenError:
         return JsonResponse({"error": "Invalid token"}, status=400)
 
+
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+
+
+class UserEditionViewSet(viewsets.ModelViewSet):
+    queryset = UserEdition.objects.all()
+    serializer_class = UserEditionSerializer
 
 
 class HelloWorldView(views.APIView):

@@ -62,6 +62,7 @@ const Login = () => {
                 })
                 .then((response) => {
                     console.log(response.data);
+                    localStorage.setItem('token', response.data.token);
                     // Handle response or navigate as needed
                     navigate(pathGenerator.SubjectsList); // Example navigation
                 })

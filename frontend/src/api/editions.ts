@@ -4,8 +4,16 @@ import { Edition } from '../utils/types';
 const baseUrl = 'http://127.0.0.1:8000';
 
 export const getEditions = async (subjectId: number): Promise<Edition[]> => {
+  // Retrieve the token from localStorage
+  const token = localStorage.getItem('token');
+
   const response: AxiosResponse<Edition[]> = await axios.get(
-    baseUrl + `/courses/${subjectId}/editions/`
+    baseUrl + `/courses/${subjectId}/editions/`, {
+      headers: {
+        // Include the token in the Authorization header
+        Authorization: `Token ${token}`
+      }
+    }
   );
   return response.data;
 };

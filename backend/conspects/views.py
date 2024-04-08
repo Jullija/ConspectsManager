@@ -64,8 +64,6 @@ class RetrieveCreateCourseView(ListCreateAPIView):
     serializer_class = CourseSerializer
 
 
-
-
 class EditionListCreateAPIView(ListCreateAPIView):
     serializer_class = EditionSerializer
 

@@ -1,4 +1,6 @@
 import json
+import time
+
 from django.http import JsonResponse
 from rest_framework import views
 from rest_framework.response import Response
@@ -23,8 +25,8 @@ User = get_user_model()
 def google_login(request):
     data = json.loads(request.body)
     id_token = data.get('token')
-
     try:
+        time.sleep(2)
         decoded_token = firebase_auth.verify_id_token(id_token)
         uid = decoded_token.get('uid')
         email = decoded_token.get('email')
@@ -50,9 +52,11 @@ def google_login(request):
 
         token, _ = Token.objects.get_or_create(user=user)
         return JsonResponse({"message": "User verified", "uid": uid, "created": created, "token": token.key})
-
     except firebase_admin.auth.InvalidIdTokenError:
         return JsonResponse({"error": "Invalid token"}, status=400)
+    except Exception as e:
+        print(str(e))
+        return JsonResponse({"error": str(e)}, status=500)
 
 
 class UserViewSet(viewsets.ModelViewSet):

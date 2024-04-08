@@ -8,9 +8,11 @@ from rest_framework.generics import ListCreateAPIView
 from rest_framework.generics import RetrieveUpdateDestroyAPIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
+from django.db.models import Q
 
 from conspects.models import Edition, Course, Folder
 from conspects.serializers import CourseSerializer, EditionSerializer, FolderSerializer
+from users.models import UserEdition
 from .models import File, Template
 from .serializers import FileSerializer, TemplateSerializer
 
@@ -62,12 +64,29 @@ class RetrieveCreateCourseView(ListCreateAPIView):
     serializer_class = CourseSerializer
 
 
+
+
 class EditionListCreateAPIView(ListCreateAPIView):
     serializer_class = EditionSerializer
 
     def get_queryset(self):
+        user = self.request.user
         course_id = self.kwargs['courseId']
-        return Edition.objects.filter(course_id=course_id)
+        # If the user is not authenticated, return an empty queryset or public editions only
+        if not user.is_authenticated:
+            print("not")
+            return Edition.objects.none()  # or filter for public editions if applicable
+
+        # Get all editions for the course that the user has 'view' permission for
+        viewable_editions = UserEdition.objects.filter(
+            user=user,
+            permission_type='view',
+            edition__course_id=course_id
+        ).values_list('edition', flat=True)
+
+        return Edition.objects.filter(
+            Q(id__in=viewable_editions)  # Assuming there's an 'is_public' field to show editions publicly
+        )
 
 
 class FolderCreateAPIView(ListCreateAPIView):

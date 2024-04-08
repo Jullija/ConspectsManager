@@ -104,16 +104,57 @@ class FolderCreateAPIView(ListCreateAPIView):
     queryset = Folder.objects.all()
 
 
+class FolderViewSet(viewsets.ModelViewSet):
+    queryset = Folder.objects.all()
+    serializer_class = FolderSerializer
+
+    @swagger_auto_schema(
+        method='get',
+        manual_parameters=[
+            openapi.Parameter(
+                'destination_folder_id', in_=openapi.IN_QUERY,
+                type=openapi.TYPE_INTEGER,
+                description='ID of the destination folder',
+                required=True
+            )
+        ],
+        responses={
+            201: FolderSerializer,
+            400: 'Invalid input / Cannot copy into itself or its descendants',
+            404: 'Destination folder not found'
+        }
+    )
+    @action(detail=True, methods=['get'], url_path='copy_to')
+    def copy_to(self, request, *args, **kwargs):
+        folder_to_copy = self.get_object()
+        destination_folder_id = request.query_params.get('destination_folder_id')
+        print(destination_folder_id)
+        try:
+            destination_folder = Folder.objects.get(pk=destination_folder_id)
+            if destination_folder.is_descendant_of(folder_to_copy) or folder_to_copy == destination_folder:
+                return Response({"error": "Cannot copy a folder into itself or one of its descendants."},
+                                status=status.HTTP_400_BAD_REQUEST)
+
+            new_folder = folder_to_copy.copy_to(destination_folder)
+            serializer = FolderSerializer(new_folder, context={'request': request})
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        except Folder.DoesNotExist:
+            return Response({"error": "Destination folder not found."}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+
+
 class EditionDetailAPIView(RetrieveUpdateDestroyAPIView):
     queryset = Edition.objects.all()
     serializer_class = EditionSerializer
     lookup_url_kwarg = 'editionId'
 
 
-class FolderDetailAPIView(RetrieveUpdateDestroyAPIView):
-    queryset = Folder.objects.all()
-    serializer_class = FolderSerializer
-    lookup_url_kwarg = 'folderId'
+# class FolderDetailAPIView(RetrieveUpdateDestroyAPIView):
+#     queryset = Folder.objects.all()
+#     serializer_class = FolderSerializer
+#     lookup_url_kwarg = 'folderId'
 
 
 class TemplateViewSet(viewsets.ModelViewSet):

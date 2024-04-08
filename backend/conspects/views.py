@@ -7,6 +7,7 @@ from rest_framework.decorators import action
 from rest_framework.generics import ListCreateAPIView
 from rest_framework.generics import RetrieveUpdateDestroyAPIView
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 
 from conspects.models import Edition, Course, Folder
 from conspects.serializers import CourseSerializer, EditionSerializer, FolderSerializer
@@ -35,7 +36,7 @@ class FilesViewSet(viewsets.ModelViewSet):
         except Edition.DoesNotExist:
             return Response({"message": "Edition not found!"})
 
-        folders = edition.folders.prefetch_related("files")
+        serializer = edition.folders.prefetch_related("files")
         return Response(serializer.data)
 
     def post(self, request):

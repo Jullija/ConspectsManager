@@ -10,18 +10,31 @@ interface TemplateCardProps {
   handleDelete: () => void;
 }
 
-const TemplateCard = ({ template, handleDelete }: TemplateCardProps) => {
+const TemplateCard: React.FC<TemplateCardProps> = ({
+  template,
+  handleDelete
+}: TemplateCardProps) => {
   const getFolderTreeElememt = (structure: TemplateFolder[]): React.ReactElement | null => {
     const createTree = (node: TemplateFolder): React.ReactElement | null => {
       const children = structure.filter((child) => child.parent === node.folder);
       if (children.length === 0) {
-        return <div key={node.folder}>📁 {node.folder}</div>;
+        return (
+          <div className="item" key={node.folder}>
+            <i className="folder icon"></i>
+            <div className="content">{node.folder}</div>
+          </div>
+        );
       }
 
       return (
-        <div key={node.folder}>
-          📁 {node.folder}
-          <div style={{ marginLeft: '20px' }}>{children.map((child) => createTree(child))}</div>
+        <div className="item" key={node.folder}>
+          <i className="folder icon"></i>
+          <div className="content">
+            {node.folder}
+            <div className="list" style={{ marginLeft: '20px' }}>
+              {children.map((child) => createTree(child))}
+            </div>
+          </div>
         </div>
       );
     };
@@ -33,7 +46,7 @@ const TemplateCard = ({ template, handleDelete }: TemplateCardProps) => {
       return null;
     }
 
-    return createTree(rootNode);
+    return <div className="ui list">{createTree(rootNode)}</div>;
   };
 
   return (

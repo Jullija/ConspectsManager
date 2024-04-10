@@ -1,6 +1,7 @@
 from django.core.management.base import BaseCommand
+
 from conspects.models import Edition, Course, File
-import os
+
 
 class Command(BaseCommand):
     help = 'Initializes the database with some data'
@@ -26,6 +27,8 @@ class Command(BaseCommand):
         przyklady_folder = grafy_folder.add_folder("przykłady")
         dynamiki_folder = asd_2024.root_folder.add_folder("Dynamiki")
         kolejny_folder_w_teorii = teoria_folder.add_folder("Kolejny folder w teorii")
+
+        asd_template = asd_2024.new_template("demo-asd-template", "last year edition template")
 
         # Creating files
         file_paths = {

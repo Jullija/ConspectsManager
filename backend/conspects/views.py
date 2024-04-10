@@ -12,7 +12,7 @@ from django.db.models import Q
 
 from conspects.models import Edition, Course, Folder
 from conspects.serializers import CourseSerializer, EditionSerializer, FolderSerializer
-from users.models import UserEdition
+from users.models import UserEdition, PermissionType
 from .models import File, Template
 from .serializers import FileSerializer, TemplateSerializer
 
@@ -72,19 +72,35 @@ class EditionListCreateAPIView(ListCreateAPIView):
         course_id = self.kwargs['courseId']
         # If the user is not authenticated, return an empty queryset or public editions only
         if not user.is_authenticated:
-            print("not")
             return Edition.objects.none()  # or filter for public editions if applicable
 
-        # Get all editions for the course that the user has 'view' permission for
+        # Check if the user has 'ADMIN' permission without a specific edition
+        # This indicates they have access to all editions
+        if UserEdition.objects.filter(user=user, edition__isnull=True, permission_type='admin').exists():
+            return Edition.objects.filter(course_id=course_id)  # Return all editions for the course
+
+        # Get all editions for the course that the user has 'view', 'owns', or 'edit' permission for
         viewable_editions = UserEdition.objects.filter(
             user=user,
-            permission_type='view',
+            permission_type__in=['view', 'owns', 'edit'],
             edition__course_id=course_id
         ).values_list('edition', flat=True)
 
         return Edition.objects.filter(
-            Q(id__in=viewable_editions)  # Assuming there's an 'is_public' field to show editions publicly
+            id__in=viewable_editions  # Filter editions based on the user's specific permissions
         )
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+
+        # Create a UserEdition instance with 'owns' permission for the current user
+        edition = serializer.instance
+        user = request.user
+        UserEdition.objects.create(user=user, edition=edition, permission_type=PermissionType.OWNS)
+
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
 class FolderCreateAPIView(ListCreateAPIView):

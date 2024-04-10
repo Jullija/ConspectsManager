@@ -23,11 +23,17 @@ export const addEdition = async (
   name: string,
   year: number
 ): Promise<Edition> => {
+  const token = localStorage.getItem('token');
   const response: AxiosResponse<Edition> = await axios.post(
     baseUrl + `/courses/${subjectId}/editions/`,
     {
       name: name,
       year: year
+    },
+    {
+      headers: {
+        Authorization: `Token ${token}`, // Make sure the token is being sent
+      }
     }
   );
   return response.data;

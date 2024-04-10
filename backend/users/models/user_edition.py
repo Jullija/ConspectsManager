@@ -7,12 +7,13 @@ class PermissionType(models.TextChoices):
     VIEW = 'view', 'View'
     EDIT = 'edit', 'Edit'
     OWNS = 'owns', 'Owns'
+    ADMIN = 'admin', 'Admin'
 
 
 class UserEdition(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='edition_permissions')
-    edition = models.ForeignKey(Edition, on_delete=models.CASCADE, related_name='user_permissions')
-    permission_type = models.CharField(max_length=4, choices=PermissionType.choices)
+    edition = models.ForeignKey(Edition, on_delete=models.CASCADE, related_name='user_permissions', null=True)
+    permission_type = models.CharField(max_length=5, choices=PermissionType.choices)
 
     class Meta:
         unique_together = (('user', 'edition', 'permission_type'),)

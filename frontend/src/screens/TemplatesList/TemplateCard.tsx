@@ -53,7 +53,7 @@ const TemplateCard: React.FC<TemplateCardProps> = ({
     <div
       style={{
         padding: 20,
-        width: 340,
+        minWidth: 340,
         height: 400,
         borderRadius: 15,
         backgroundColor: colors.white,

@@ -1,7 +1,8 @@
 import axios, { AxiosResponse } from 'axios';
 import { Edition } from '../utils/types';
+import { api_base } from './api_url';
 
-const baseUrl = 'http://127.0.0.1:8000';
+const baseUrl = api_base;
 
 export const getEditions = async (subjectId: number): Promise<Edition[]> => {
   const response: AxiosResponse<Edition[]> = await axios.get(

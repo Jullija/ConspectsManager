@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Form, Segment } from 'semantic-ui-react';
 import { File } from '../../utils/types';
+import { api_base } from '../../api/api_url';
 
 interface MarkdownFileProps {
   file: File;
@@ -24,7 +25,7 @@ const TextFileComponent: React.FC<MarkdownFileProps> = ({ file, onSave }) => {
 
   const fetchMarkdownPreview = async () => {
     try {
-      const response = await fetch(`http://localhost:8000/files/${file.id}/html_markdown/`);
+      const response = await fetch(`${api_base}/files/${file.id}/html_markdown/`);
       if (response.ok) {
         const html = await response.text();
         setPreview(html);

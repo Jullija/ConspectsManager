@@ -3,6 +3,7 @@ import { useFile } from '../../context/FileContext';
 import TextFileComponent from './TextFileComponent';
 import MarkdownFile from './MarkdownFile';
 import { Accordion, Icon, Grid, Segment } from 'semantic-ui-react';
+import { api_base } from '../../api/api_url';
 
 interface ContentViewProps {
   subjectId: number;
@@ -39,7 +40,7 @@ const ContentView: React.FC<ContentViewProps> = ({ subjectId, edition }) => {
 
   const handleSave = async (updatedBase64Content: string) => {
     try {
-      const response = await fetch(`http://localhost:8000/files/${selectedFile?.id}/`, {
+      const response = await fetch(`${api_base}/files/${selectedFile?.id}/`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json'

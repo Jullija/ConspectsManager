@@ -1,5 +1,6 @@
 import { Edition } from '../utils/types';
 import axios from 'axios';
+import { api_base } from './api_url';
 
 export const getEdition = async (
   subjectId: number,
@@ -7,7 +8,7 @@ export const getEdition = async (
 ): Promise<Edition | undefined> => {
   try {
     const response = await axios.get<Edition>(
-      `http://localhost:8000/courses/${subjectId}/editions/${editioinId}`
+      `${api_base}/courses/${subjectId}/editions/${editioinId}`
     );
     return response.data;
   } catch (error) {

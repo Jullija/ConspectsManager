@@ -2,12 +2,12 @@ version: '3.8'
 
 services:
   frontend:
-    build: ./frontend
+    image: conspectsmanagercr.azurecr.io/io_frontend:0.0.1
     ports:
-      - 3000:3000
+      - 80:3000
     depends_on:
       - backend
   backend:
-    build: ./backend
+    image: conspectsmanagercr.azurecr.io/io_backend:0.0.1
     ports:
       - 8000:8000

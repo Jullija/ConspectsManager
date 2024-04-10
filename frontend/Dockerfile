@@ -4,10 +4,11 @@ WORKDIR /frontend
 
 COPY package* .
 RUN npm install
-
+RUN npm install -g serve
 COPY . .
+RUN npm run build
 
-EXPOSE 3000
+EXPOSE 80
 
-ENTRYPOINT ["npm"]
-CMD ["start"]
+ENTRYPOINT ["serve"]
+CMD ["-s", "build", "-l", "80"]

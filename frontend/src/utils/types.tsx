@@ -30,3 +30,15 @@ export interface Edition {
   root_folder: number;
   folders: Folder[];
 }
+
+export interface Template {
+  id: number;
+  name: string;
+  description: string;
+  folders: TemplateFolder[];
+}
+
+export interface TemplateFolder {
+  parent: string;
+  folder: string;
+}

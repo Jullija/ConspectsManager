@@ -1,6 +1,6 @@
 import { Outlet } from 'react-router-dom';
 import Navbar from './Navbar';
-import { minContentWidth } from '../utils/sizes';
+import { contentWidth } from '../utils/sizes';
 
 const Root = () => {
   return (
@@ -12,7 +12,7 @@ const Root = () => {
           display: 'flex',
           justifyContent: 'center'
         }}>
-        <div style={{ minWidth: minContentWidth }}>
+        <div style={{ width: contentWidth }}>
           <Outlet />
         </div>
       </div>

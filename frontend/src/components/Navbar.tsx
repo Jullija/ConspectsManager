@@ -8,6 +8,7 @@ const menuPaths = [
   pathGenerator.AddSubject,
   pathGenerator.Edition(1, 1),
   pathGenerator.AddEdition(1),
+  pathGenerator.TemplatesList,
   pathGenerator.AccessRights(1, 1)
 ];
 
@@ -27,6 +28,7 @@ const Navbar = () => {
           'Add subject',
           'Edition',
           'Add edition',
+          'Templates',
           'Access right panel'
         ]}
         paths={menuPaths}

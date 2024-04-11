@@ -6,6 +6,8 @@ import { Button } from 'semantic-ui-react';
 import { subtitleFontSize } from '../../utils/sizes';
 import { useState } from 'react';
 import ConfiramtionModal from '../../components/ConfirmationModal';
+import { addTemplate } from '../../api/templates';
+import axios from 'axios';
 
 interface EditionCardProps {
   edition: Edition;
@@ -23,6 +25,20 @@ const EditionCard = ({
   const navigate = useNavigate();
   const [hovered, setHovered] = useState<boolean>(false);
   const [showConfirmationModal, setShowConfirmationModal] = useState<boolean>(false);
+
+  const handleAddTemplate = async () => {
+    try {
+      await addTemplate(edition.id, edition.name, 'description');
+    } catch (error) {
+      navigate(
+        pathGenerator.ErrorPage(
+          axios.isAxiosError(error)
+            ? JSON.stringify(error.response?.data)
+            : 'Something went wrong :('
+        )
+      );
+    }
+  };
 
   return (
     <>
@@ -50,6 +66,12 @@ const EditionCard = ({
             style={{ backgroundColor: colors.orange, color: colors.darkblue }}
             onClick={() => navigate(pathGenerator.Edition(subjectId, edition.id))}>
             edit
+          </Button>
+
+          <Button
+            style={{ backgroundColor: colors.orange, color: colors.darkblue }}
+            onClick={handleAddTemplate}>
+            save template
           </Button>
 
           <Button

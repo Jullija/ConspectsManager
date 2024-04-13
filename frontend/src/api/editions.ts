@@ -40,8 +40,14 @@ export const addEdition = async (
 };
 
 export const deleteEdition = async (subjectId: number, editionId: number): Promise<Edition> => {
+  const token = localStorage.getItem('token');
   const response: AxiosResponse<Edition> = await axios.delete(
-    baseUrl + `/courses/${subjectId}/editions/${editionId}`
+    baseUrl + `/courses/${subjectId}/editions/${editionId}`, {
+      headers: {
+        // Include the token in the Authorization header
+        Authorization: `Token ${token}`
+      }
+    }
   );
   return response.data;
 };

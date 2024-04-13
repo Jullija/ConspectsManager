@@ -3,6 +3,28 @@ export type Subject = {
   id: number;
   description: string;
 };
+export type PermissionType = 'view' | 'edit' | 'owns' | 'admin';
+
+export type UserEdition = {
+  id: number;
+  user: number;
+  userDetails?: User;
+  edition: number | null;
+  permission_type: PermissionType;
+};
+
+
+export type User = {
+  id: number;
+  username: string;
+  uid: string;
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  isStaff?: boolean;
+  isActive?: boolean;
+  dateJoined?: Date;
+};
 
 export interface File {
   id: number;
@@ -12,6 +34,7 @@ export interface File {
   can_be_edited: boolean;
   can_be_previewed: boolean;
   is_attachment: boolean;
+  user_permission: string;
 }
 
 export interface Folder {
@@ -20,6 +43,7 @@ export interface Folder {
   edition: number;
   parent: number | null;
   files: File[];
+  user_permission: string;
 }
 
 export interface Edition {
@@ -29,4 +53,5 @@ export interface Edition {
   name: string;
   root_folder: number;
   folders: Folder[];
+  user_permission: string;
 }

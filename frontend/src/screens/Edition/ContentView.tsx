@@ -9,6 +9,9 @@ interface ContentViewProps {
   edition?: { id: number; name: string };
 }
 
+const viewablePermissions = ['view', 'owns', 'edit', 'admin'];
+const editablePermissions = ['owns', 'edit', 'admin'];
+
 const ContentView: React.FC<ContentViewProps> = ({ subjectId, edition }) => {
   const { selectedFile } = useFile();
   const [activeIndex, setActiveIndex] = useState(-1);
@@ -25,10 +28,18 @@ const ContentView: React.FC<ContentViewProps> = ({ subjectId, edition }) => {
           {selectedFile?.name}.{selectedFile?.extension}
         </h3>
         <p>
-          <strong>Can be edited:</strong> {selectedFile?.can_be_edited ? 'Yes' : 'No'}
+        <strong>Can be edited:</strong> {
+            selectedFile && selectedFile.user_permission && editablePermissions.includes(selectedFile.user_permission) && selectedFile.can_be_edited
+              ? 'Yes'
+              : 'No'
+          }
         </p>
         <p>
-          <strong>Can be previewed:</strong> {selectedFile?.can_be_previewed ? 'Yes' : 'No'}
+        <strong>Can be previewed:</strong> {
+            selectedFile && selectedFile.user_permission && viewablePermissions.includes(selectedFile.user_permission) && selectedFile.can_be_previewed
+              ? 'Yes'
+              : 'No'
+          }
         </p>
         <p>
           <strong>Is attachment:</strong> {selectedFile?.is_attachment ? 'Yes' : 'No'}
@@ -39,10 +50,12 @@ const ContentView: React.FC<ContentViewProps> = ({ subjectId, edition }) => {
 
   const handleSave = async (updatedBase64Content: string) => {
     try {
+      const token = localStorage.getItem('token');
       const response = await fetch(`http://localhost:8000/files/${selectedFile?.id}/`, {
         method: 'PATCH',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': `Token ${token}`
         },
         body: JSON.stringify({
           name: selectedFile?.name,
@@ -68,10 +81,10 @@ const ContentView: React.FC<ContentViewProps> = ({ subjectId, edition }) => {
     const fileDetails = renderFileDetails();
     switch (selectedFile.extension) {
       case 'txt':
-        return <TextFileComponent file={selectedFile} onSave={handleSave} />;
+        return <TextFileComponent file={selectedFile} onSave={handleSave} canEdit={editablePermissions.includes(selectedFile.user_permission)}/>;
 
       case 'md':
-        return <MarkdownFile file={selectedFile} onSave={handleSave} />;
+        return <MarkdownFile file={selectedFile} onSave={handleSave} canEdit={editablePermissions.includes(selectedFile.user_permission)}/>;
       case 'jpg':
       case 'jpeg':
       case 'gif':
@@ -132,11 +145,19 @@ const ContentView: React.FC<ContentViewProps> = ({ subjectId, edition }) => {
                 {selectedFile.name}.{selectedFile.extension}
               </Accordion.Title>
               <Accordion.Content active={activeIndex === 0}>
-                <p>
-                  <strong>Can be edited:</strong> {selectedFile.can_be_edited ? 'Yes' : 'No'}
+              <p>
+                <strong>Can be edited:</strong> {
+                    selectedFile && selectedFile.user_permission && editablePermissions.includes(selectedFile.user_permission) && selectedFile.can_be_edited
+                      ? 'Yes'
+                      : 'No'
+                  }
                 </p>
                 <p>
-                  <strong>Can be previewed:</strong> {selectedFile.can_be_previewed ? 'Yes' : 'No'}
+                <strong>Can be previewed:</strong> {
+                    selectedFile && selectedFile.user_permission && viewablePermissions.includes(selectedFile.user_permission) && selectedFile.can_be_previewed
+                      ? 'Yes'
+                      : 'No'
+                  }
                 </p>
                 <p>
                   <strong>Is attachment:</strong> {selectedFile.is_attachment ? 'Yes' : 'No'}

@@ -1,4 +1,6 @@
 from rest_framework import serializers
+
+from conspects.serializers import EditionSerializer
 from .models import User
 from .models import UserEdition, PermissionType
 

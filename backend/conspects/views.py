@@ -89,6 +89,7 @@ class EditionListCreateAPIView(ListCreateAPIView):
         return Edition.objects.filter(
             id__in=viewable_editions  # Filter editions based on the user's specific permissions
         )
+
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -103,10 +104,30 @@ class EditionListCreateAPIView(ListCreateAPIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
-class FolderCreateAPIView(ListCreateAPIView):
-    serializer_class = FolderSerializer
-    queryset = Folder.objects.all()
+# class FolderCreateAPIView(ListCreateAPIView):
+#     serializer_class = FolderSerializer
+#     queryset = Folder.objects.all()
+#
+#     def get_serializer_context(self):
+#         """
+#         Ensures that the request context is always included in the serializer context.
+#         """
+#         context = super(FolderCreateAPIView, self).get_serializer_context()
+#         print("Context in get_serializer_context2:", context)
+#         return context
 
+
+class FolderViewSet(viewsets.ModelViewSet):
+    queryset = Folder.objects.all()
+    serializer_class = FolderSerializer
+    lookup_url_kwarg = 'folderId'
+
+    def get_serializer_context(self):
+        """
+        Ensures that the request context is always included in the serializer context.
+        """
+        context = super(FolderViewSet, self).get_serializer_context()
+        return context
 
 class EditionDetailAPIView(RetrieveUpdateDestroyAPIView):
     queryset = Edition.objects.all()
@@ -114,10 +135,18 @@ class EditionDetailAPIView(RetrieveUpdateDestroyAPIView):
     lookup_url_kwarg = 'editionId'
 
 
-class FolderDetailAPIView(RetrieveUpdateDestroyAPIView):
-    queryset = Folder.objects.all()
-    serializer_class = FolderSerializer
-    lookup_url_kwarg = 'folderId'
+# class FolderDetailAPIView(RetrieveUpdateDestroyAPIView):
+#     queryset = Folder.objects.all()
+#     serializer_class = FolderSerializer
+#     lookup_url_kwarg = 'folderId'
+#
+#     def get_serializer_context(self):
+#         """
+#         Ensures that the request context is always included in the serializer context.
+#         """
+#         context = super(FolderDetailAPIView, self).get_serializer_context()
+#         print("Context in get_serializer_context:", context)
+#         return context
 
 
 class TemplateViewSet(viewsets.ModelViewSet):

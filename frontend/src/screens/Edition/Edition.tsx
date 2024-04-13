@@ -60,6 +60,8 @@ const Edition = () => {
           accessRights={accessRights}
           subjectId={subjectId}
           editionId={editionId}
+          canEdit={["owns", "edit", "admin"].includes(edition?.user_permission ?? "")}
+          canShare={["owns", "admin"].includes(edition?.user_permission ?? "")}
         />
         <Grid>
           <Grid.Row>

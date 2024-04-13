@@ -6,9 +6,10 @@ import { File } from '../../utils/types';
 interface TextFileComponentProps {
   file: File;
   onSave: (updatedBase64Content: string) => Promise<void>;
+  canEdit: boolean;
 }
 
-const TextFileComponent: React.FC<TextFileComponentProps> = ({ file, onSave }) => {
+const TextFileComponent: React.FC<TextFileComponentProps> = ({ file, onSave, canEdit}) => {
   const [content, setContent] = useState('');
 
   useEffect(() => {
@@ -19,6 +20,7 @@ const TextFileComponent: React.FC<TextFileComponentProps> = ({ file, onSave }) =
   }, [file]);
 
   const handleSave = async () => {
+    if (!canEdit) return;
     const binaryString = new TextEncoder()
       .encode(content)
       .reduce((acc, byte) => acc + String.fromCharCode(byte), '');
@@ -29,16 +31,17 @@ const TextFileComponent: React.FC<TextFileComponentProps> = ({ file, onSave }) =
   return (
     <div>
       <Form>
-        <Form.TextArea
+      <Form.TextArea
           value={content}
-          onChange={(e, { value }) =>
-            typeof value === 'string' ? setContent(value) : setContent('')
-          }
-          style={{ minHeight: 300, width: '100%', height: '60vh' }}
+          onChange={(e, { value }) => canEdit && typeof value === 'string' ? setContent(value) : undefined}
+          readOnly={!canEdit}
+          style={{ minHeight: 300, width: '100%', height: '60vh', overflowY: 'auto' }}
         />
-        <Button onClick={handleSave} primary>
-          Save
-        </Button>
+        {canEdit && (
+          <Button onClick={handleSave} primary>
+            Save
+          </Button>
+        )}
       </Form>
     </div>
   );

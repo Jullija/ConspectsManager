@@ -5,6 +5,7 @@ from django.http import JsonResponse
 from rest_framework import views
 from rest_framework.response import Response
 import firebase_admin
+from django_filters import rest_framework as filters
 from firebase_admin import credentials
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
@@ -64,9 +65,55 @@ class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
 
 
+class UserEditionFilter(filters.FilterSet):
+    edition = filters.NumberFilter(field_name='edition__id')
+
+    class Meta:
+        model = UserEdition
+        fields = ['edition']
+
+
 class UserEditionViewSet(viewsets.ModelViewSet):
     queryset = UserEdition.objects.all()
     serializer_class = UserEditionSerializer
+    filter_backends = (filters.DjangoFilterBackend,)
+    filterset_class = UserEditionFilter
+
+    def get_queryset(self):
+        user = self.request.user
+        if not user.is_authenticated:
+            return UserEdition.objects.none()  # No access for unauthenticated users
+
+        edition_id = self.request.query_params.get('edition')
+        if edition_id:
+            # Check if the user owns the queried edition
+            if not UserEdition.objects.filter(user=user, edition__isnull=True, permission_type='admin').exists():
+                if UserEdition.objects.filter(user=user, edition_id=edition_id, permission_type='owns').exists():
+                    return UserEdition.objects.filter(edition_id=edition_id)
+                else:
+                    return UserEdition.objects.none()
+
+        return UserEdition.objects
+
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        user = self.request.user
+        if not user.is_authenticated:
+            return UserEdition.objects.none()
+        if not UserEdition.objects.filter(user=user, edition__isnull=True, permission_type='admin').exists():
+            if not UserEdition.objects.filter(user=user, edition=instance.edition, permission_type='owns').exists():
+                return Response({"detail": "You do not have permission to perform this action."}, status=403)
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        if not serializer.is_valid():
+            print(f"Serializer errors: {serializer.errors}")  # Log serializer errors
+            return Response(serializer.errors, status=400)
+        self.perform_update(serializer)
+
+        if getattr(instance, '_prefetched_objects_cache', None):
+            instance._prefetched_objects_cache = {}
+
+        return Response(serializer.data)
 
 
 class HelloWorldView(views.APIView):

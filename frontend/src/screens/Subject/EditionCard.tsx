@@ -31,6 +31,10 @@ const EditionCard = ({ edition, subjectId, withBottomBorder }: EditionCardProps)
       );
     }
   };
+  // Check permission types for displaying buttons
+  const hasAdminOrOwnsPermission = ['admin', 'owns'].includes(edition.user_permission);
+  const hasEditPermission = ['edit', 'owns', 'admin'].includes(edition.user_permission);
+  const hasViewPermission = ['view'].includes(edition.user_permission);
 
   return (
     <div
@@ -53,17 +57,27 @@ const EditionCard = ({ edition, subjectId, withBottomBorder }: EditionCardProps)
         {edition.name}
       </div>
       <div style={{ display: 'flex', gap: 16 }}>
-        <Button
-          style={{ backgroundColor: colors.orange, color: colors.darkblue }}
-          onClick={() => navigate(pathGenerator.Edition(subjectId, edition.id))}>
-          edit
-        </Button>
-
-        <Button
-          style={{ backgroundColor: colors.grey, color: colors.darkblue }}
-          onClick={handleDelete}>
-          delete
-        </Button>
+        {hasViewPermission && (
+          <Button
+            style={{ backgroundColor: colors.orange, color: colors.white }}
+            onClick={() => navigate(pathGenerator.Edition(subjectId, edition.id))}>
+            view
+          </Button>
+        )}
+        {hasEditPermission && (
+          <Button
+            style={{ backgroundColor: colors.orange, color: colors.darkblue }}
+            onClick={() => navigate(pathGenerator.Edition(subjectId, edition.id))}>
+            edit
+          </Button>
+        )}
+        {hasAdminOrOwnsPermission && (
+          <Button
+            style={{  backgroundColor: colors.grey, color: colors.darkblue  }}
+            onClick={handleDelete}>
+            delete
+          </Button>
+        )}
       </div>
     </div>
   );

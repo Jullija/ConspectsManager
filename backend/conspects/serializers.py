@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from conspects.models import File, Folder, Course, Edition, Template
+from users.models import UserEdition
 
 
 class CourseSerializer(serializers.ModelSerializer):
@@ -11,10 +12,11 @@ class CourseSerializer(serializers.ModelSerializer):
 
 class EditionSerializer(serializers.ModelSerializer):
     folders = serializers.SerializerMethodField(read_only=True)
+    user_permission = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Edition
-        fields = ["id", "course", "year", "name", "root_folder", "folders"]
+        fields = ["id", "course", "year", "name", "root_folder", "folders", "user_permission"]
         read_only_fields = ["root_folder", "course"]
 
     def validate_name(self, value):
@@ -34,7 +36,17 @@ class EditionSerializer(serializers.ModelSerializer):
 
     def get_folders(self, obj):
         folders = obj.edition_folders.all()
-        return FolderSerializer(folders, many=True).data
+        return FolderSerializer(folders, many=True, context=self.context).data
+
+    def get_user_permission(self, obj):
+        user = self.context['request'].user
+        print(user, user.is_authenticated)
+        if user.is_authenticated:
+            if UserEdition.objects.filter(user=user, edition__isnull=True, permission_type='admin').exists():
+                return "admin"
+            permission = UserEdition.objects.filter(user=user, edition=obj).first()
+            return permission.permission_type if permission else None
+        return None
 
     # def create(self, validated_data):
     #     course_id = self.context['request'].parser_context['kwargs']['courseId']
@@ -49,10 +61,11 @@ class EditionSerializer(serializers.ModelSerializer):
 
 class FolderSerializer(serializers.ModelSerializer):
     files = serializers.SerializerMethodField(read_only=True)
+    user_permission = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Folder
-        fields = ["id", "name", "edition", "parent", "files"]
+        fields = ["id", "name", "edition", "parent", "files", "user_permission"]
         read_only_fields = ["edition"]
 
     def validate(self, data):
@@ -67,14 +80,35 @@ class FolderSerializer(serializers.ModelSerializer):
 
     def get_files(self, obj):
         files = obj.folder_files.all()
-        return FileSerializer(files, many=True).data
+        return FileSerializer(files, many=True, context=self.context).data
+
+    def get_user_permission(self, obj):
+        user = self.context['request'].user
+        if user.is_authenticated:
+            if UserEdition.objects.filter(user=user, edition__isnull=True, permission_type='admin').exists():
+                return "admin"
+            permission = UserEdition.objects.filter(user=user, edition=obj.edition).first()
+            return permission.permission_type if permission else None
+        return None
 
 
 class FileSerializer(serializers.ModelSerializer):
+    user_permission = serializers.SerializerMethodField(read_only=True)
+
     class Meta:
         model = File
-        fields = ["id", "name", "extension", "content", "can_be_edited", "can_be_previewed", "is_attachment"]
+        fields = ["id", "name", "extension", "content", "can_be_edited", "can_be_previewed", "is_attachment",
+                  "user_permission"]
         read_only_fields = ["can_be_edited", "can_be_previewed", "is_attachment"]
+
+    def get_user_permission(self, obj):
+        user = self.context['request'].user
+        if user.is_authenticated:
+            if UserEdition.objects.filter(user=user, edition__isnull=True, permission_type='admin').exists():
+                return "admin"
+            permission = UserEdition.objects.filter(user=user, edition=obj.folder.edition).first()
+            return permission.permission_type if permission else None
+        return None
 
 
 class TemplateSerializer(serializers.ModelSerializer):

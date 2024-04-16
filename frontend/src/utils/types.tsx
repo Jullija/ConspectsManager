@@ -4,6 +4,9 @@ export type Subject = {
   description: string;
 };
 export type PermissionType = 'view' | 'edit' | 'owns' | 'admin';
+export type PermissionTypeEditable = 'edit' | 'owns' | 'admin';
+export type PermissionTypeNormal = 'view' | 'edit' | 'owns';
+
 
 export type UserEdition = {
   id: number;

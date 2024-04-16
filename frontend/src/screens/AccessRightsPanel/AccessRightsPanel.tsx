@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { pathGenerator } from '../../router/paths';
-import { getUserEditionsByEdition, updateUserEdition, deleteUserEdition, postUserEdition} from '../../api/usereditions';
+import { getUserEditionsByEdition, updateUserEdition, deleteUserEdition, postUserEdition} from '../../api/userEditions';
 import { getUsers} from '../../api/users';
 import { getUser} from '../../api/user';
-import { UserEdition, User } from '../../utils/types';
+import { UserEdition, User, PermissionTypeNormal } from '../../utils/types';
 
 const AccessRightsPanel = () => {
   const [permissions, setPermissions] = useState<UserEdition[]>([]);
@@ -99,21 +99,7 @@ const AccessRightsPanel = () => {
     navigate(pathGenerator.Edition(subjectId, editionId));
   };
 
-  // const handlePermissionChange = async (id: number, newPermission: 'view' | 'edit' | 'owns') => {
-  //   const updateResult = await updateUserEdition({
-  //     id: id,
-  //     permissionType: newPermission
-  //   });
-  //   if (updateResult) {
-  //     setPermissions(permissions.map(perm => {
-  //       if (perm.id === id) {
-  //         return { ...perm, permission_type: newPermission }; 
-  //       }
-  //       return perm;
-  //     }));
-  //     setEditingPermissionId(null);
-  //   }
-  // };
+
   const handlePermissionChange = (id: number, newPermission: 'view' | 'edit' | 'owns') => {
     setStagedPermissions(prev => ({
       ...prev,
@@ -132,7 +118,7 @@ const AccessRightsPanel = () => {
 
 
 
-  const availablePermissions = ['view', 'edit', 'owns'];
+  const availablePermissions: PermissionTypeNormal[] = ['view', 'edit', 'owns'];
 
   return (
     <>

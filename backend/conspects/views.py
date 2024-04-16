@@ -87,7 +87,7 @@ class EditionListCreateAPIView(ListCreateAPIView):
         ).values_list('edition', flat=True)
 
         return Edition.objects.filter(
-            id__in=viewable_editions  # Filter editions based on the user's specific permissions
+            id__in=viewable_editions
         )
 
     def create(self, request, *args, **kwargs):
@@ -96,25 +96,11 @@ class EditionListCreateAPIView(ListCreateAPIView):
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
 
-        # Create a UserEdition instance with 'owns' permission for the current user
         edition = serializer.instance
         user = request.user
         UserEdition.objects.create(user=user, edition=edition, permission_type=PermissionType.OWNS)
 
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
-
-
-# class FolderCreateAPIView(ListCreateAPIView):
-#     serializer_class = FolderSerializer
-#     queryset = Folder.objects.all()
-#
-#     def get_serializer_context(self):
-#         """
-#         Ensures that the request context is always included in the serializer context.
-#         """
-#         context = super(FolderCreateAPIView, self).get_serializer_context()
-#         print("Context in get_serializer_context2:", context)
-#         return context
 
 
 class FolderViewSet(viewsets.ModelViewSet):
@@ -129,24 +115,11 @@ class FolderViewSet(viewsets.ModelViewSet):
         context = super(FolderViewSet, self).get_serializer_context()
         return context
 
+
 class EditionDetailAPIView(RetrieveUpdateDestroyAPIView):
     queryset = Edition.objects.all()
     serializer_class = EditionSerializer
     lookup_url_kwarg = 'editionId'
-
-
-# class FolderDetailAPIView(RetrieveUpdateDestroyAPIView):
-#     queryset = Folder.objects.all()
-#     serializer_class = FolderSerializer
-#     lookup_url_kwarg = 'folderId'
-#
-#     def get_serializer_context(self):
-#         """
-#         Ensures that the request context is always included in the serializer context.
-#         """
-#         context = super(FolderDetailAPIView, self).get_serializer_context()
-#         print("Context in get_serializer_context:", context)
-#         return context
 
 
 class TemplateViewSet(viewsets.ModelViewSet):

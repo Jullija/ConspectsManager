@@ -1,13 +1,14 @@
 import { Edition } from '../utils/types';
 import axios from 'axios';
+import getToken from '../utils/tokenManager';
 
 export const getEditions = async (subjectId: number): Promise<Edition[]> => {
   try {
-    const token = localStorage.getItem('token');
+    const token = getToken();
+    
     const response = await axios.get<Edition[]>(
       `http://localhost:8000/courses/${subjectId}/editions`, {
         headers: {
-          // Include the token in the Authorization header
           Authorization: `Token ${token}`
         }
       }

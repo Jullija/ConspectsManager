@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Form, Segment } from 'semantic-ui-react';
 import { File } from '../../utils/types';
+import getToken from '../../utils/tokenManager';
 
 interface MarkdownFileProps {
   file: File;
@@ -25,7 +26,8 @@ const TextFileComponent: React.FC<MarkdownFileProps> = ({ file, onSave, canEdit}
 
   const fetchMarkdownPreview = async () => {
     try {
-      const token = localStorage.getItem('token');
+      const token = getToken();
+
       const response = await fetch(`http://localhost:8000/files/${file.id}/html_markdown/`, {
         headers: {
           'Authorization': `Token ${token}`

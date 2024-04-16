@@ -4,8 +4,10 @@ import { useFolder } from '../../context/FolderContext';
 import { Folder, File as FileType } from '../../utils/types';
 import { Icon, List } from 'semantic-ui-react';
 import { getFile } from '../../api/file';
+import { PermissionType } from '../../utils/types';
 
-const viewablePermissions = ['view', 'owns', 'edit', 'admin'];
+
+const viewablePermissions: PermissionType[] = ['view', 'owns', 'edit', 'admin'];
 
 interface FolderStructureProps {
   folders: Folder[];
@@ -34,11 +36,11 @@ const FolderStructure: React.FC<FolderStructureProps> = ({ folders, parent = nul
 
 
   const hasViewableFolderPermission = (folder: Folder): boolean => {
-    return viewablePermissions.includes(folder.user_permission);
+    return viewablePermissions.includes(folder.user_permission as PermissionType);
   };
 
   const hasViewableFilePermission = (file: FileType): boolean => {
-    return viewablePermissions.includes(file.user_permission);
+    return viewablePermissions.includes(file.user_permission as PermissionType);
   };
   return (
     <List>

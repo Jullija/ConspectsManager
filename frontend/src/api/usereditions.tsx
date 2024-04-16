@@ -1,14 +1,16 @@
 import axios from 'axios';
 import { UserEdition, PermissionType} from '../utils/types';
+import getToken from '../utils/tokenManager';
 
 
 type UpdateUserEditionParams = {
   id: number;
-  permissionType: PermissionType;  // Adjust as needed based on your types
+  permissionType: PermissionType;
 };
 
 export const deleteUserEdition = async (id: number) => {
-    const token = localStorage.getItem('token');
+  const token = getToken();
+
     try {
       await axios.delete(`http://127.0.0.1:8000/user-editions/${id}/`, {
         headers: {
@@ -23,7 +25,8 @@ export const deleteUserEdition = async (id: number) => {
   };
 
   export const updateUserEdition = async (params: UpdateUserEditionParams): Promise<UserEdition | null> => {
-    const token = localStorage.getItem('token');
+    const token = getToken();
+
     console.log("Updating User Edition with params:", params);
     try {
         const response = await axios.patch<UserEdition>(
@@ -44,13 +47,13 @@ export const deleteUserEdition = async (id: number) => {
     }
 };
 
-// Function to get user-edition permissions by user ID or edition ID
 export const getUserEditions = async ({
   userId,
   editionId
 }: { userId?: number; editionId?: number }): Promise<UserEdition[]> => {
   try {
-    const token = localStorage.getItem('token');
+    const token = getToken();
+
     let url = 'http://127.0.0.1:8000/user-editions/';
     if (userId) {
       url += `?user=${userId}`;
@@ -73,7 +76,8 @@ export const getUserEditions = async ({
 
 export const getUserEditionsByEdition = async (editionId: number): Promise<UserEdition[]> => {
   try {
-    const token = localStorage.getItem('token');
+    const token = getToken();
+
     const response = await axios.get<UserEdition[]>(
       `http://127.0.0.1:8000/user-editions/?edition=${editionId}`, {
         headers: {
@@ -88,9 +92,7 @@ export const getUserEditionsByEdition = async (editionId: number): Promise<UserE
   }
 };
 export const postUserEdition = async (userId: number, editionId: number, permissionType: PermissionType) => {
-    const token = localStorage.getItem('token');
-    // Debugging logs
-    console.log("Posting new UserEdition with:", { userId, editionId, permissionType });
+    const token = getToken();
 
     try {
       await axios.post('http://127.0.0.1:8000/user-editions/', {
@@ -102,7 +104,6 @@ export const postUserEdition = async (userId: number, editionId: number, permiss
           Authorization: `Token ${token}`,
         },
       });
-      console.log("Post successful");
       return true;
     } catch (error) {
       console.error('Error posting user edition:', error);

@@ -5,12 +5,12 @@ import { Button, Dropdown } from 'semantic-ui-react';
 import EditionCard from './EditionCard';
 import { getEditions } from '../../api/editions'; // Adjust imports as needed
 import { getUsers } from '../../api/users'; // Adjust imports as needed
-import { getUserEditions, postUserEdition, getUserEditionsByEdition } from '../../api/usereditions'; // Adjust imports as needed
+import { postUserEdition } from '../../api/userEditions'; // Adjust imports as needed
 import { User } from '../../utils/types';
-import { UserEdition } from '../../utils/types';
 import { pathGenerator } from '../../router/paths';
 import { titleFontSize } from '../../utils/sizes';
 import { colors } from '../../utils/colors';
+import { PermissionType } from '../../utils/types';
 
 const Subject = () => {
   const params = useParams();
@@ -46,7 +46,7 @@ const Subject = () => {
       if (edition.user_permission === 'admin'){
         await postUserEdition(selectedUser, edition.id, 'owns');
       }else {
-        await postUserEdition(selectedUser, edition.id, edition.user_permission as 'view' | 'edit' | 'owns' | 'admin');
+        await postUserEdition(selectedUser, edition.id, edition.user_permission as PermissionType);
       }
 
     }

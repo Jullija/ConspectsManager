@@ -1,16 +1,15 @@
 import axios, { AxiosResponse } from 'axios';
 import { Edition } from '../utils/types';
+import getToken from '../utils/tokenManager';
 
 const baseUrl = 'http://127.0.0.1:8000';
 
 export const getEditions = async (subjectId: number): Promise<Edition[]> => {
-  // Retrieve the token from localStorage
-  const token = localStorage.getItem('token');
+  const token = getToken();
 
   const response: AxiosResponse<Edition[]> = await axios.get(
     baseUrl + `/courses/${subjectId}/editions/`, {
       headers: {
-        // Include the token in the Authorization header
         Authorization: `Token ${token}`
       }
     }
@@ -23,7 +22,8 @@ export const addEdition = async (
   name: string,
   year: number
 ): Promise<Edition> => {
-  const token = localStorage.getItem('token');
+  const token = getToken();
+
   const response: AxiosResponse<Edition> = await axios.post(
     baseUrl + `/courses/${subjectId}/editions/`,
     {
@@ -32,7 +32,7 @@ export const addEdition = async (
     },
     {
       headers: {
-        Authorization: `Token ${token}`, // Make sure the token is being sent
+        Authorization: `Token ${token}`,
       }
     }
   );
@@ -40,11 +40,11 @@ export const addEdition = async (
 };
 
 export const deleteEdition = async (subjectId: number, editionId: number): Promise<Edition> => {
-  const token = localStorage.getItem('token');
+  const token = getToken();
+  
   const response: AxiosResponse<Edition> = await axios.delete(
     baseUrl + `/courses/${subjectId}/editions/${editionId}`, {
       headers: {
-        // Include the token in the Authorization header
         Authorization: `Token ${token}`
       }
     }

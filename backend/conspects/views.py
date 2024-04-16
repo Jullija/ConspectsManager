@@ -2,6 +2,8 @@ import marko
 from django.db import IntegrityError
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.generics import ListCreateAPIView
@@ -26,17 +28,43 @@ class FilesViewSet(viewsets.ModelViewSet):
     queryset = File.objects.all()
     serializer_class = FileSerializer
 
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+
+        return Response(serializer.data)
+
+    @swagger_auto_schema(
+        method='get',
+        manual_parameters=[
+            openapi.Parameter(
+                'id',
+                openapi.IN_QUERY,
+                description="ID of the edition to filter folders by",
+                type=openapi.TYPE_INTEGER
+            )
+        ]
+    )
     @action(detail=False, methods=["get"], url_name="edition")
     def per_edition(self, request):
-        edition_id = request.get("id")
-        edition: Edition
+        edition_id = request.query_params.get("id")
         try:
             edition_id = int(edition_id)
-            edition = Edition.objects.find(id=edition_id)
+            edition = Edition.objects.get(id=edition_id)
         except ValueError:
-            return Response({"message": "Invalid edition id!"})
+            return Response({"message": "Invalid edition id!"}, status=400)
         except Edition.DoesNotExist:
-            return Response({"message": "Edition not found!"})
+            return Response({"message": "Edition not found!"}, status=404)
 
         serializer = edition.folders.prefetch_related("files")
         return Response(serializer.data)
@@ -57,6 +85,47 @@ class FilesViewSet(viewsets.ModelViewSet):
         file = self.get_object()
         html_content = marko.convert(file.content.decode('utf-8'))
         return HttpResponse(html_content, content_type="text/html")
+
+    @swagger_auto_schema(
+        method='post',
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'destination_folder_id': openapi.Schema(type=openapi.TYPE_INTEGER,
+                                                        description='ID of the destination folder')
+            },
+        ),
+        responses={201: FileSerializer()}  # Instantiate the serializer
+    )
+    @action(detail=True, methods=['post'], url_path='copy_to_folder')
+    def copy_to_folder(self, request, pk=None):
+        file_to_copy = self.get_object()
+        destination_folder_id = request.data.get('destination_folder_id')
+
+        try:
+            destination_folder = Folder.objects.get(pk=destination_folder_id)
+
+            original_name = file_to_copy.name
+            new_name = original_name
+            counter = 1
+
+            while File.objects.filter(name=new_name, folder=destination_folder).exists():
+                new_name = f"{original_name} ({counter})"
+                counter += 1
+
+            file_copy = File.objects.create(
+                name=new_name,
+                content=file_to_copy.content,
+                extension=file_to_copy.extension,
+                folder=destination_folder
+            )
+            serializer = self.get_serializer(file_copy)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        except Folder.DoesNotExist:
+            return Response({"message": "Destination folder not found."}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({"message": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class RetrieveCreateCourseView(ListCreateAPIView):
@@ -114,6 +183,42 @@ class FolderViewSet(viewsets.ModelViewSet):
         """
         context = super(FolderViewSet, self).get_serializer_context()
         return context
+
+    @swagger_auto_schema(
+        method='get',
+        manual_parameters=[
+            openapi.Parameter(
+                'destination_folder_id', in_=openapi.IN_QUERY,
+                type=openapi.TYPE_INTEGER,
+                description='ID of the destination folder',
+                required=True
+            )
+        ],
+        responses={
+            201: FolderSerializer,
+            400: 'Invalid input / Cannot copy into itself or its descendants',
+            404: 'Destination folder not found'
+        }
+    )
+    @action(detail=True, methods=['get'], url_path='copy_to')
+    def copy_to(self, request, *args, **kwargs):
+        folder_to_copy = self.get_object()
+        destination_folder_id = request.query_params.get('destination_folder_id')
+        print(destination_folder_id)
+        try:
+            destination_folder = Folder.objects.get(pk=destination_folder_id)
+            if destination_folder.is_descendant_of(folder_to_copy) or folder_to_copy == destination_folder:
+                return Response({"error": "Cannot copy a folder into itself or one of its descendants."},
+                                status=status.HTTP_400_BAD_REQUEST)
+
+            new_folder = folder_to_copy.copy_to(destination_folder)
+            serializer = FolderSerializer(new_folder, context={'request': request})
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        except Folder.DoesNotExist:
+            return Response({"error": "Destination folder not found."}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
 
 
 class EditionDetailAPIView(RetrieveUpdateDestroyAPIView):

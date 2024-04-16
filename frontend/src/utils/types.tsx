@@ -58,3 +58,15 @@ export interface Edition {
   folders: Folder[];
   user_permission: string;
 }
+
+export interface Template {
+  id: number;
+  name: string;
+  description: string;
+  folders: TemplateFolder[];
+}
+
+export interface TemplateFolder {
+  parent: string;
+  folder: string;
+}

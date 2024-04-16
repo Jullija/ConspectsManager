@@ -7,6 +7,7 @@ const basePaths = {
   Edition: '/edition',
   AccessRights: '/access-rights-panel',
   AddEdition: '/add-edition',
+  TemplatesList: '/templates-list',
   ErrorPage: '/error',
   PageNotFound: '*'
 };
@@ -25,6 +26,7 @@ export const browserRouterPaths = {
   Edition: basePaths.Edition + '/:' + subjectIdString + '/:' + editionIdString,
   AccessRights: basePaths.AccessRights + '/:' + subjectIdString + '/:' + editionIdString,
   AddEdition: basePaths.AddEdition + '/:' + subjectIdString,
+  TemplatesList: basePaths.TemplatesList,
   // TODO: make message optional
   ErrorPage: basePaths.ErrorPage + '/:' + errorMessageString,
   PageNotFound: basePaths.PageNotFound
@@ -47,6 +49,7 @@ export const pathGenerator = {
   AddEdition: (subjectId: number) => {
     return basePaths.AddEdition + '/' + subjectId;
   },
+  TemplatesList: basePaths.TemplatesList,
   ErrorPage: (message: string) => {
     return basePaths.ErrorPage + '/' + message;
   },

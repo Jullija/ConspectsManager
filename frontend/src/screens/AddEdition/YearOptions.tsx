@@ -1,6 +1,6 @@
-const generateYearOptions = (startYear: number, endYear: number) => {
+const generateYearOptions = (lowerBound: number, upperBound: number) => {
   const years = [];
-  for (let year = endYear; year >= startYear; year--) {
+  for (let year = upperBound; year >= lowerBound; year--) {
     years.push({ key: year, value: year, text: year });
   }
   return years;

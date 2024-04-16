@@ -24,6 +24,23 @@ export const addEdition = async (
   return response.data;
 };
 
+export const addEditionWithTemplate = async (
+  subjectId: number,
+  name: string,
+  year: number,
+  templateId: number
+): Promise<Edition> => {
+  const response: AxiosResponse<Edition> = await axiosClient.post(
+    // TODO swap endpoint when it will be ready
+    `/courses/${subjectId}/editions/`,
+    {
+      name: name,
+      year: year
+    }
+  );
+  return response.data;
+};
+
 export const deleteEdition = async (subjectId: number, editionId: number): Promise<Edition> => {
   const response: AxiosResponse<Edition> = await axiosClient.delete(
     `/courses/${subjectId}/editions/${editionId}`

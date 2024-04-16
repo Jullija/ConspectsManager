@@ -8,19 +8,10 @@ import { getSubjects } from '../../api/subjects';
 
 const SubjectsList = () => {
   const navigate = useNavigate();
-  const {
-    isLoading,
-    error,
-    data: subjects
-  } = useQuery({ queryKey: ['subjects'], queryFn: getSubjects });
+  const { isLoading, error, data: subjects } = useQuery('subjects', getSubjects);
 
-  if (isLoading) {
-    return <p>Loading...</p>;
-  }
-
-  if (error) {
-    navigate(pathGenerator.ErrorPage('something went wrong'));
-  }
+  if (isLoading) <p>Loading...</p>;
+  if (error) navigate(pathGenerator.ErrorPage('something went wrong'));
 
   return (
     <>

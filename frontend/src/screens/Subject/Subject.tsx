@@ -17,18 +17,10 @@ const Subject = () => {
     error,
     data: editions,
     refetch
-  } = useQuery({
-    queryKey: ['editions', subjectId],
-    queryFn: () => getEditions(subjectId)
-  });
+  } = useQuery('editions', () => getEditions(subjectId));
 
-  if (isLoading) {
-    return <p>Loading...</p>;
-  }
-
-  if (error) {
-    navigate(pathGenerator.ErrorPage('something went wrong'));
-  }
+  if (isLoading) return <p>Loading...</p>;
+  if (error) navigate(pathGenerator.ErrorPage('something went wrong'));
 
   const handleDeleteEdition = async (editionId: number) => {
     try {

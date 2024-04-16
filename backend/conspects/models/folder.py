@@ -1,6 +1,7 @@
-from django.db import models
+from django.db import models, transaction
 
 import conspects.models as conspects_models
+from conspects.models import File
 
 
 class Folder(models.Model):
@@ -22,6 +23,34 @@ class Folder(models.Model):
                 return True
             current_folder = current_folder.parent
         return False
+
+    def copy_to(self, destination_folder):
+        with transaction.atomic():
+            # Copy the current folder
+            new_folder = Folder.objects.create(
+                name=self.name,
+                parent=destination_folder,
+                edition=destination_folder.edition
+            )
+
+            # Recursively copy child folders and files
+            self._copy_contents_to(new_folder)
+
+        return new_folder
+
+    def _copy_contents_to(self, new_folder):
+        # Copy files
+        for file in self.folder_files.all():
+            File.objects.create(
+                name=file.name,
+                content=file.content,
+                extension=file.extension,
+                folder=new_folder
+            )
+
+        # Copy subfolders
+        for child_folder in self.folder_children.all():
+            child_copy = child_folder.copy_to(new_folder)  # Recursively copy each child folder
 
     def __str__(self):
         return self.name

@@ -4,6 +4,16 @@ from conspects.models import File, Folder, Course, Edition, Template
 from users.models import UserEdition
 
 
+def get_user_permission(serializer, edition):
+    user = serializer.context['request'].user
+    if user.is_authenticated:
+        if UserEdition.objects.filter(user=user, edition__isnull=True, permission_type='admin').exists():
+            return "admin"
+        permission = UserEdition.objects.filter(user=user, edition=edition).first()
+        return permission.permission_type if permission else None
+    return None
+
+
 class CourseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Course
@@ -39,24 +49,7 @@ class EditionSerializer(serializers.ModelSerializer):
         return FolderSerializer(folders, many=True, context=self.context).data
 
     def get_user_permission(self, obj):
-        user = self.context['request'].user
-        print(user, user.is_authenticated)
-        if user.is_authenticated:
-            if UserEdition.objects.filter(user=user, edition__isnull=True, permission_type='admin').exists():
-                return "admin"
-            permission = UserEdition.objects.filter(user=user, edition=obj).first()
-            return permission.permission_type if permission else None
-        return None
-
-    # def create(self, validated_data):
-    #     course_id = self.context['request'].parser_context['kwargs']['courseId']
-    #     try:
-    #         course = Course.objects.get(pk=course_id)
-    #     except Course.DoesNotExist:
-    #         raise serializers.ValidationError("Course not found")
-    #     validated_data['course'] = course
-    #     instance = super().create(validated_data)
-    #     return instance
+        return get_user_permission(self, obj)
 
 
 class FolderSerializer(serializers.ModelSerializer):
@@ -83,13 +76,7 @@ class FolderSerializer(serializers.ModelSerializer):
         return FileSerializer(files, many=True, context=self.context).data
 
     def get_user_permission(self, obj):
-        user = self.context['request'].user
-        if user.is_authenticated:
-            if UserEdition.objects.filter(user=user, edition__isnull=True, permission_type='admin').exists():
-                return "admin"
-            permission = UserEdition.objects.filter(user=user, edition=obj.edition).first()
-            return permission.permission_type if permission else None
-        return None
+        return get_user_permission(self, obj.edition)
 
 
 class FileSerializer(serializers.ModelSerializer):
@@ -102,13 +89,7 @@ class FileSerializer(serializers.ModelSerializer):
         read_only_fields = ["can_be_edited", "can_be_previewed", "is_attachment"]
 
     def get_user_permission(self, obj):
-        user = self.context['request'].user
-        if user.is_authenticated:
-            if UserEdition.objects.filter(user=user, edition__isnull=True, permission_type='admin').exists():
-                return "admin"
-            permission = UserEdition.objects.filter(user=user, edition=obj.folder.edition).first()
-            return permission.permission_type if permission else None
-        return None
+        return get_user_permission(self, obj.folder.edition)
 
 
 class TemplateSerializer(serializers.ModelSerializer):

@@ -1,9 +1,10 @@
 import { Button } from 'semantic-ui-react';
 import { colors } from '../../utils/colors';
-import { Template, TemplateFolder } from '../../utils/types';
+import { Template } from '../../utils/types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { subtitleFontSize } from '../../utils/sizes';
+import { TemplateStructure } from '../../components/TemplateStructure';
 
 interface TemplateCardProps {
   template: Template;
@@ -14,41 +15,6 @@ const TemplateCard: React.FC<TemplateCardProps> = ({
   template,
   handleDelete
 }: TemplateCardProps) => {
-  const getFolderTreeElememt = (structure: TemplateFolder[]): React.ReactElement | null => {
-    const createTree = (node: TemplateFolder): React.ReactElement | null => {
-      const children = structure.filter((child) => child.parent === node.folder);
-      if (children.length === 0) {
-        return (
-          <div className="item" key={node.folder}>
-            <i className="folder icon"></i>
-            <div className="content">{node.folder}</div>
-          </div>
-        );
-      }
-
-      return (
-        <div className="item" key={node.folder}>
-          <i className="folder icon"></i>
-          <div className="content">
-            {node.folder}
-            <div className="list" style={{ marginLeft: '20px' }}>
-              {children.map((child) => createTree(child))}
-            </div>
-          </div>
-        </div>
-      );
-    };
-
-    const rootNode = structure.find((node) => node.parent.startsWith('root-edition'));
-
-    if (!rootNode) {
-      console.error('Root node not found!');
-      return null;
-    }
-
-    return <div className="ui list">{createTree(rootNode)}</div>;
-  };
-
   return (
     <div
       style={{
@@ -75,7 +41,10 @@ const TemplateCard: React.FC<TemplateCardProps> = ({
           <FontAwesomeIcon icon={faTrash} color={colors.darkblue} fontSize={12} />
         </Button>
       </div>
-      <div>{getFolderTreeElememt(template.folders)}</div>
+
+      <div>
+        <TemplateStructure template={template} />
+      </div>
     </div>
   );
 };

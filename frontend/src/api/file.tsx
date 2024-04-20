@@ -1,9 +1,9 @@
 import { File } from '../utils/types';
-import axios from 'axios';
+import { axiosClient } from './axiosClient';
 
 export const getFile = async (fileId: number): Promise<File | undefined> => {
   try {
-    const response = await axios.get<File>(`http://localhost:8000/files/${fileId}`);
+    const response = await axiosClient.get<File>(`/files/${fileId}`);
     return response.data;
   } catch (error) {
     console.error('Error fetching editions:', error);

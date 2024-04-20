@@ -4,29 +4,41 @@ import { pathGenerator } from '../../router/paths';
 import { titleFontSize } from '../../utils/sizes';
 import { Button } from 'semantic-ui-react';
 import { colors } from '../../utils/colors';
-import { getEditions } from '../../api/editions';
+import { getEditions, deleteEdition } from '../../api/editions';
 import { useQuery } from 'react-query';
+import axios from 'axios';
 
 const Subject = () => {
   const params = useParams();
   const subjectId = Number(params.subjectId);
   const navigate = useNavigate();
-  const { isLoading, error, data: editions } = useQuery('editions', () => getEditions(subjectId));
+  const {
+    isLoading,
+    error,
+    data: editions,
+    refetch
+  } = useQuery('editions', () => getEditions(subjectId));
 
-  if (isLoading) {
-    return <p>Loading...</p>;
-  }
+  if (isLoading) return <p>Loading...</p>;
+  if (error) navigate(pathGenerator.ErrorPage('something went wrong'));
 
-  if (error) {
-    navigate(pathGenerator.ErrorPage('something went wrong'));
-  }
+  const handleDeleteEdition = async (editionId: number) => {
+    try {
+      await deleteEdition(subjectId, editionId);
+      refetch();
+    } catch (error) {
+      navigate(
+        pathGenerator.ErrorPage(
+          axios.isAxiosError(error)
+            ? JSON.stringify(error.response?.data)
+            : 'Something went wrong :('
+        )
+      );
+    }
+  };
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column'
-      }}>
+    <div style={{ display: 'flex', flexDirection: 'column' }}>
       <div
         style={{
           display: 'flex',
@@ -35,20 +47,19 @@ const Subject = () => {
           margin: '24px 20px'
         }}>
         <div style={{ fontSize: titleFontSize }}>subject subjectId: {subjectId}</div>
-
         <Button
           style={{ backgroundColor: colors.blue, color: colors.white }}
           onClick={() => navigate(pathGenerator.AddEdition(subjectId))}>
           add edition
         </Button>
       </div>
-
       {editions?.map((edition, index) => (
         <EditionCard
           key={index}
           edition={edition}
           subjectId={subjectId}
           withBottomBorder={index !== editions.length - 1}
+          handleDeleteEdition={handleDeleteEdition}
         />
       ))}
     </div>

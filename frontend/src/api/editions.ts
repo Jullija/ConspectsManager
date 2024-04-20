@@ -31,14 +31,23 @@ export const addEditionWithTemplate = async (
   templateId: number
 ): Promise<Edition> => {
   const response: AxiosResponse<Edition> = await axiosClient.post(
-    // TODO swap endpoint when it will be ready
     `/courses/${subjectId}/editions/`,
     {
       name: name,
       year: year
     }
   );
-  return response.data;
+  const edition: Edition = response.data;
+
+  await axiosClient.post(`/templates/${templateId}/apply/`, {
+    root_folder_id: edition.root_folder
+  });
+
+  const response2: AxiosResponse<Edition> = await axiosClient.get(
+    `/courses/${subjectId}/editions/${edition.id}`
+  );
+
+  return response2.data;
 };
 
 export const deleteEdition = async (subjectId: number, editionId: number): Promise<Edition> => {

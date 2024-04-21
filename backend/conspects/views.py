@@ -265,7 +265,10 @@ class DuplicateEditionView(APIView):
                             status=status.HTTP_400_BAD_REQUEST)
 
         new_root_folder = new_edition.root_folder
-        base_edition.root_folder.copy_to(new_root_folder)
+        for file in base_edition.root_folder.folder_files.all():
+            File.objects.create(name=file.name, extension=file.extension, content=file.content, folder=new_root_folder)
+        for folder in base_edition.root_folder.folder_children.all():
+            folder.copy_to(new_root_folder)
 
         return Response({'message': 'Edition duplicated successfully', 'new_edition_id': new_edition.id},
                         status=status.HTTP_201_CREATED)

@@ -11,12 +11,19 @@ import { pathGenerator } from '../../router/paths';
 import { titleFontSize } from '../../utils/sizes';
 import { colors } from '../../utils/colors';
 import { PermissionType } from '../../utils/types';
+import { deleteEdition } from '../../api/editions';
+import axios from 'axios';
 
 const Subject = () => {
   const params = useParams();
   const subjectId = Number(params.subjectId);
   const navigate = useNavigate();
-  const { isLoading, error, data: editions } = useQuery('editions', () => getEditions(subjectId));
+  const {
+    isLoading,
+    error,
+    data: editions,
+    refetch
+  } = useQuery('editions', () => getEditions(subjectId));
 
   const [showUsers, setShowUsers] = useState(false);
   const [selectedUser, setSelectedUser] = useState<number | null>(null);
@@ -55,10 +62,22 @@ const Subject = () => {
   if (isLoading) {
     return <p>Loading...</p>;
   }
+  if (error) navigate(pathGenerator.ErrorPage('something went wrong'));
 
-  if (error) {
-    navigate(pathGenerator.ErrorPage('something went wrong'));
-  }
+  const handleDeleteEdition = async (editionId: number) => {
+    try {
+      await deleteEdition(subjectId, editionId);
+      refetch();
+    } catch (error) {
+      navigate(
+        pathGenerator.ErrorPage(
+          axios.isAxiosError(error)
+            ? JSON.stringify(error.response?.data)
+            : 'Something went wrong :('
+        )
+      );
+    }
+  };
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column' }}>
@@ -93,7 +112,7 @@ const Subject = () => {
       )}
 
       {editions?.map((edition, index) => (
-        <EditionCard key={index} edition={edition} subjectId={subjectId} withBottomBorder={index !== editions.length - 1} />
+        <EditionCard key={index} edition={edition} subjectId={subjectId} withBottomBorder={index !== editions.length - 1} handleDeleteEdition={handleDeleteEdition}/>
       ))}
 
       

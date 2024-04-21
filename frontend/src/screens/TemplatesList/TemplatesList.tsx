@@ -26,13 +26,8 @@ const TemplatesList = () => {
     }
   };
 
-  if (isLoading) {
-    return <p>Loading...</p>;
-  }
-
-  if (error) {
-    navigate(pathGenerator.ErrorPage('something went wrong'));
-  }
+  if (isLoading) return <p>Loading...</p>;
+  if (error) navigate(pathGenerator.ErrorPage('something went wrong'));
 
   return (
     <>

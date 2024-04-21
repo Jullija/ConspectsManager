@@ -1,6 +1,6 @@
 import { Edition } from '../utils/types';
-import axios from 'axios';
 import getToken from '../utils/tokenManager';
+import { axiosClient } from './axiosClient';
 
 export const getEdition = async (
   subjectId: number,
@@ -8,8 +8,8 @@ export const getEdition = async (
 ): Promise<Edition | undefined> => {
   try {
     const token = getToken();
-    const response = await axios.get<Edition>(
-      `http://localhost:8000/courses/${subjectId}/editions/${editioinId}`, {
+    const response = await axiosClient.get<Edition>(
+      `/courses/${subjectId}/editions/${editioinId}`, {
         headers: {
           Authorization: `Token ${token}`
         }

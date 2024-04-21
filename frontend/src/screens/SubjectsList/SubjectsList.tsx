@@ -10,13 +10,8 @@ const SubjectsList = () => {
   const navigate = useNavigate();
   const { isLoading, error, data: subjects } = useQuery('subjects', getSubjects);
 
-  if (isLoading) {
-    return <p>Loading...</p>;
-  }
-
-  if (error) {
-    navigate(pathGenerator.ErrorPage('something went wrong'));
-  }
+  if (isLoading) <p>Loading...</p>;
+  if (error) navigate(pathGenerator.ErrorPage('something went wrong'));
 
   return (
     <>

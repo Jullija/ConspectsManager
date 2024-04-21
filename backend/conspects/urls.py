@@ -3,7 +3,7 @@ from rest_framework import routers
 
 from conspects.views import RetrieveCreateCourseView, \
     EditionListCreateAPIView, FolderCreateAPIView, FilesViewSet, EditionDetailAPIView, \
-    TemplateViewSet, FolderViewSet
+    TemplateViewSet, FolderViewSet, DuplicateEditionView
 
 app_name = "conspects"
 
@@ -22,4 +22,5 @@ urlpatterns = [
     path('folders/', FolderCreateAPIView.as_view()),
     # path('folders/<int:folderId>/', FolderDetailAPIView.as_view(), name='folder-detail'),
     path('', include(router.urls)),
+    path('editions/duplicate/', DuplicateEditionView.as_view(), name='duplicate_edition'),
 ]

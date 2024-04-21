@@ -5,5 +5,5 @@ drf-yasg
 djangorestframework
 django-extensions
 django-cors-headers
-
+firebase-admin
 marko

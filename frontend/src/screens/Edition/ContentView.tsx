@@ -3,11 +3,17 @@ import { useFile } from '../../context/FileContext';
 import TextFileComponent from './TextFileComponent';
 import MarkdownFile from './MarkdownFile';
 import { Accordion, Icon, Grid, Segment } from 'semantic-ui-react';
+import getToken from '../../utils/tokenManager';
+import { PermissionType, PermissionTypeEditable } from '../../utils/types';
+
 
 interface ContentViewProps {
   subjectId: number;
   edition?: { id: number; name: string };
 }
+
+const viewablePermissions: PermissionType[] = ['view', 'owns', 'edit', 'admin'];
+const editablePermissions: PermissionTypeEditable[] = ['owns', 'edit', 'admin'];
 
 const ContentView: React.FC<ContentViewProps> = ({ subjectId, edition }) => {
   const { selectedFile } = useFile();
@@ -25,10 +31,18 @@ const ContentView: React.FC<ContentViewProps> = ({ subjectId, edition }) => {
           {selectedFile?.name}.{selectedFile?.extension}
         </h3>
         <p>
-          <strong>Can be edited:</strong> {selectedFile?.can_be_edited ? 'Yes' : 'No'}
+        <strong>Can be edited:</strong> {
+            selectedFile && selectedFile.user_permission && editablePermissions.includes(selectedFile.user_permission as PermissionTypeEditable) && selectedFile.can_be_edited
+              ? 'Yes'
+              : 'No'
+          }
         </p>
         <p>
-          <strong>Can be previewed:</strong> {selectedFile?.can_be_previewed ? 'Yes' : 'No'}
+        <strong>Can be previewed:</strong> {
+            selectedFile && selectedFile.user_permission && viewablePermissions.includes(selectedFile.user_permission as PermissionType) && selectedFile.can_be_previewed
+              ? 'Yes'
+              : 'No'
+          }
         </p>
         <p>
           <strong>Is attachment:</strong> {selectedFile?.is_attachment ? 'Yes' : 'No'}
@@ -39,10 +53,13 @@ const ContentView: React.FC<ContentViewProps> = ({ subjectId, edition }) => {
 
   const handleSave = async (updatedBase64Content: string) => {
     try {
+      const token = getToken();
+
       const response = await fetch(`http://localhost:8000/files/${selectedFile?.id}/`, {
         method: 'PATCH',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': `Token ${token}`
         },
         body: JSON.stringify({
           name: selectedFile?.name,
@@ -68,10 +85,10 @@ const ContentView: React.FC<ContentViewProps> = ({ subjectId, edition }) => {
     const fileDetails = renderFileDetails();
     switch (selectedFile.extension) {
       case 'txt':
-        return <TextFileComponent file={selectedFile} onSave={handleSave} />;
+        return <TextFileComponent file={selectedFile} onSave={handleSave} canEdit={editablePermissions.includes(selectedFile.user_permission as PermissionTypeEditable)}/>;
 
       case 'md':
-        return <MarkdownFile file={selectedFile} onSave={handleSave} />;
+        return <MarkdownFile file={selectedFile} onSave={handleSave} canEdit={editablePermissions.includes(selectedFile.user_permission  as PermissionTypeEditable)}/>;
       case 'jpg':
       case 'jpeg':
       case 'gif':
@@ -132,11 +149,19 @@ const ContentView: React.FC<ContentViewProps> = ({ subjectId, edition }) => {
                 {selectedFile.name}.{selectedFile.extension}
               </Accordion.Title>
               <Accordion.Content active={activeIndex === 0}>
-                <p>
-                  <strong>Can be edited:</strong> {selectedFile.can_be_edited ? 'Yes' : 'No'}
+              <p>
+                <strong>Can be edited:</strong> {
+                    selectedFile && selectedFile.user_permission && editablePermissions.includes(selectedFile.user_permission  as PermissionTypeEditable) && selectedFile.can_be_edited
+                      ? 'Yes'
+                      : 'No'
+                  }
                 </p>
                 <p>
-                  <strong>Can be previewed:</strong> {selectedFile.can_be_previewed ? 'Yes' : 'No'}
+                <strong>Can be previewed:</strong> {
+                    selectedFile && selectedFile.user_permission && viewablePermissions.includes(selectedFile.user_permission as PermissionType) && selectedFile.can_be_previewed
+                      ? 'Yes'
+                      : 'No'
+                  }
                 </p>
                 <p>
                   <strong>Is attachment:</strong> {selectedFile.is_attachment ? 'Yes' : 'No'}

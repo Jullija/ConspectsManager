@@ -13,6 +13,8 @@ interface EditBarProps {
   accessRights: () => void; // New prop for accessing rights
   subjectId: number;
   editionId: number;
+  canEdit: boolean;
+  canShare: boolean; // New prop to control access rights editing
 }
 
 const EditBar: React.FC<EditBarProps> = ({
@@ -26,7 +28,9 @@ const EditBar: React.FC<EditBarProps> = ({
   addFile,
   uploadFile,
   subjectId,
-  editionId
+  editionId,
+  canEdit,
+  canShare,
 }) => {
   return (
     <div
@@ -38,14 +42,30 @@ const EditBar: React.FC<EditBarProps> = ({
       }}>
       <div>
         <Button onClick={goBack} icon="arrow left" content="Back to Subject" />
-        <Button onClick={onCopy} icon="copy" content="Copy" />
-        <Button onClick={onCut} icon="cut" content="Cut" />
-        <Button onClick={onPaste} icon="paste" content="Paste" />
-        <Button onClick={onDelete} icon="delete" content="Delete" />
-        <Button onClick={addFolder} icon="folder" content="Add Folder" />
-        <Button onClick={addFile} icon="file" content="Add File" />
-        <Button onClick={uploadFile} icon="upload" content="Upload File" />
-        <Button onClick={accessRights} icon="privacy" content="Access Rights" />
+        {canEdit && (
+          <Button onClick={onCopy} icon="copy" content="Copy" />
+          )}
+        {canEdit && (
+          <Button onClick={onCut} icon="cut" content="Cut" />
+          )}
+        {canEdit && (
+          <Button onClick={onPaste} icon="paste" content="Paste" />
+          )}
+        {canEdit && (
+          <Button onClick={onDelete} icon="delete" content="Delete" />
+          )}
+        {canEdit && (
+          <Button onClick={addFolder} icon="folder" content="Add Folder" />
+          )}
+        {canEdit && (
+          <Button onClick={addFile} icon="file" content="Add File" />
+          )}
+        {canEdit && (
+          <Button onClick={uploadFile} icon="upload" content="Upload File" />
+          )}
+        {canShare && (
+          <Button onClick={accessRights} icon="privacy" content="Access Rights" />
+          )}
       </div>
       <div>
         Edition: {subjectId} | ID: {editionId}

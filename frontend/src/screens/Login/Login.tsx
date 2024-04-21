@@ -4,8 +4,19 @@ import { Button, Dropdown, DropdownProps } from 'semantic-ui-react'
 import { titleFontSize } from '../../utils/sizes';
 import { colors } from '../../utils/colors';
 import { useState } from 'react';
+import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
+import app from '../../firebase/firebase-config';
+import axios from 'axios';
+
+const baseUrl = 'http://127.0.0.1:8000';
+
+
 
 const Login = () => {
+
+
+
+
   const navigate = useNavigate();
   const [loginOptions, setLoginOptions] = useState([
     { key: "1", text: "Michael Scott", value: "Michael Scott" },
@@ -38,6 +49,35 @@ const Login = () => {
     ]);
   };
 
+  const signInWithGoogle = () => {
+    const auth = getAuth(app);
+    const provider = new GoogleAuthProvider();
+    signInWithPopup(auth, provider)
+        .then((result) => {
+            // Get the user's ID token as it is needed to authenticate with the backend.
+            result.user.getIdToken().then((idToken) => {
+                // Use Axios to send the ID token to your backend
+                axios.post(baseUrl + '/google-login/', {
+                    token: idToken,
+                })
+                .then((response) => {
+                    localStorage.setItem('token', response.data.token);
+                    // Handle response or navigate as needed
+                    navigate(pathGenerator.SubjectsList); // Example navigation
+                })
+                .catch((error) => {
+                    console.error("Error posting the ID token to backend:", error);
+                });
+            });
+        }).catch((error) => {
+            // Handle Errors here.
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            console.error("Error signing in with Google", errorMessage);
+        });
+};
+  
+
   return (
     <div style={{ color: colors.darkblue }}>
       <div style={{ fontSize: titleFontSize, margin: '24px 20px' }}>Login</div>
@@ -60,6 +100,16 @@ const Login = () => {
       <div style={{ display: 'flex', flexDirection: 'row', margin: '0 345px' }}>
       
         <Button onClick={handleClick} style={{backgroundColor: colors.darkblue, color: colors.white }}>Login</Button>
+      </div>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', margin: '0 20px' }}>
+        {/* Existing login button and other components */}
+
+        {/* Google sign-in button */}
+        <Button onClick={signInWithGoogle} style={{ backgroundColor: '#5541A9', color: colors.white, marginTop: '10px' }}>
+          Sign in with Google
+        </Button>
+
+        {showSelectUserMessage && <p style={{ color: colors.orange, position: 'relative', marginTop: '10px'}}>Please select a user to proceed.</p>}
       </div>
     </div>
   );

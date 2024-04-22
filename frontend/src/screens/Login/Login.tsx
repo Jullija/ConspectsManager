@@ -6,10 +6,7 @@ import { colors } from '../../utils/colors';
 import { useState } from 'react';
 import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 import app from '../../firebase/firebase-config';
-import axios from 'axios';
-
-const baseUrl = 'http://127.0.0.1:8000';
-
+import { axiosClient } from '../../api/axiosClient';
 
 
 const Login = () => {
@@ -57,7 +54,7 @@ const Login = () => {
             // Get the user's ID token as it is needed to authenticate with the backend.
             result.user.getIdToken().then((idToken) => {
                 // Use Axios to send the ID token to your backend
-                axios.post(baseUrl + '/google-login/', {
+                axiosClient.post('/google-login/', {
                     token: idToken,
                 })
                 .then((response) => {

@@ -1,5 +1,6 @@
 from django.urls import path, include
 from rest_framework import routers
+from .views import export_edition_as_zip
 
 from conspects.views import RetrieveCreateCourseView, EditionListCreateAPIView, FilesViewSet, EditionDetailAPIView, \
     TemplateViewSet, FolderViewSet, DuplicateEditionView
@@ -18,4 +19,5 @@ urlpatterns = [
     path('courses/<int:courseId>/editions/<int:editionId>/', EditionDetailAPIView.as_view(), name='edition-detail'),
     path('', include(router.urls)),
     path('editions/duplicate/', DuplicateEditionView.as_view(), name='duplicate_edition'),
+    path('export-edition/<int:edition_id>/', export_edition_as_zip, name='export-edition'),
 ]

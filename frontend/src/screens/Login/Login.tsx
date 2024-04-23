@@ -22,6 +22,8 @@ const Login = () => {
   ]);
   const [selectedUser, setSelectedUser] = useState('');
   const [showSelectUserMessage, setShowSelectUserMessage] = useState(false);
+  const [authenticated, setAuthenticated] = useState(false);
+
 
   const handleDropdownChange = (event: React.SyntheticEvent<HTMLElement>, data: DropdownProps) => {
     setSelectedUser(data.value as string);
@@ -67,13 +69,18 @@ const Login = () => {
                     console.error("Error posting the ID token to backend:", error);
                 });
             });
+            setAuthenticated(true);
         }).catch((error) => {
             // Handle Errors here.
             const errorCode = error.code;
             const errorMessage = error.message;
             console.error("Error signing in with Google", errorMessage);
         });
-};
+  };
+  const handleLogout = () => {
+    axiosClient.defaults.headers.common['Authorization'] = ``;
+    setAuthenticated(false);
+  };
   
 
   return (
@@ -103,9 +110,13 @@ const Login = () => {
         {/* Existing login button and other components */}
 
         {/* Google sign-in button */}
-        <Button onClick={signInWithGoogle} style={{ backgroundColor: '#5541A9', color: colors.white, marginTop: '10px' }}>
+        {(<Button onClick={signInWithGoogle} style={{ backgroundColor: '#5541A9', color: colors.white, marginTop: '10px' }}>
           Sign in with Google
-        </Button>
+        </Button>)}
+        {/* {authenticated && (<Button onClick={handleLogout} style={{ backgroundColor: '#5541A9', color: colors.white, marginTop: '10px' }}>
+          Logout
+        </Button>)} */}
+        
 
         {showSelectUserMessage && <p style={{ color: colors.orange, position: 'relative', marginTop: '10px'}}>Please select a user to proceed.</p>}
       </div>

@@ -17,6 +17,7 @@ from .models import UserEdition
 from .serializers import UserEditionSerializer
 from .serializers import UserSerializer
 from rest_framework.authtoken.models import Token
+from rest_framework.exceptions import AuthenticationFailed
 
 User = get_user_model()
 
@@ -63,6 +64,12 @@ def google_login(request):
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    def check_permissions(self, request):
+        super().check_permissions(request)
+
+        # If the user is not authenticated, raise AuthenticationFailed exception
+        if not request.user.is_authenticated:
+            raise AuthenticationFailed()
 
 
 class UserEditionFilter(filters.FilterSet):
@@ -78,6 +85,13 @@ class UserEditionViewSet(viewsets.ModelViewSet):
     serializer_class = UserEditionSerializer
     filter_backends = (filters.DjangoFilterBackend,)
     filterset_class = UserEditionFilter
+
+    def check_permissions(self, request):
+        super().check_permissions(request)
+
+        # If the user is not authenticated, raise AuthenticationFailed exception
+        if not request.user.is_authenticated:
+            raise AuthenticationFailed()
 
     def get_queryset(self):
         user = self.request.user

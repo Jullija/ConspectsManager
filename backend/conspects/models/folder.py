@@ -24,11 +24,13 @@ class Folder(models.Model):
             current_folder = current_folder.parent
         return False
 
-    def copy_to(self, destination_folder):
+    def copy_to(self, destination_folder, name=None):
         with transaction.atomic():
             # Copy the current folder
+            new_name = self.name
+            if name is not None: new_name = name
             new_folder = Folder.objects.create(
-                name=self.name,
+                name=new_name,
                 parent=destination_folder,
                 edition=destination_folder.edition
             )

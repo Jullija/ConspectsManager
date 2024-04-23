@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
-import { useFile } from '../../context/FileContext';
-import { useFolder } from '../../context/FolderContext';
 import { Folder, File as FileType } from '../../utils/types';
 import { Icon, List } from 'semantic-ui-react';
 import { getFile } from '../../api/file';
 import { PermissionType } from '../../utils/types';
-
+import { useItem } from '../../context/ItemContext';
 
 const viewablePermissions: PermissionType[] = ['view', 'owns', 'edit', 'admin'];
 
@@ -15,8 +13,7 @@ interface FolderStructureProps {
 }
 
 const FolderStructure: React.FC<FolderStructureProps> = ({ folders, parent = null }) => {
-  const { selectedFile, selectFile } = useFile();
-  const { selectFolder } = useFolder();
+  const { selectedItem, selectItem, itemType } = useItem();
   const [collapsedFolders, setCollapsedFolders] = useState<number[]>([]);
 
   const toggleFolderCollapse = (folderId: number) => {
@@ -26,14 +23,12 @@ const FolderStructure: React.FC<FolderStructureProps> = ({ folders, parent = nul
         : [...currentCollapsedFolders, folderId]
     );
   };
-
   const isFolderCollapsed = (folderId: number) => collapsedFolders.includes(folderId);
-
+  console.log(selectedItem, itemType);
   const handleFileClick = async (file: FileType) => {
     const data = await getFile(file.id);
-    selectFile(data || null);
+    selectItem(data || null);
   };
-
 
   const hasViewableFolderPermission = (folder: Folder): boolean => {
     return viewablePermissions.includes(folder.user_permission as PermissionType);
@@ -53,7 +48,15 @@ const FolderStructure: React.FC<FolderStructureProps> = ({ folders, parent = nul
               onClick={() => toggleFolderCollapse(folder.id)}
             />
             <List.Content>
-              <List.Header as="a" onClick={() => selectFolder(folder)}>
+              <List.Header
+                as="a"
+                onClick={() => selectItem(folder)}
+                style={{
+                  backgroundColor:
+                    folder.id === selectedItem?.id && itemType == 'folder'
+                      ? 'lightgrey'
+                      : 'transparent'
+                }}>
                 {folder.name}
               </List.Header>
               {!isFolderCollapsed(folder.id) && (
@@ -63,7 +66,10 @@ const FolderStructure: React.FC<FolderStructureProps> = ({ folders, parent = nul
                       key={file.id}
                       onClick={() => handleFileClick(file)}
                       style={{
-                        backgroundColor: file.id === selectedFile?.id ? 'lightgrey' : 'transparent'
+                        backgroundColor:
+                          file.id === selectedItem?.id && itemType == 'file'
+                            ? 'lightgrey'
+                            : 'transparent'
                       }}>
                       <Icon name={file.can_be_previewed ? 'file outline' : 'attach'} />
                       <List.Content>

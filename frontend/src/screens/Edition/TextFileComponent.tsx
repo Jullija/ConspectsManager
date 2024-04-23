@@ -9,7 +9,7 @@ interface TextFileComponentProps {
   canEdit: boolean;
 }
 
-const TextFileComponent: React.FC<TextFileComponentProps> = ({ file, onSave, canEdit}) => {
+const TextFileComponent: React.FC<TextFileComponentProps> = ({ file, onSave, canEdit }) => {
   const [content, setContent] = useState('');
 
   useEffect(() => {
@@ -31,11 +31,13 @@ const TextFileComponent: React.FC<TextFileComponentProps> = ({ file, onSave, can
   return (
     <div>
       <Form>
-      <Form.TextArea
+        <Form.TextArea
           value={content}
-          onChange={(e, { value }) => canEdit && typeof value === 'string' ? setContent(value) : undefined}
+          onChange={(e, { value }) =>
+            canEdit && typeof value === 'string' ? setContent(value) : undefined
+          }
           readOnly={!canEdit}
-          style={{ minHeight: 300, width: '100%', height: '60vh', overflowY: 'auto' }}
+          style={{ minHeight: 300, width: '100%', height: '73vh', overflowY: 'auto' }}
         />
         {canEdit && (
           <Button onClick={handleSave} primary>

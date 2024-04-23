@@ -86,7 +86,7 @@ class FilesViewSet(viewsets.ModelViewSet):
         return HttpResponse(html_content, content_type="text/html")
 
     @swagger_auto_schema(
-        method='post',
+        method='get',
         request_body=openapi.Schema(
             type=openapi.TYPE_OBJECT,
             properties={
@@ -96,12 +96,13 @@ class FilesViewSet(viewsets.ModelViewSet):
         ),
         responses={201: FileSerializer()}  # Instantiate the serializer
     )
-    @action(detail=True, methods=['post'], url_path='copy_to_folder')
+    @action(detail=True, methods=['get'], url_path='copy_to_folder')
     def copy_to_folder(self, request, pk=None):
         file_to_copy = self.get_object()
-        destination_folder_id = request.data.get('destination_folder_id')
+        destination_folder_id = request.query_params.get('destination_folder_id')
 
         try:
+            print("Hehhehehehe", destination_folder_id)
             destination_folder = Folder.objects.get(pk=destination_folder_id)
 
             original_name = file_to_copy.name
@@ -203,14 +204,20 @@ class FolderViewSet(viewsets.ModelViewSet):
     def copy_to(self, request, *args, **kwargs):
         folder_to_copy = self.get_object()
         destination_folder_id = request.query_params.get('destination_folder_id')
-        print(destination_folder_id)
         try:
             destination_folder = Folder.objects.get(pk=destination_folder_id)
             if destination_folder.is_descendant_of(folder_to_copy) or folder_to_copy == destination_folder:
                 return Response({"error": "Cannot copy a folder into itself or one of its descendants."},
                                 status=status.HTTP_400_BAD_REQUEST)
+            original_name = folder_to_copy.name
+            new_name = original_name
+            counter = 1
 
-            new_folder = folder_to_copy.copy_to(destination_folder)
+            while Folder.objects.filter(name=new_name, parent=destination_folder).exists():
+                new_name = f"{original_name} ({counter})"
+                counter += 1
+
+            new_folder = folder_to_copy.copy_to(destination_folder, new_name)
             serializer = FolderSerializer(new_folder, context={'request': request})
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         except Folder.DoesNotExist:

@@ -127,12 +127,14 @@ const EditBar: React.FC<EditBarProps> = ({
           </div>
         </Grid.Column>
 
-        <Grid.Column width={7} textAlign="right">
+        <Grid.Column width={4} textAlign="right">
           {clipboardItem && (
             <div style={{ marginTop: '10px' }}>
               <strong>Clipboard:</strong> {clipboardItem.item.name} - {actionType?.toUpperCase()}
             </div>
           )}
+        </Grid.Column>
+        <Grid.Column width={3} textAlign="right">
           <div style={{ marginTop: '10px' }}>
             Edition: {subjectId} | ID: {editionId}
           </div>

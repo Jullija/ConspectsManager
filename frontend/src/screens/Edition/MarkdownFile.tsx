@@ -21,7 +21,6 @@ const MarkdownFile: React.FC<MarkdownFileProps> = ({ file, onSave, canEdit }) =>
     setContent(decodedContent);
   }, [file]);
 
-  // Debounce fetchMarkdownPreview to avoid too frequent updates
   const fetchMarkdownPreview = debounce(async () => {
     try {
       const token = getToken();
@@ -41,11 +40,10 @@ const MarkdownFile: React.FC<MarkdownFileProps> = ({ file, onSave, canEdit }) =>
       console.error('Error fetching markdown preview:', error);
       setPreview('Error fetching markdown preview.');
     }
-  }, 1000); // Debounce time of 1000 ms to allow for delay after last edit
+  }, 500);
 
   useEffect(() => {
     fetchMarkdownPreview();
-    // Cleanup function to cancel the debounced call if the component unmounts
     return () => fetchMarkdownPreview.cancel();
   }, [content]);
 
@@ -62,10 +60,9 @@ const MarkdownFile: React.FC<MarkdownFileProps> = ({ file, onSave, canEdit }) =>
       .reduce((acc, byte) => acc + String.fromCharCode(byte), '');
     const updatedBase64Content = btoa(binaryString);
     await onSave(updatedBase64Content);
-  }, 500); // Debounce save operation by 2000ms
+  }, 500);
 
   useEffect(() => {
-    // Cleanup function to cancel the debounced save if the component unmounts
     return () => debouncedSave.cancel();
   }, []);
 

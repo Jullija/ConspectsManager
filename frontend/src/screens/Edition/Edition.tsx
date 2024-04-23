@@ -1,14 +1,14 @@
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { pathGenerator } from '../../router/paths';
 import { Grid } from 'semantic-ui-react';
 import { useEffect, useState } from 'react';
 import { getEdition } from '../../api/edition';
 import { Edition as Ed } from '../../utils/types';
-import { FileProvider } from '../../context/FileContext';
+import { ItemProvider } from '../../context/ItemContext';
 import ContentView from './ContentView';
 import FolderStructure from './FolderStructure';
 import Editbar from './Editbar';
-import { FolderProvider } from '../../context/FolderContext';
+import { ClipboardProvider } from '../../context/ClipboardContext';
 
 const Edition = () => {
   const navigate = useNavigate();
@@ -18,6 +18,7 @@ const Edition = () => {
   const subjectId = Number(params.subjectId);
 
   const [edition, setEdition] = useState<Ed>();
+  const [refreshFlag, setRefreshFlag] = useState(false);
 
   const goBack = () => navigate(pathGenerator.subject(subjectId));
   const accessRights = () => navigate(pathGenerator.AccessRights(subjectId, editionId));
@@ -29,39 +30,23 @@ const Edition = () => {
     };
 
     fetchEdition();
-  }, []);
+  }, [refreshFlag]);
 
+  const handleRefresh = () => {
+    setRefreshFlag(!refreshFlag); // Toggle to trigger re-fetch
+  };
+  const canEdit = ['owns', 'edit', 'admin'].includes(edition?.user_permission ?? '');
   return (
-    <FileProvider>
-      <FolderProvider>
+    <ItemProvider>
+      <ClipboardProvider>
         <Editbar
-          onDelete={() => {
-            console.log('Edit action');
-          }}
-          addFile={() => {
-            console.log('Edit action');
-          }}
-          addFolder={() => {
-            console.log('Edit action');
-          }}
-          uploadFile={() => {
-            console.log('Edit action');
-          }}
-          onCut={() => {
-            console.log('Edit action');
-          }} // Placeholder functionality
-          onCopy={() => {
-            console.log('Copy action');
-          }} // Placeholder functionality
-          onPaste={() => {
-            console.log('Paste action');
-          }} // Placeholder functionality
+          onChange={handleRefresh}
           goBack={goBack}
           accessRights={accessRights}
           subjectId={subjectId}
           editionId={editionId}
-          canEdit={["owns", "edit", "admin"].includes(edition?.user_permission ?? "")}
-          canShare={["owns", "admin"].includes(edition?.user_permission ?? "")}
+          canEdit={canEdit}
+          canShare={['owns', 'admin'].includes(edition?.user_permission ?? '')}
         />
         <Grid>
           <Grid.Row>
@@ -69,12 +54,12 @@ const Edition = () => {
               {edition && <FolderStructure folders={edition.folders || []} />}
             </Grid.Column>
             <Grid.Column width={12}>
-              <ContentView subjectId={subjectId} edition={edition} />
+              <ContentView onChange={handleRefresh} canEdit={canEdit} />
             </Grid.Column>
           </Grid.Row>
         </Grid>
-      </FolderProvider>
-    </FileProvider>
+      </ClipboardProvider>
+    </ItemProvider>
   );
 };
 

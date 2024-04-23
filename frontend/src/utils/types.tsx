@@ -7,7 +7,6 @@ export type PermissionType = 'view' | 'edit' | 'owns' | 'admin';
 export type PermissionTypeEditable = 'edit' | 'owns' | 'admin';
 export type PermissionTypeNormal = 'view' | 'edit' | 'owns';
 
-
 export type UserEdition = {
   id: number;
   user: number;
@@ -15,7 +14,6 @@ export type UserEdition = {
   edition: number | null;
   permission_type: PermissionType;
 };
-
 
 export type User = {
   id: number;
@@ -30,6 +28,7 @@ export type User = {
 };
 
 export interface File {
+  type: 'file';
   id: number;
   name: string;
   extension: string;
@@ -41,6 +40,7 @@ export interface File {
 }
 
 export interface Folder {
+  type: 'folder';
   id: number;
   name: string;
   edition: number;

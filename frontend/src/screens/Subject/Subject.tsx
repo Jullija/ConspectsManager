@@ -84,6 +84,8 @@ const Subject = () => {
       );
     }
   };
+
+  console.log(isLoading, editions);
   return (
     <Container style={{ width: '60vw' }}>
       <div style={{ display: 'flex', flexDirection: 'column' }}>
@@ -121,7 +123,7 @@ const Subject = () => {
             </Button>
           </>
         )}
-        {isLoading && (
+        {!editions && (
           <Dimmer active inverted>
             <Loader>Loading</Loader>
           </Dimmer>

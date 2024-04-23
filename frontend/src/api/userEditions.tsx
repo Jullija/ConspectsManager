@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { UserEdition, PermissionType} from '../utils/types';
-import getToken from '../utils/tokenManager';
+import { axiosClient } from './axiosClient';
 
 
 type UpdateUserEditionParams = {
@@ -9,14 +9,9 @@ type UpdateUserEditionParams = {
 };
 
 export const deleteUserEdition = async (id: number) => {
-  const token = getToken();
 
     try {
-      await axios.delete(`http://127.0.0.1:8000/user-editions/${id}/`, {
-        headers: {
-          Authorization: `Token ${token}`,
-        },
-      });
+      await axiosClient.delete(`/user-editions/${id}/`);
       return true;
     } catch (error) {
       console.error('Error deleting user edition:', error);
@@ -25,19 +20,12 @@ export const deleteUserEdition = async (id: number) => {
   };
 
   export const updateUserEdition = async (params: UpdateUserEditionParams): Promise<UserEdition | null> => {
-    const token = getToken();
 
     console.log("Updating User Edition with params:", params);
     try {
-        const response = await axios.patch<UserEdition>(
-            `http://127.0.0.1:8000/user-editions/${params.id}/`,
-            { permission_type: params.permissionType }, // Only update permission_type
-            {
-                headers: {
-                    Authorization: `Token ${token}`,
-                    'Content-Type': 'application/json',
-                },
-            }
+        const response = await axiosClient.patch<UserEdition>(
+            `/user-editions/${params.id}/`,
+            { permission_type: params.permissionType } // Only update permission_type
         );
         console.log("Update successful", response.data);
         return response.data;
@@ -52,20 +40,15 @@ export const getUserEditions = async ({
   editionId
 }: { userId?: number; editionId?: number }): Promise<UserEdition[]> => {
   try {
-    const token = getToken();
 
-    let url = 'http://127.0.0.1:8000/user-editions/';
+    let url = '/user-editions/';
     if (userId) {
       url += `?user=${userId}`;
     } else if (editionId) {
       url += `?edition=${editionId}`;
     }
 
-    const response = await axios.get<UserEdition[]>(url, {
-      headers: {
-        Authorization: `Token ${token}`,
-      },
-    });
+    const response = await axiosClient.get<UserEdition[]>(url);
     return response.data;
   } catch (error) {
     console.error('Error fetching user editions:', error);
@@ -76,14 +59,9 @@ export const getUserEditions = async ({
 
 export const getUserEditionsByEdition = async (editionId: number): Promise<UserEdition[]> => {
   try {
-    const token = getToken();
 
-    const response = await axios.get<UserEdition[]>(
-      `http://127.0.0.1:8000/user-editions/?edition=${editionId}`, {
-        headers: {
-          Authorization: `Token ${token}`,
-        },
-      }
+    const response = await axiosClient.get<UserEdition[]>(
+      `/user-editions/?edition=${editionId}`
     );
     return response.data;
   } catch (error) {
@@ -92,17 +70,12 @@ export const getUserEditionsByEdition = async (editionId: number): Promise<UserE
   }
 };
 export const postUserEdition = async (userId: number, editionId: number, permissionType: PermissionType) => {
-    const token = getToken();
 
     try {
-      await axios.post('http://127.0.0.1:8000/user-editions/', {
+      await axiosClient.post('/user-editions/', {
         user: userId,
         edition: editionId,
         permission_type: permissionType
-      }, {
-        headers: {
-          Authorization: `Token ${token}`,
-        },
       });
       return true;
     } catch (error) {

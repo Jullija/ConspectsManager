@@ -7,6 +7,7 @@ import { useState } from 'react';
 import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 import app from '../../firebase/firebase-config';
 import { axiosClient } from '../../api/axiosClient';
+import axios from 'axios';
 
 
 const Login = () => {
@@ -58,7 +59,7 @@ const Login = () => {
                     token: idToken,
                 })
                 .then((response) => {
-                    localStorage.setItem('token', response.data.token);
+                    axiosClient.defaults.headers.common['Authorization'] = `Token ${response.data.token}`;
                     // Handle response or navigate as needed
                     navigate(pathGenerator.SubjectsList); // Example navigation
                 })

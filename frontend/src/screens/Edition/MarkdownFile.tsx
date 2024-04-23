@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Button, Form, Segment } from 'semantic-ui-react';
 import { File } from '../../utils/types';
 import getToken from '../../utils/tokenManager';
-
+import { axiosClient } from '../../api/axiosClient';
 interface MarkdownFileProps {
   file: File;
   onSave: (updatedBase64Content: string) => Promise<void>;
@@ -28,19 +28,10 @@ const TextFileComponent: React.FC<MarkdownFileProps> = ({ file, onSave, canEdit}
     try {
       const token = getToken();
 
-      const response = await fetch(`http://localhost:8000/files/${file.id}/html_markdown/`, {
-        headers: {
-          'Authorization': `Token ${token}`
-        },
-      }
-      );
-      if (response.ok) {
-        const html = await response.text();
-        setPreview(html);
-      } else {
-        console.error('Failed to fetch markdown preview:', response.status);
-        setPreview('Failed to fetch markdown preview.');
-      }
+      const response = await axiosClient.get(`/files/${file.id}/html_markdown/`);
+
+      const html = response.data; // Axios stores the response data directly in the 'data' property.
+      setPreview(html);
     } catch (error) {
       console.error('Error fetching markdown preview:', error);
       setPreview('Error fetching markdown preview.');

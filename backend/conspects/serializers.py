@@ -52,6 +52,10 @@ class EditionSerializer(serializers.ModelSerializer):
         return get_user_permission(self, obj)
 
 
+class DestinationFolderSerializer(serializers.Serializer):
+    destination_folder_id = serializers.IntegerField(help_text='ID of the destination folder')
+
+
 class FolderSerializer(serializers.ModelSerializer):
     files = serializers.SerializerMethodField(read_only=True)
     user_permission = serializers.SerializerMethodField(read_only=True)
@@ -69,7 +73,8 @@ class FolderSerializer(serializers.ModelSerializer):
             try:
                 parent_folder = Folder.objects.get(pk=parent_id)
 
-                if self.instance and (self.instance.pk == parent_folder.pk or parent_folder.is_descendant_of(self.instance)):
+                if self.instance and (
+                        self.instance.pk == parent_folder.pk or parent_folder.is_descendant_of(self.instance)):
                     raise serializers.ValidationError({"parent": "Cannot set a descendant as the new parent."})
 
                 data['parent'] = parent_folder

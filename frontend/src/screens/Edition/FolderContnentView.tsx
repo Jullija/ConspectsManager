@@ -4,6 +4,7 @@ import axios from 'axios';
 import { Folder } from '../../utils/types';
 import { useClipboard } from '../../context/ClipboardContext';
 import getToken from '../../utils/tokenManager';
+import { axiosClient } from '../../api/axiosClient';
 
 interface FolderContentViewProps {
   selectedFolder: Folder;
@@ -37,36 +38,27 @@ const FolderContentView: React.FC<FolderContentViewProps> = ({
   const handlePaste = async () => {
     if (!clipboardItem) return;
 
-    const token = getToken();
     let url = '';
 
     try {
       if (clipboardItem.type === 'file') {
         if (actionType === 'copy') {
           url = `${baseUrl}/files/${clipboardItem.item.id}/copy_to_folder/?destination_folder_id=${selectedFolder.id}`;
-          await axios.get(url, { headers: { Authorization: `Token ${token}` } });
+          await axiosClient.get(url);
           console.log('File copied successfully.');
         } else if (actionType === 'cut') {
           url = `${baseUrl}/files/${clipboardItem.item.id}/`;
-          await axios.patch(
-            url,
-            { folder: selectedFolder.id },
-            { headers: { Authorization: `Token ${token}` } }
-          );
+          await axiosClient.patch(url, { folder: selectedFolder.id });
           console.log('File moved successfully.');
         }
       } else if (clipboardItem.type === 'folder') {
         if (actionType === 'copy') {
           url = `${baseUrl}/folders/${clipboardItem.item.id}/copy_to/?destination_folder_id=${selectedFolder.id}`;
-          await axios.get(url, { headers: { Authorization: `Token ${token}` } });
+          await axiosClient.get(url);
           console.log('Folder copied successfully.');
         } else if (actionType === 'cut') {
           url = `${baseUrl}/folders/${clipboardItem.item.id}/`;
-          await axios.patch(
-            url,
-            { parent: selectedFolder.id },
-            { headers: { Authorization: `Token ${token}` } }
-          );
+          await axiosClient.patch(url, { parent: selectedFolder.id });
           console.log('Folder moved successfully.');
         }
       }
@@ -83,22 +75,15 @@ const FolderContentView: React.FC<FolderContentViewProps> = ({
   };
 
   const handleAddFile = async () => {
-    const token = localStorage.getItem('token');
-    const url = baseUrl + `/files/`;
+    const url = `/files/`;
 
     try {
-      const response = await axios.post(
-        url,
-        {
-          name: newFileName,
-          extension: newFileExtension,
-          content: '',
-          folder: selectedFolder.id
-        },
-        {
-          headers: { Authorization: `Token ${token}` }
-        }
-      );
+      const response = await axiosClient.post(url, {
+        name: newFileName,
+        extension: newFileExtension,
+        content: '',
+        folder: selectedFolder.id
+      });
 
       console.log('File added successfully:', response.data);
       setFileModalOpen(false);
@@ -109,20 +94,13 @@ const FolderContentView: React.FC<FolderContentViewProps> = ({
   };
 
   const handleAddFolder = async () => {
-    const token = localStorage.getItem('token');
-    const url = baseUrl + `/folders/`;
+    const url = `/folders/`;
 
     try {
-      const response = await axios.post(
-        url,
-        {
-          name: newFolderName,
-          parent: selectedFolder.id
-        },
-        {
-          headers: { Authorization: `Token ${token}` }
-        }
-      );
+      const response = await axiosClient.post(url, {
+        name: newFolderName,
+        parent: selectedFolder.id
+      });
 
       console.log('Folder added successfully:', response.data);
       setFolderModalOpen(false);
@@ -155,22 +133,15 @@ const FolderContentView: React.FC<FolderContentViewProps> = ({
 
   const handleUploadFile = async () => {
     if (!fileToUpload) return;
-    const token = localStorage.getItem('token');
-    const url = `${baseUrl}/files/`;
+    const url = `/files/`;
 
     try {
-      const response = await axios.post(
-        url,
-        {
-          name: fileToUpload.name,
-          extension: fileToUpload.extension,
-          content: fileToUpload.content,
-          folder: selectedFolder.id
-        },
-        {
-          headers: { Authorization: `Token ${token}` }
-        }
-      );
+      const response = await axiosClient.post(url, {
+        name: fileToUpload.name,
+        extension: fileToUpload.extension,
+        content: fileToUpload.content,
+        folder: selectedFolder.id
+      });
 
       console.log('File uploaded successfully:', response.data);
       setUploadModalOpen(false);

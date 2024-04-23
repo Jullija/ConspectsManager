@@ -3,6 +3,7 @@ import { PermissionTypeEditable, File } from '../../utils/types';
 import MarkdownFile from './MarkdownFile';
 import TextFileComponent from './TextFileComponent';
 import getToken from '../../utils/tokenManager';
+import { axiosClient } from '../../api/axiosClient';
 
 interface FileContentViewProps {
   selectedFile: File;
@@ -14,24 +15,19 @@ const editablePermissions: PermissionTypeEditable[] = ['owns', 'edit', 'admin'];
 const FileContentView = ({ selectedFile }: FileContentViewProps): JSX.Element => {
   const handleSave = async (updatedBase64Content: string) => {
     try {
-      const token = getToken();
-
-      const response = await fetch(`http://localhost:8000/files/${selectedFile?.id}/`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Token ${token}`
-        },
-        body: JSON.stringify({
+      const response = await axiosClient.patch(
+        `/files/${selectedFile?.id}/`,
+        {
           name: selectedFile?.name,
           extension: selectedFile?.extension,
           content: updatedBase64Content
-        })
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }
+      );
 
       console.log('File saved successfully.');
     } catch (error) {

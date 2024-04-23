@@ -5,6 +5,7 @@ import { useClipboard } from '../../context/ClipboardContext';
 import axios from 'axios';
 import getToken from '../../utils/tokenManager';
 import { File } from '../../utils/types';
+import { axiosClient } from '../../api/axiosClient';
 interface EditBarProps {
   onChange: () => void;
   goBack: () => void;
@@ -43,12 +44,9 @@ const EditBar: React.FC<EditBarProps> = ({
 
   const handleDelete = async () => {
     if (!selectedItem) return;
-    const token = getToken();
     const url = `${baseUrl}/${itemType}s/${selectedItem.id}`;
     try {
-      const response = await axios.delete(url, {
-        headers: { Authorization: `Token ${token}` }
-      });
+      const response = await axiosClient.delete(url);
       console.log('Item deleted successfully:', response.data);
       onChange();
       selectItem(null);

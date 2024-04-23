@@ -63,10 +63,11 @@ const Edition = () => {
                   style={{
                     overflowY: 'auto',
                     maxHeight: 'calc(100vh - 10em)',
+                    minHeight: 'calc(30vh)',
                     paddingRight: '1em'
                   }}>
                   {loading ? (
-                    <Dimmer active inverted>
+                    <Dimmer active inverted style={{ minHeight: '100px' }}>
                       <Loader>Loading Folder Structure</Loader>
                     </Dimmer>
                   ) : (

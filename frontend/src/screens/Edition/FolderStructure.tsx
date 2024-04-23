@@ -24,7 +24,6 @@ const FolderStructure: React.FC<FolderStructureProps> = ({ folders, parent = nul
     );
   };
   const isFolderCollapsed = (folderId: number) => collapsedFolders.includes(folderId);
-  console.log(selectedItem, itemType);
   const handleFileClick = async (file: FileType) => {
     const data = await getFile(file.id);
     selectItem(data || null);

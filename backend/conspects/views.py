@@ -9,8 +9,7 @@ from rest_framework.decorators import action
 from rest_framework.generics import ListCreateAPIView
 from rest_framework.generics import RetrieveUpdateDestroyAPIView
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
-from django.db.models import Q
+from rest_framework.views import APIView
 
 from conspects.models import Edition, Course, Folder
 from conspects.serializers import CourseSerializer, EditionSerializer, FolderSerializer
@@ -220,7 +219,6 @@ class FolderViewSet(viewsets.ModelViewSet):
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 
-
 class EditionDetailAPIView(RetrieveUpdateDestroyAPIView):
     queryset = Edition.objects.all()
     serializer_class = EditionSerializer
@@ -279,3 +277,25 @@ class TemplateViewSet(viewsets.ModelViewSet):
     def partial_update(self, request, *args, **kwargs):
         response = {'message': 'Partial Update function is not offered in this path.'}
         return Response(response, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+
+class DuplicateEditionView(APIView):
+    def post(self, request, format=None):
+        base_edition = get_object_or_404(Edition, id=request.data.get('base_edition_id'))
+        new_edition_name = request.data.get('new_edition_name', base_edition.name + ' copy')
+        new_edition_year = request.data.get('new_edition_year', base_edition.year)
+        try:
+            new_edition = Edition.objects.create(course=base_edition.course, year=new_edition_year,
+                                                 name=new_edition_name)
+        except IntegrityError:
+            return Response({'error': 'An edition with this name already exists for this course.'},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        new_root_folder = new_edition.root_folder
+        for file in base_edition.root_folder.folder_files.all():
+            File.objects.create(name=file.name, extension=file.extension, content=file.content, folder=new_root_folder)
+        for folder in base_edition.root_folder.folder_children.all():
+            folder.copy_to(new_root_folder)
+
+        return Response({'message': 'Edition duplicated successfully', 'new_edition_id': new_edition.id},
+                        status=status.HTTP_201_CREATED)

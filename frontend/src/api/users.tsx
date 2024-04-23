@@ -1,16 +1,10 @@
 import axios from 'axios';
 import { User } from '../utils/types';
-import getToken from '../utils/tokenManager';
+import { axiosClient } from './axiosClient';
 
 export const getUsers = async (): Promise<User[]> => {
-  try {
-    const token = getToken();
-    
-    const response = await axios.get<User[]>('http://127.0.0.1:8000/users/', {
-      headers: {
-        Authorization: `Token ${token}`,
-      },
-    });
+  try {    
+    const response = await axiosClient.get<User[]>('/users/');
     return response.data;
   } catch (error) {
     console.error('Error fetching users:', error);

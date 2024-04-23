@@ -1,19 +1,13 @@
 import { User } from '../utils/types';
-import axios from 'axios';
-import getToken from '../utils/tokenManager';
+import { axiosClient } from './axiosClient';
+
 
 export const getUser = async (
   userId: number
 ): Promise<User | undefined> => {
-  try {
-    const token = getToken();
-    
-    const response = await axios.get<User>(
-      `http://127.0.0.1:8000/users/${userId}`, {
-        headers: {
-          Authorization: `Token ${token}`
-        }
-      }
+  try {    
+    const response = await axiosClient.get<User>(
+      `/users/${userId}`
     );
     return response.data;
   } catch (error) {

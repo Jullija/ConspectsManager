@@ -5,7 +5,7 @@ import MarkdownFile from './MarkdownFile';
 import { Accordion, Icon, Grid, Segment } from 'semantic-ui-react';
 import getToken from '../../utils/tokenManager';
 import { PermissionType, PermissionTypeEditable } from '../../utils/types';
-
+import { axiosClient } from '../../api/axiosClient';
 
 interface ContentViewProps {
   subjectId: number;
@@ -55,22 +55,15 @@ const ContentView: React.FC<ContentViewProps> = ({ subjectId, edition }) => {
     try {
       const token = getToken();
 
-      const response = await fetch(`http://localhost:8000/files/${selectedFile?.id}/`, {
-        method: 'PATCH',
+      const response = await axiosClient.patch(`/files/${selectedFile?.id}/`, {
+        name: selectedFile?.name,
+        extension: selectedFile?.extension,
+        content: updatedBase64Content
+      }, {
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Token ${token}`
-        },
-        body: JSON.stringify({
-          name: selectedFile?.name,
-          extension: selectedFile?.extension,
-          content: updatedBase64Content
-        })
+          }
       });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
 
       console.log('File saved successfully.');
     } catch (error) {

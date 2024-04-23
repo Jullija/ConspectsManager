@@ -18,6 +18,42 @@ from conspects.serializers import CourseSerializer, EditionSerializer, FolderSer
 from users.models import UserEdition, PermissionType
 from .models import File, Template
 from .serializers import FileSerializer, TemplateSerializer
+from rest_framework.exceptions import AuthenticationFailed
+
+
+def export_edition_as_zip(request, edition_id):
+    user = request.user
+
+    # If the user is not authenticated, raise AuthenticationFailed exception
+    if not user.is_authenticated:
+        raise AuthenticationFailed()
+    try:
+        edition = Edition.objects.get(pk=edition_id)
+        response = HttpResponse(content_type='application/zip')
+        response['Content-Disposition'] = f'attachment; filename={edition.name}.zip'
+
+        with zipfile.ZipFile(response, 'w') as zip_file:
+            add_edition_to_zip(zip_file, edition)
+
+        return response
+    except Edition.DoesNotExist:
+        return HttpResponse("Edition not found", status=404)
+
+
+def add_edition_to_zip(zip_file, edition):
+    for folder in edition.edition_folders.all():
+        add_folder_to_zip(zip_file, folder, folder_path=folder.name)
+
+
+def add_folder_to_zip(zip_file, folder, folder_path):
+    # Add folder to ZIP file
+    for file in folder.folder_files.all():
+        file_path = os.path.join(folder_path, file.name + '.' + file.extension)
+        zip_file.writestr(file_path, file.content)
+
+    for child in folder.folder_children.all():
+        child_folder_path = os.path.join(folder_path, child.name)
+        add_folder_to_zip(zip_file, child, folder_path=child_folder_path)
 
 
 def export_edition_as_zip(request, edition_id):
@@ -58,6 +94,13 @@ class ConceptsViewSet(viewsets.ViewSet):
 class FilesViewSet(viewsets.ModelViewSet):
     queryset = File.objects.all()
     serializer_class = FileSerializer
+
+    def check_permissions(self, request):
+        super().check_permissions(request)
+
+        # If the user is not authenticated, raise AuthenticationFailed exception
+        if not request.user.is_authenticated:
+            raise AuthenticationFailed()
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -158,17 +201,30 @@ class RetrieveCreateCourseView(ListCreateAPIView):
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
 
+    def check_permissions(self, request):
+        super().check_permissions(request)
+
+        # If the user is not authenticated, raise AuthenticationFailed exception
+        if not request.user.is_authenticated:
+            raise AuthenticationFailed()
+
 
 class EditionListCreateAPIView(ListCreateAPIView):
     serializer_class = EditionSerializer
+
+    def check_permissions(self, request):
+        super().check_permissions(request)
+
+        # If the user is not authenticated, raise AuthenticationFailed exception
+        if not request.user.is_authenticated:
+            raise AuthenticationFailed()
 
     def get_queryset(self):
         user = self.request.user
         course_id = self.kwargs['courseId']
         # If the user is not authenticated, return an empty queryset or public editions only
         if not user.is_authenticated:
-            return Edition.objects.none()  # or filter for public editions if applicable
-
+            raise AuthenticationFailed()
         # Check if the user has 'ADMIN' permission without a specific edition
         # This indicates they have access to all editions
         if UserEdition.objects.filter(user=user, edition__isnull=True, permission_type='admin').exists():
@@ -186,6 +242,9 @@ class EditionListCreateAPIView(ListCreateAPIView):
         )
 
     def create(self, request, *args, **kwargs):
+        user = request.user
+        if not user.is_authenticated:
+            raise AuthenticationFailed()
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
@@ -202,6 +261,13 @@ class FolderViewSet(viewsets.ModelViewSet):
     queryset = Folder.objects.all()
     serializer_class = FolderSerializer
     lookup_url_kwarg = 'folderId'
+
+    def check_permissions(self, request):
+        super().check_permissions(request)
+
+        # If the user is not authenticated, raise AuthenticationFailed exception
+        if not request.user.is_authenticated:
+            raise AuthenticationFailed()
 
     def get_serializer_context(self):
         """
@@ -257,10 +323,24 @@ class EditionDetailAPIView(RetrieveUpdateDestroyAPIView):
     serializer_class = EditionSerializer
     lookup_url_kwarg = 'editionId'
 
+    def check_permissions(self, request):
+        super().check_permissions(request)
+
+        # If the user is not authenticated, raise AuthenticationFailed exception
+        if not request.user.is_authenticated:
+            raise AuthenticationFailed()
+
 
 class TemplateViewSet(viewsets.ModelViewSet):
     queryset = Template.objects.all()
     serializer_class = TemplateSerializer
+
+    def check_permissions(self, request):
+        super().check_permissions(request)
+
+        # If the user is not authenticated, raise AuthenticationFailed exception
+        if not request.user.is_authenticated:
+            raise AuthenticationFailed()
 
     def create(self, request, *args, **kwargs):
         edition_id = request.data.get('edition')
@@ -313,6 +393,12 @@ class TemplateViewSet(viewsets.ModelViewSet):
 
 
 class DuplicateEditionView(APIView):
+    def check_permissions(self, request):
+        super().check_permissions(request)
+
+        # If the user is not authenticated, raise AuthenticationFailed exception
+        if not request.user.is_authenticated:
+            raise AuthenticationFailed()
     def post(self, request, format=None):
         base_edition = get_object_or_404(Edition, id=request.data.get('base_edition_id'))
         new_edition_name = request.data.get('new_edition_name', base_edition.name + ' copy')

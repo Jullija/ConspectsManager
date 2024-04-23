@@ -1,8 +1,8 @@
-import React from 'react';
 import { useItem } from '../../context/ItemContext';
 import { File, Folder } from '../../utils/types';
 import FileContentView from './FileContentView';
 import FolderContentView from './FolderContnentView';
+import React from 'react';
 
 interface ContentViewProps {
   onChange: () => void;

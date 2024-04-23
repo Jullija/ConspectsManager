@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Segment, Modal, Form, Input, Header } from 'semantic-ui-react';
-import axios from 'axios';
 import { Folder } from '../../utils/types';
 import { useClipboard } from '../../context/ClipboardContext';
-import getToken from '../../utils/tokenManager';
 import { axiosClient } from '../../api/axiosClient';
 
 interface FolderContentViewProps {

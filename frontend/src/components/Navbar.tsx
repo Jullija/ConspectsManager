@@ -4,11 +4,6 @@ import CenteredMenu from './Menu';
 const menuPaths = [
   pathGenerator.Login,
   pathGenerator.SubjectsList,
-  pathGenerator.subject(1),
-  pathGenerator.AddSubject,
-  pathGenerator.Edition(1, 1),
-  pathGenerator.AddEdition(1),
-  pathGenerator.TemplatesList,
   pathGenerator.AccessRights(1, 1)
 ];
 
@@ -21,16 +16,7 @@ const Navbar = () => {
         width: '100vw'
       }}>
       <CenteredMenu
-        itemTitles={[
-          'Login',
-          'SubjectsList',
-          'Subject',
-          'Add subject',
-          'Edition',
-          'Add edition',
-          'Templates',
-          'Access right panel'
-        ]}
+        itemTitles={['Login', 'SubjectsList', 'Access right panel']}
         paths={menuPaths}
         styles={{ width: '100vw' }}
       />

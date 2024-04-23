@@ -2,7 +2,6 @@ import { Grid, Segment } from 'semantic-ui-react';
 import { PermissionTypeEditable, File } from '../../utils/types';
 import MarkdownFile from './MarkdownFile';
 import TextFileComponent from './TextFileComponent';
-import getToken from '../../utils/tokenManager';
 import { axiosClient } from '../../api/axiosClient';
 
 interface FileContentViewProps {
@@ -15,7 +14,7 @@ const editablePermissions: PermissionTypeEditable[] = ['owns', 'edit', 'admin'];
 const FileContentView = ({ selectedFile }: FileContentViewProps): JSX.Element => {
   const handleSave = async (updatedBase64Content: string) => {
     try {
-      const response = await axiosClient.patch(
+      await axiosClient.patch(
         `/files/${selectedFile?.id}/`,
         {
           name: selectedFile?.name,

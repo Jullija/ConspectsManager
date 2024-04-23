@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import { Button, Grid, Modal } from 'semantic-ui-react';
 import { useItem } from '../../context/ItemContext';
 import { useClipboard } from '../../context/ClipboardContext';
-import axios from 'axios';
-import getToken from '../../utils/tokenManager';
 import { File } from '../../utils/types';
 import { axiosClient } from '../../api/axiosClient';
 interface EditBarProps {

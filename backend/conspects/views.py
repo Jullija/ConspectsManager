@@ -12,7 +12,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from conspects.models import Edition, Course, Folder
-from conspects.serializers import CourseSerializer, EditionSerializer, FolderSerializer
+from conspects.serializers import CourseSerializer, EditionSerializer, FolderSerializer, DestinationFolderSerializer
 from users.models import UserEdition, PermissionType
 from .models import File, Template
 from .serializers import FileSerializer, TemplateSerializer
@@ -87,14 +87,8 @@ class FilesViewSet(viewsets.ModelViewSet):
 
     @swagger_auto_schema(
         method='get',
-        request_body=openapi.Schema(
-            type=openapi.TYPE_OBJECT,
-            properties={
-                'destination_folder_id': openapi.Schema(type=openapi.TYPE_INTEGER,
-                                                        description='ID of the destination folder')
-            },
-        ),
-        responses={201: FileSerializer()}  # Instantiate the serializer
+        query_serializer=DestinationFolderSerializer(),  # Assuming you have this serializer
+        responses={201: FileSerializer()}
     )
     @action(detail=True, methods=['get'], url_path='copy_to_folder')
     def copy_to_folder(self, request, pk=None):

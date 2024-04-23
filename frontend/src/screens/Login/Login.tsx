@@ -61,6 +61,7 @@ const Login = () => {
                     token: idToken,
                 })
                 .then((response) => {
+                    localStorage.setItem("token", response.data.token);
                     axiosClient.defaults.headers.common['Authorization'] = `Token ${response.data.token}`;
                     // Handle response or navigate as needed
                     navigate(pathGenerator.SubjectsList); // Example navigation

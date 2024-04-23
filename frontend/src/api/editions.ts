@@ -1,10 +1,17 @@
 import { AxiosResponse } from 'axios';
 import { Edition } from '../utils/types';
+import getToken from '../utils/tokenManager';
 import { axiosClient } from './axiosClient';
 
 export const getEditions = async (subjectId: number): Promise<Edition[]> => {
+  const token = getToken();
+
   const response: AxiosResponse<Edition[]> = await axiosClient.get(
-    `/courses/${subjectId}/editions/`
+    `/courses/${subjectId}/editions/`, {
+      headers: {
+        Authorization: `Token ${token}`
+      }
+    }
   );
   return response.data;
 };
@@ -14,11 +21,18 @@ export const addEdition = async (
   name: string,
   year: number
 ): Promise<Edition> => {
+  const token = getToken();
+
   const response: AxiosResponse<Edition> = await axiosClient.post(
-    `/courses/${subjectId}/editions/`,
+     `/courses/${subjectId}/editions/`,
     {
       name: name,
       year: year
+    },
+    {
+      headers: {
+        Authorization: `Token ${token}`,
+      }
     }
   );
   return response.data;
@@ -51,8 +65,14 @@ export const addEditionWithTemplate = async (
 };
 
 export const deleteEdition = async (subjectId: number, editionId: number): Promise<Edition> => {
+  const token = getToken();
+  
   const response: AxiosResponse<Edition> = await axiosClient.delete(
-    `/courses/${subjectId}/editions/${editionId}`
+    `/courses/${subjectId}/editions/${editionId}`, {
+      headers: {
+        Authorization: `Token ${token}`
+      }
+    }
   );
   return response.data;
 };

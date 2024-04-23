@@ -1,11 +1,10 @@
-import axios, { AxiosResponse } from 'axios';
+import { AxiosResponse } from 'axios';
 import { Template } from '../utils/types';
-
+import { axiosClient } from './axiosClient';
 // TODO
-const baseUrl = 'http://127.0.0.1:8000';
 
 export const getTemplates = async (): Promise<Template[]> => {
-  const response: AxiosResponse<any[]> = await axios.get(baseUrl + '/templates/');
+  const response: AxiosResponse<any[]> = await axiosClient.get('/templates/');
   return response.data.map((item) => {
     return {
       id: item.id,
@@ -21,7 +20,7 @@ export const addTemplate = async (
   name: string,
   description: string
 ): Promise<Template> => {
-  const response: AxiosResponse<Template> = await axios.post(baseUrl + `/templates/`, {
+  const response: AxiosResponse<Template> = await axiosClient.post(`/templates/`, {
     edition: editionId,
     name: name,
     description: description
@@ -30,8 +29,8 @@ export const addTemplate = async (
 };
 
 export const deleteTemplate = async (templateId: number): Promise<Template> => {
-  const response: AxiosResponse<Template> = await axios.delete(
-    baseUrl + `/templates/${templateId}/`
+  const response: AxiosResponse<Template> = await axiosClient.delete(
+    `/templates/${templateId}/`
   );
   return response.data;
 };

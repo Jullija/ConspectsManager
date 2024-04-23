@@ -13,6 +13,7 @@ from rest_framework.views import APIView
 
 from conspects.models import Edition, Course, Folder
 from conspects.serializers import CourseSerializer, EditionSerializer, FolderSerializer
+from users.models import UserEdition, PermissionType
 from .models import File, Template
 from .serializers import FileSerializer, TemplateSerializer
 
@@ -64,9 +65,7 @@ class FilesViewSet(viewsets.ModelViewSet):
         except Edition.DoesNotExist:
             return Response({"message": "Edition not found!"}, status=404)
 
-        files = File.objects.filter(folder__edition=edition).select_related('folder')
-        serializer = FileSerializer(files, many=True)
-
+        serializer = edition.folders.prefetch_related("files")
         return Response(serializer.data)
 
     def post(self, request):
@@ -137,18 +136,52 @@ class EditionListCreateAPIView(ListCreateAPIView):
     serializer_class = EditionSerializer
 
     def get_queryset(self):
+        user = self.request.user
         course_id = self.kwargs['courseId']
-        return Edition.objects.filter(course_id=course_id)
+        # If the user is not authenticated, return an empty queryset or public editions only
+        if not user.is_authenticated:
+            return Edition.objects.none()  # or filter for public editions if applicable
 
+        # Check if the user has 'ADMIN' permission without a specific edition
+        # This indicates they have access to all editions
+        if UserEdition.objects.filter(user=user, edition__isnull=True, permission_type='admin').exists():
+            return Edition.objects.filter(course_id=course_id)  # Return all editions for the course
 
-class FolderCreateAPIView(ListCreateAPIView):
-    serializer_class = FolderSerializer
-    queryset = Folder.objects.all()
+        # Get all editions for the course that the user has 'view', 'owns', or 'edit' permission for
+        viewable_editions = UserEdition.objects.filter(
+            user=user,
+            permission_type__in=['view', 'owns', 'edit'],
+            edition__course_id=course_id
+        ).values_list('edition', flat=True)
+
+        return Edition.objects.filter(
+            id__in=viewable_editions
+        )
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+
+        edition = serializer.instance
+        user = request.user
+        UserEdition.objects.create(user=user, edition=edition, permission_type=PermissionType.OWNS)
+
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
 class FolderViewSet(viewsets.ModelViewSet):
     queryset = Folder.objects.all()
     serializer_class = FolderSerializer
+    lookup_url_kwarg = 'folderId'
+
+    def get_serializer_context(self):
+        """
+        Ensures that the request context is always included in the serializer context.
+        """
+        context = super(FolderViewSet, self).get_serializer_context()
+        return context
 
     @swagger_auto_schema(
         method='get',
@@ -190,12 +223,6 @@ class EditionDetailAPIView(RetrieveUpdateDestroyAPIView):
     queryset = Edition.objects.all()
     serializer_class = EditionSerializer
     lookup_url_kwarg = 'editionId'
-
-
-# class FolderDetailAPIView(RetrieveUpdateDestroyAPIView):
-#     queryset = Folder.objects.all()
-#     serializer_class = FolderSerializer
-#     lookup_url_kwarg = 'folderId'
 
 
 class TemplateViewSet(viewsets.ModelViewSet):

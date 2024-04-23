@@ -1,12 +1,24 @@
 from django.core.management.base import BaseCommand
 
 from conspects.models import Edition, Course, File
+from users.models import User, UserEdition
 
 
 class Command(BaseCommand):
     help = 'Initializes the database with some data'
 
     def handle(self, *args, **options):
+
+        admin = User.objects.create(
+            username="conspectsmanager@gmail.com",  # Adjust if you use a different logic for usernames
+
+            email="conspectsmanager@gmail.com",
+            first_name="Jan",
+            last_name="",
+            uid="wPMNs0NqzzWBxYu6pxtSvnoBYFD3"  # Assuming you've added a `uid` field to your user model
+
+        )
+        admin_privileges = UserEdition.objects.create(user=admin, edition=None, permission_type='admin')
         # Creating courses
         asd_course = Course.objects.create(name="Algorytmy i struktury danych")
         sysopy_course = Course.objects.create(name="Systemy operacyjne")

@@ -85,7 +85,6 @@ const Subject = () => {
     }
   };
 
-  console.log(isLoading, editions);
   return (
     <Container style={{ width: '60vw' }}>
       <div style={{ display: 'flex', flexDirection: 'column' }}>

@@ -406,7 +406,9 @@ class DuplicateEditionView(APIView):
         try:
             new_edition = Edition.objects.create(course=base_edition.course, year=new_edition_year,
                                                  name=new_edition_name)
-        except IntegrityError:
+            UserEdition.objects.create(user=request.user, edition=new_edition,
+                                                          permission_type=PermissionType.OWNS)
+        except IntegrityError as e:
             return Response({'error': 'An edition with this name already exists for this course.'},
                             status=status.HTTP_400_BAD_REQUEST)
 

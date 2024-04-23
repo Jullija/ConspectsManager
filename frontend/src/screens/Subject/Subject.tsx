@@ -99,15 +99,17 @@ const Subject = () => {
           <Button
             style={{ backgroundColor: colors.blue, color: colors.white }}
             onClick={() => navigate(pathGenerator.AddEdition(subjectId))}>
-            Add Edition
+            Dodaj Edycję
           </Button>
         </div>
-        <Button onClick={handleShareSubject}>{showUsers ? 'Hide Users' : 'Share Subject'}</Button>
+        <Button onClick={handleShareSubject}>
+          {showUsers ? 'Ukryj Użytkowników' : 'Udostępnij Przedmiot'}
+        </Button>
 
         {showUsers && (
           <>
             <Dropdown
-              placeholder="Select User to Copy Permissions"
+              placeholder="Wybierz użytkownika do kopii praw dostępu"
               fluid
               selection
               options={users.map((user) => ({
@@ -118,13 +120,13 @@ const Subject = () => {
               onChange={(_, { value }) => setSelectedUser(value as number)}
             />
             <Button onClick={handleCopyPermissions} disabled={!selectedUser}>
-              Copy Permissions
+              Kopiuj Prawa Dostępu
             </Button>
           </>
         )}
         {!editions && (
           <Dimmer active inverted>
-            <Loader>Loading</Loader>
+            <Loader>Ładowanie</Loader>
           </Dimmer>
         )}
 
@@ -140,7 +142,7 @@ const Subject = () => {
             />
           ))
         ) : (
-          <p>No editions available.</p>
+          <p>Brak dostępnych edycji.</p>
         )}
       </div>
     </Container>

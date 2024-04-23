@@ -1,11 +1,7 @@
 import { pathGenerator } from '../router/paths';
 import CenteredMenu from './Menu';
 
-const menuPaths = [
-  pathGenerator.Login,
-  pathGenerator.SubjectsList,
-  pathGenerator.AccessRights(1, 1)
-];
+const menuPaths = [pathGenerator.Login, pathGenerator.SubjectsList, pathGenerator.TemplatesList];
 
 const Navbar = () => {
   return (
@@ -16,7 +12,7 @@ const Navbar = () => {
         width: '100vw'
       }}>
       <CenteredMenu
-        itemTitles={['Login', 'SubjectsList', 'Access right panel']}
+        itemTitles={['Login', 'Przedmioty', 'Templatki']}
         paths={menuPaths}
         styles={{ width: '100vw' }}
       />

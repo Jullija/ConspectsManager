@@ -7,7 +7,7 @@ const ErrorPage = () => {
   return (
     <>
       <h1>Error</h1>
-      <p>{message ? message : 'something went wrong :('}</p>
+      <p>{message ? message : 'coś poszło nie tak :('}</p>
     </>
   );
 };

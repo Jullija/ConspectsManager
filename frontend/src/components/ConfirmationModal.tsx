@@ -16,16 +16,16 @@ interface ConfiramtionModalProps {
 function ConfiramtionModal({ onConfirmClick, open, onCloseClick }: ConfiramtionModalProps) {
   return (
     <Modal open={open} style={{ width: 400 }}>
-      <ModalHeader>Confirmation</ModalHeader>
+      <ModalHeader>Potwierdzenie</ModalHeader>
       <ModalContent>
         <ModalDescription>
-          <p>Are you sure?</p>
+          <p>Jesteś pewien/a?</p>
         </ModalDescription>
       </ModalContent>
       <ModalActions>
-        <Button onClick={onCloseClick}>Cancel</Button>
+        <Button onClick={onCloseClick}>Anuluj</Button>
         <Button onClick={onConfirmClick} positive>
-          Delete
+          Usuń
         </Button>
       </ModalActions>
     </Modal>

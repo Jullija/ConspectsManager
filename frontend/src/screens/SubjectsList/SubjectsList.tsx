@@ -12,7 +12,7 @@ const SubjectsList = () => {
   const { isLoading, error, data: subjects } = useQuery('subjects', getSubjects);
 
   if (isLoading) {
-    return <p>Loading...</p>;
+    return <p>Ładowanie...</p>;
   }
 
   if (error) {
@@ -21,8 +21,17 @@ const SubjectsList = () => {
 
   return (
     <>
-      <div style={{ display: 'flex', justifyContent: 'center' }}>
-        <CenteredMenu itemTitles={['Sortuj po przedmiocie', 'Sortuj po roku']} />
+      <div style={{ display: 'flex', justifyContent: 'center', marginTop: 20 }}>
+        <Button
+          onClick={() => {
+            navigate(pathGenerator.AddSubject);
+          }}
+          style={{
+            backgroundColor: colors.darkblue,
+            color: colors.white
+          }}>
+          Dodaj przedmiot
+        </Button>
       </div>
       <div
         style={{
@@ -37,19 +46,6 @@ const SubjectsList = () => {
           return <SubjectCard subject={subject} key={index} />;
         })}
       </div>
-
-      <Button
-        onClick={() => {
-          navigate(pathGenerator.AddSubject);
-        }}
-        style={{
-          position: 'fixed',
-          right: 100,
-          zIndex: 100,
-          backgroundColor: colors.orange
-        }}>
-        Dodaj przedmiot
-      </Button>
     </>
   );
 };

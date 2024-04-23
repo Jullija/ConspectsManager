@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Modal } from 'semantic-ui-react';
+import { Button, Grid, Modal } from 'semantic-ui-react';
 import { useItem } from '../../context/ItemContext';
 import { useClipboard } from '../../context/ClipboardContext';
 import axios from 'axios';
@@ -7,12 +7,12 @@ import getToken from '../../utils/tokenManager';
 import { File } from '../../utils/types';
 interface EditBarProps {
   onChange: () => void;
-  goBack: () => void; // New prop for going back
-  accessRights: () => void; // New prop for accessing rights
+  goBack: () => void;
+  accessRights: () => void;
   subjectId: number;
   editionId: number;
   canEdit: boolean;
-  canShare: boolean; // New prop to control access rights editing
+  canShare: boolean;
 }
 
 const baseUrl = 'http://localhost:8000';
@@ -106,33 +106,38 @@ const EditBar: React.FC<EditBarProps> = ({
   };
 
   return (
-    <div
-      style={{
-        marginBottom: '20px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between'
-      }}>
-      <div>
-        <Button onClick={goBack} icon="arrow left" content="Back to Subject" />
-        {canEdit && selectedItem && <Button onClick={handleCopy} icon="copy" content="Copy" />}
-        {canEdit && selectedItem && <Button onClick={handleCut} icon="cut" content="Cut" />}
-        {canEdit && selectedItem && (
-          <Button onClick={() => setDeleteConfirmOpen(true)} icon="delete" content="Delete" />
-        )}
-        {selectedItem && itemType === 'file' && (
-          <Button onClick={handleDownload} icon="download" content="Download File" />
-        )}
-        {canShare && <Button onClick={accessRights} icon="privacy" content="Access Rights" />}
-      </div>
-      <div>
-        Edition: {subjectId} | ID: {editionId}
-      </div>
-      {clipboardItem && (
-        <div style={{ marginTop: '10px' }}>
-          <strong>Clipboard:</strong> {clipboardItem.item.name} - {actionType?.toUpperCase()}
-        </div>
-      )}
+    <Grid>
+      <Grid.Row>
+        <Grid.Column width={7}>
+          <Button onClick={goBack} icon="arrow left" content="Back to Subject" />
+          {canEdit && selectedItem && <Button onClick={handleCopy} icon="copy" content="Copy" />}
+          {canEdit && selectedItem && <Button onClick={handleCut} icon="cut" content="Cut" />}
+          {canEdit && selectedItem && (
+            <Button onClick={() => setDeleteConfirmOpen(true)} icon="delete" content="Delete" />
+          )}
+          {selectedItem && itemType === 'file' && (
+            <Button onClick={handleDownload} icon="download" content="Download File" />
+          )}
+          {canShare && <Button onClick={accessRights} icon="privacy" content="Access Rights" />}
+        </Grid.Column>
+
+        <Grid.Column width={2} textAlign="center">
+          <div style={{ marginTop: '10px', fontWeight: 'bold', fontSize: '1.2em' }}>
+            {selectedItem ? selectedItem.name : 'No Item Selected'}
+          </div>
+        </Grid.Column>
+
+        <Grid.Column width={7} textAlign="right">
+          {clipboardItem && (
+            <div style={{ marginTop: '10px' }}>
+              <strong>Clipboard:</strong> {clipboardItem.item.name} - {actionType?.toUpperCase()}
+            </div>
+          )}
+          <div style={{ marginTop: '10px' }}>
+            Edition: {subjectId} | ID: {editionId}
+          </div>
+        </Grid.Column>
+      </Grid.Row>
 
       <Modal
         open={deleteConfirmOpen}
@@ -152,7 +157,7 @@ const EditBar: React.FC<EditBarProps> = ({
           </Button>
         </Modal.Actions>
       </Modal>
-    </div>
+    </Grid>
   );
 };
 

@@ -1,56 +1,17 @@
-import { Accordion, Grid, Icon, Segment } from 'semantic-ui-react';
-import { PermissionType, PermissionTypeEditable, File } from '../../utils/types';
+import { Grid, Segment } from 'semantic-ui-react';
+import { PermissionTypeEditable, File } from '../../utils/types';
 import MarkdownFile from './MarkdownFile';
 import TextFileComponent from './TextFileComponent';
 import getToken from '../../utils/tokenManager';
-import { useState } from 'react';
 
 interface FileContentViewProps {
   selectedFile: File;
   onChange: () => void;
 }
 
-const viewablePermissions: PermissionType[] = ['view', 'owns', 'edit', 'admin'];
 const editablePermissions: PermissionTypeEditable[] = ['owns', 'edit', 'admin'];
 
-const FileContentView = ({ selectedFile, onChange }: FileContentViewProps): JSX.Element => {
-  const [activeIndex, setActiveIndex] = useState(-1);
-
-  const handleClick = () => {
-    setActiveIndex(activeIndex === 0 ? -1 : 0);
-  };
-
-  const renderFileDetails = () => {
-    return (
-      <>
-        <h3>
-          {selectedFile?.name}.{selectedFile?.extension}
-        </h3>
-        <p>
-          <strong>Can be edited:</strong>{' '}
-          {selectedFile &&
-          selectedFile.user_permission &&
-          editablePermissions.includes(selectedFile.user_permission as PermissionTypeEditable) &&
-          selectedFile.can_be_edited
-            ? 'Yes'
-            : 'No'}
-        </p>
-        <p>
-          <strong>Can be previewed:</strong>{' '}
-          {selectedFile &&
-          selectedFile.user_permission &&
-          viewablePermissions.includes(selectedFile.user_permission as PermissionType) &&
-          selectedFile.can_be_previewed
-            ? 'Yes'
-            : 'No'}
-        </p>
-        <p>
-          <strong>Is attachment:</strong> {selectedFile?.is_attachment ? 'Yes' : 'No'}
-        </p>
-      </>
-    );
-  };
-
+const FileContentView = ({ selectedFile }: FileContentViewProps): JSX.Element => {
   const handleSave = async (updatedBase64Content: string) => {
     try {
       const token = getToken();
@@ -82,7 +43,6 @@ const FileContentView = ({ selectedFile, onChange }: FileContentViewProps): JSX.
       return <p>No file selected.</p>;
     }
 
-    const fileDetails = renderFileDetails();
     switch (selectedFile.extension) {
       case 'txt':
         return (
@@ -131,10 +91,8 @@ const FileContentView = ({ selectedFile, onChange }: FileContentViewProps): JSX.
             data={pdfDataUrl}
             type="application/pdf"
             width="100%"
-            height="500px"
-            style={{ minHeight: '500px' }}>
-            {' '}
-            PDF cannot be displayed, download it{' '}
+            style={{ minHeight: '500px', height: '77vh' }}>
+            PDF cannot be displayed, download it
             <a href={pdfDataUrl} download={`${selectedFile.name}.pdf`}>
               here
             </a>
@@ -156,43 +114,6 @@ const FileContentView = ({ selectedFile, onChange }: FileContentViewProps): JSX.
 
   return (
     <Grid celled="internally">
-      {selectedFile && (
-        <Grid.Row>
-          <Grid.Column width={16}>
-            <Accordion fluid styled>
-              <Accordion.Title active={activeIndex === 0} onClick={handleClick}>
-                <Icon name="dropdown" />
-                {selectedFile.name}.{selectedFile.extension}
-              </Accordion.Title>
-              <Accordion.Content active={activeIndex === 0}>
-                <p>
-                  <strong>Can be edited:</strong>{' '}
-                  {selectedFile &&
-                  selectedFile.user_permission &&
-                  editablePermissions.includes(
-                    selectedFile.user_permission as PermissionTypeEditable
-                  ) &&
-                  selectedFile.can_be_edited
-                    ? 'Yes'
-                    : 'No'}
-                </p>
-                <p>
-                  <strong>Can be previewed:</strong>{' '}
-                  {selectedFile &&
-                  selectedFile.user_permission &&
-                  viewablePermissions.includes(selectedFile.user_permission as PermissionType) &&
-                  selectedFile.can_be_previewed
-                    ? 'Yes'
-                    : 'No'}
-                </p>
-                <p>
-                  <strong>Is attachment:</strong> {selectedFile.is_attachment ? 'Yes' : 'No'}
-                </p>
-              </Accordion.Content>
-            </Accordion>
-          </Grid.Column>
-        </Grid.Row>
-      )}
       <Grid.Row>
         <Grid.Column width={16}>
           <Segment>

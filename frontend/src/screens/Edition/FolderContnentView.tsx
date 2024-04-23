@@ -144,6 +144,7 @@ const FolderContentView: React.FC<FolderContentViewProps> = ({
           setFileToUpload({
             content: base64,
             name: file.name.split('.').slice(0, -1).join('.'),
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             extension: file.name.split('.').pop()!
           });
         }

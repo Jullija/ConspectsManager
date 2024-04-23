@@ -3,6 +3,8 @@ from django.db import IntegrityError
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from drf_yasg import openapi
+import os
+import zipfile
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
@@ -16,6 +18,36 @@ from conspects.serializers import CourseSerializer, EditionSerializer, FolderSer
 from users.models import UserEdition, PermissionType
 from .models import File, Template
 from .serializers import FileSerializer, TemplateSerializer
+
+
+def export_edition_as_zip(request, edition_id):
+    try:
+        edition = Edition.objects.get(pk=edition_id)
+        response = HttpResponse(content_type='application/zip')
+        response['Content-Disposition'] = f'attachment; filename={edition.name}.zip'
+
+        with zipfile.ZipFile(response, 'w') as zip_file:
+            add_edition_to_zip(zip_file, edition)
+
+        return response
+    except Edition.DoesNotExist:
+        return HttpResponse("Edition not found", status=404)
+
+
+def add_edition_to_zip(zip_file, edition):
+    for folder in edition.edition_folders.all():
+        add_folder_to_zip(zip_file, folder, folder_path=folder.name)
+
+
+def add_folder_to_zip(zip_file, folder, folder_path):
+    # Add folder to ZIP file
+    for file in folder.folder_files.all():
+        file_path = os.path.join(folder_path, file.name + '.' + file.extension)
+        zip_file.writestr(file_path, file.content)
+
+    for child in folder.folder_children.all():
+        child_folder_path = os.path.join(folder_path, child.name)
+        add_folder_to_zip(zip_file, child, folder_path=child_folder_path)
 
 
 class ConceptsViewSet(viewsets.ViewSet):

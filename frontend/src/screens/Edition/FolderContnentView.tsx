@@ -195,7 +195,7 @@ const FolderContentView: React.FC<FolderContentViewProps> = ({
 
       {/* Modal for adding folder */}
       <Modal open={isFolderModalOpen} onClose={() => setFolderModalOpen(false)} size="small">
-        <Header icon="folder" content="Dodaj nowy folder" />
+        <Header icon="folder" content="Dodaj Nowy Folder" />
         <Modal.Content>
           <Form>
             <Form.Field>
@@ -218,7 +218,7 @@ const FolderContentView: React.FC<FolderContentViewProps> = ({
       </Modal>
 
       <Modal open={isUploadModalOpen} onClose={() => setUploadModalOpen(false)} size="small">
-        <Header icon="upload" content="Prześlij plik" />
+        <Header icon="upload" content="Prześlij Plik" />
         <Modal.Content>
           <Form>
             <Form.Field>

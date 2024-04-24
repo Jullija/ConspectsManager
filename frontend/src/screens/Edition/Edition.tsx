@@ -68,7 +68,7 @@ const Edition = () => {
                   }}>
                   {loading ? (
                     <Dimmer active inverted style={{ minHeight: '100px' }}>
-                      <Loader>Ładowanie stuktury folderu</Loader>
+                      <Loader>Ładowanie Stuktury Folderu</Loader>
                     </Dimmer>
                   ) : (
                     edition && <FolderStructure folders={edition.folders || []} />

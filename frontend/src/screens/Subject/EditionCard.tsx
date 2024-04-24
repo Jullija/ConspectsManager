@@ -51,7 +51,7 @@ const EditionCard = ({
     } catch (error) {
       navigate(
         pathGenerator.ErrorPage(
-          axios.isAxiosError(error) ? JSON.stringify(error.response?.data) : 'coś poszło nie tak :('
+          axios.isAxiosError(error) ? JSON.stringify(error.response?.data) : 'Coś poszło nie tak :('
         )
       );
     }
@@ -146,19 +146,19 @@ const EditionCard = ({
       </Card.Content>
 
       <Modal open={showDuplicateModal} onClose={() => setShowDuplicateModal(false)} size="tiny">
-        <Modal.Header>Kopiuj edycję</Modal.Header>
+        <Modal.Header>Kopiuj Edycję</Modal.Header>
         <Modal.Content>
           <Form>
             <Form.Field>
-              <label>Nazwa edycji</label>
+              <label>Nazwa Edycji</label>
               <Input
                 value={newEditionName}
                 onChange={(e) => setNewEditionName(e.target.value)}
-                placeholder="podaj nazwę nowej edycji"
+                placeholder="Podaj nazwę nowej edycji"
               />
             </Form.Field>
             <Form.Field>
-              <label>Rok edycji</label>
+              <label>Rok Edycji</label>
               <Input
                 type="number"
                 value={newEditionYear}

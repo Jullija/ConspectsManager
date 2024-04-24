@@ -31,9 +31,6 @@ const TemplatesList = () => {
 
   return (
     <>
-      <div style={{ fontSize: titleFontSize, color: colors.darkblue, padding: '20px 0px' }}>
-        Templates
-      </div>
       <div
         style={{
           display: 'flex',

@@ -41,7 +41,7 @@ const EditionCard = ({
       refetch();
     } catch (error) {
       console.error('Failed to duplicate the edition:', error);
-      alert('Error duplicating the edition.');
+      alert('Błąd kopiowania edycji.');
     }
   };
 
@@ -51,9 +51,7 @@ const EditionCard = ({
     } catch (error) {
       navigate(
         pathGenerator.ErrorPage(
-          axios.isAxiosError(error)
-            ? JSON.stringify(error.response?.data)
-            : 'Something went wrong :('
+          axios.isAxiosError(error) ? JSON.stringify(error.response?.data) : 'Coś poszło nie tak :('
         )
       );
     }
@@ -90,7 +88,7 @@ const EditionCard = ({
       URL.revokeObjectURL(downloadUrl);
     } catch (error) {
       console.error('Failed to download the file:', error);
-      alert('Failed to download the file.');
+      alert('Błąd pobierania pliku.');
     } finally {
       setLoading(false);
     }
@@ -111,7 +109,7 @@ const EditionCard = ({
                   icon
                   color="blue"
                   onClick={() => navigate(pathGenerator.Edition(subjectId, edition.id))}>
-                  <Icon name="eye" /> View
+                  <Icon name="eye" /> Widok
                 </Button>
               )}
               {hasEditPermission && (
@@ -119,28 +117,28 @@ const EditionCard = ({
                   icon
                   color="orange"
                   onClick={() => navigate(pathGenerator.Edition(subjectId, edition.id))}>
-                  <Icon name="edit" /> Edit
+                  <Icon name="edit" /> Edytuj
                 </Button>
               )}
               {hasEditPermission && (
                 <Button icon color="red" onClick={() => setShowConfirmationModal(true)}>
-                  <Icon name="delete" /> Delete
+                  <Icon name="delete" /> Usuń
                 </Button>
               )}
             </Grid.Column>
             <Grid.Column textAlign="right">
               <Button color="teal" onClick={handleAddTemplate}>
-                <Icon name="save" /> Save Template
+                <Icon name="save" /> Zapisz Templatkę
               </Button>
               <Button color="grey" onClick={() => setShowDuplicateModal(true)}>
-                <Icon name="copy" /> Copy Edition
+                <Icon name="copy" /> Kopiuj Edycję
               </Button>
               <Button color="olive" onClick={downloadEdition}>
-                <Icon name="download" /> Download ZIP
+                <Icon name="download" /> Pobierz ZIP
               </Button>
               {/* Loading indicator */}
               <Dimmer active={loading} inverted>
-                <Loader>Loading</Loader>
+                <Loader>Ładowanie</Loader>
               </Dimmer>
             </Grid.Column>
           </Grid>
@@ -148,34 +146,34 @@ const EditionCard = ({
       </Card.Content>
 
       <Modal open={showDuplicateModal} onClose={() => setShowDuplicateModal(false)} size="tiny">
-        <Modal.Header>Duplicate Edition</Modal.Header>
+        <Modal.Header>Kopiuj Edycję</Modal.Header>
         <Modal.Content>
           <Form>
             <Form.Field>
-              <label>Edition Name</label>
+              <label>Nazwa Edycji</label>
               <Input
                 value={newEditionName}
                 onChange={(e) => setNewEditionName(e.target.value)}
-                placeholder="Enter new edition name"
+                placeholder="Podaj nazwę nowej edycji"
               />
             </Form.Field>
             <Form.Field>
-              <label>Edition Year</label>
+              <label>Rok Edycji</label>
               <Input
                 type="number"
                 value={newEditionYear}
                 onChange={(e) => setNewEditionYear(parseInt(e.target.value, 10))}
-                placeholder="Enter new edition year"
+                placeholder="Podaj rok nowej edycji"
               />
             </Form.Field>
           </Form>
         </Modal.Content>
         <Modal.Actions>
           <Button color="red" onClick={() => setShowDuplicateModal(false)}>
-            Cancel
+            Anuluj
           </Button>
           <Button color="green" onClick={duplicateEdition}>
-            Duplicate
+            Kopiuj
           </Button>
         </Modal.Actions>
       </Modal>

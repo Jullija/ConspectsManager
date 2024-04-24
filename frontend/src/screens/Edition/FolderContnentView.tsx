@@ -64,10 +64,10 @@ const FolderContentView: React.FC<FolderContentViewProps> = ({
     } catch (error: unknown) {
       if (error instanceof Error) {
         console.error('Failed to paste item:', error.message);
-        setErrorMessage(`Failed to paste item: ${error.message}`);
+        setErrorMessage(`Nie udało się wkleić pliku: ${error.message}`);
       } else {
         console.error('Failed to paste item:', error);
-        setErrorMessage('Failed to paste item due to an unexpected error.');
+        setErrorMessage('Nie udało się wkleić pliku: powód nieznany');
       }
     }
   };
@@ -155,29 +155,29 @@ const FolderContentView: React.FC<FolderContentViewProps> = ({
     <Segment>
       {canEdit && (
         <>
-          <Button onClick={() => setFileModalOpen(true)}>Add File</Button>
-          <Button onClick={() => setFolderModalOpen(true)}>Add Folder</Button>
-          <Button onClick={() => setUploadModalOpen(true)}>Upload File</Button>
-          {clipboardItem && <Button onClick={handlePaste}>Paste</Button>}
+          <Button onClick={() => setFileModalOpen(true)}>Dodaj Plik</Button>
+          <Button onClick={() => setFolderModalOpen(true)}>Dodaj Folder</Button>
+          <Button onClick={() => setUploadModalOpen(true)}>Prześlij Plik</Button>
+          {clipboardItem && <Button onClick={handlePaste}>Wklej</Button>}
         </>
       )}
 
       {/* Modal for adding file */}
       <Modal open={isFileModalOpen} onClose={() => setFileModalOpen(false)} size="small">
-        <Header icon="file" content="Add New File" />
+        <Header icon="file" content="Dodaj nowy plik" />
         <Modal.Content>
           <Form>
             <Form.Field>
-              <label>File Name</label>
+              <label>Nazwa Pliku</label>
               <Input
-                placeholder="Enter file name"
+                placeholder="Podaj nazwę pliku"
                 onChange={(e) => setNewFileName(e.target.value)}
               />
             </Form.Field>
             <Form.Field>
-              <label>File Extension</label>
+              <label>Rozszerzenie Pliku</label>
               <Input
-                placeholder="Enter file extension"
+                placeholder="Podaj rozszerzenie pliku"
                 onChange={(e) => setNewFileExtension(e.target.value)}
               />
             </Form.Field>
@@ -185,23 +185,23 @@ const FolderContentView: React.FC<FolderContentViewProps> = ({
         </Modal.Content>
         <Modal.Actions>
           <Button color="red" onClick={() => setFileModalOpen(false)}>
-            Cancel
+            Anuluj
           </Button>
           <Button color="green" onClick={handleAddFile}>
-            Add File
+            Dodaj Plik
           </Button>
         </Modal.Actions>
       </Modal>
 
       {/* Modal for adding folder */}
       <Modal open={isFolderModalOpen} onClose={() => setFolderModalOpen(false)} size="small">
-        <Header icon="folder" content="Add New Folder" />
+        <Header icon="folder" content="Dodaj Nowy Folder" />
         <Modal.Content>
           <Form>
             <Form.Field>
-              <label>Folder Name</label>
+              <label>Nazwa Folderu</label>
               <Input
-                placeholder="Enter folder name"
+                placeholder="Podaj nazwę folderu"
                 onChange={(e) => setNewFolderName(e.target.value)}
               />
             </Form.Field>
@@ -209,41 +209,41 @@ const FolderContentView: React.FC<FolderContentViewProps> = ({
         </Modal.Content>
         <Modal.Actions>
           <Button color="red" onClick={() => setFolderModalOpen(false)}>
-            Cancel
+            Anuluj
           </Button>
           <Button color="green" onClick={handleAddFolder}>
-            Add Folder
+            Dodaj Folder
           </Button>
         </Modal.Actions>
       </Modal>
 
       <Modal open={isUploadModalOpen} onClose={() => setUploadModalOpen(false)} size="small">
-        <Header icon="upload" content="Upload File" />
+        <Header icon="upload" content="Prześlij Plik" />
         <Modal.Content>
           <Form>
             <Form.Field>
-              <label>Select File</label>
+              <label>Wybierz Plik</label>
               <Input type="file" onChange={handleFileChange} />
             </Form.Field>
           </Form>
         </Modal.Content>
         <Modal.Actions>
           <Button color="red" onClick={() => setUploadModalOpen(false)}>
-            Cancel
+            Anuluj
           </Button>
           <Button color="green" onClick={handleUploadFile}>
-            Upload
+            Prześlij
           </Button>
         </Modal.Actions>
       </Modal>
       <Modal open={!!errorMessage} onClose={closeModal} size="small">
-        <Header icon="exclamation triangle" content="Error" />
+        <Header icon="exclamation triangle" content="Błąd" />
         <Modal.Content>
           <p>{errorMessage}</p>
         </Modal.Content>
         <Modal.Actions>
           <Button color="red" onClick={closeModal}>
-            Close
+            Zamknij
           </Button>
         </Modal.Actions>
       </Modal>

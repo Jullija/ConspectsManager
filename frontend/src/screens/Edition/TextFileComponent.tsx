@@ -41,7 +41,7 @@ const TextFileComponent: React.FC<TextFileComponentProps> = ({ file, onSave, can
         />
         {canEdit && (
           <Button onClick={handleSave} primary>
-            Save
+            Zapisz
           </Button>
         )}
       </Form>

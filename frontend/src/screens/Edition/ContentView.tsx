@@ -13,7 +13,7 @@ const ContentView: React.FC<ContentViewProps> = ({ onChange, canEdit }) => {
   const { selectedItem, itemType } = useItem();
 
   if (!selectedItem) {
-    return <div>No item selected</div>;
+    return <div>Element nie został wybrany</div>;
   }
 
   switch (itemType) {
@@ -28,7 +28,7 @@ const ContentView: React.FC<ContentViewProps> = ({ onChange, canEdit }) => {
         />
       );
     default:
-      return <div>Invalid item type</div>;
+      return <div>Zły typ elementu</div>;
   }
 };
 

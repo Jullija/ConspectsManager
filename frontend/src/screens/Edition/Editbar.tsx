@@ -105,34 +105,34 @@ const EditBar: React.FC<EditBarProps> = ({
     <Grid>
       <Grid.Row>
         <Grid.Column width={7}>
-          <Button onClick={goBack} icon="arrow left" content="Back to Subject" />
-          {canEdit && selectedItem && <Button onClick={handleCopy} icon="copy" content="Copy" />}
-          {canEdit && selectedItem && <Button onClick={handleCut} icon="cut" content="Cut" />}
+          <Button onClick={goBack} icon="arrow left" content="Wróć do przedmiotu" />
+          {canEdit && selectedItem && <Button onClick={handleCopy} icon="copy" content="Kopiuj" />}
+          {canEdit && selectedItem && <Button onClick={handleCut} icon="cut" content="Wytnij" />}
           {canEdit && selectedItem && (
-            <Button onClick={() => setDeleteConfirmOpen(true)} icon="delete" content="Delete" />
+            <Button onClick={() => setDeleteConfirmOpen(true)} icon="delete" content="Usuń" />
           )}
           {selectedItem && itemType === 'file' && (
-            <Button onClick={handleDownload} icon="download" content="Download File" />
+            <Button onClick={handleDownload} icon="download" content="Pobierz Plik" />
           )}
-          {canShare && <Button onClick={accessRights} icon="privacy" content="Access Rights" />}
+          {canShare && <Button onClick={accessRights} icon="privacy" content="Prawa Dostępu" />}
         </Grid.Column>
 
         <Grid.Column width={2} textAlign="center">
           <div style={{ marginTop: '10px', fontWeight: 'bold', fontSize: '1.2em' }}>
-            {selectedItem ? selectedItem.name : 'No Item Selected'}
+            {selectedItem ? selectedItem.name : 'Nie wybrano elementu'}
           </div>
         </Grid.Column>
 
         <Grid.Column width={4} textAlign="right">
           {clipboardItem && (
             <div style={{ marginTop: '10px' }}>
-              <strong>Clipboard:</strong> {clipboardItem.item.name} - {actionType?.toUpperCase()}
+              <strong>Schowek:</strong> {clipboardItem.item.name} - {actionType?.toUpperCase()}
             </div>
           )}
         </Grid.Column>
         <Grid.Column width={3} textAlign="right">
           <div style={{ marginTop: '10px' }}>
-            Edition: {subjectId} | ID: {editionId}
+            Edycja: {subjectId} | ID: {editionId}
           </div>
         </Grid.Column>
       </Grid.Row>
@@ -142,16 +142,16 @@ const EditBar: React.FC<EditBarProps> = ({
         onClose={() => setDeleteConfirmOpen(false)}
         size="small"
         dimmer="blurring">
-        <Modal.Header>Delete Item</Modal.Header>
+        <Modal.Header>Usuń element</Modal.Header>
         <Modal.Content>
-          <p>Are you sure you want to delete this item?</p>
+          <p>Jesteś pewien/a, że chcesz usunąć ten element?</p>
         </Modal.Content>
         <Modal.Actions>
           <Button negative onClick={() => setDeleteConfirmOpen(false)}>
-            No
+            Nie
           </Button>
           <Button positive onClick={handleDelete}>
-            Yes
+            Tak
           </Button>
         </Modal.Actions>
       </Modal>

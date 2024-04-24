@@ -35,7 +35,7 @@ const FileContentView = ({ selectedFile }: FileContentViewProps): JSX.Element =>
   };
   const renderFileContent = () => {
     if (!selectedFile) {
-      return <p>No file selected.</p>;
+      return <p>Nie wybrano pliku.</p>;
     }
 
     switch (selectedFile.extension) {
@@ -87,9 +87,9 @@ const FileContentView = ({ selectedFile }: FileContentViewProps): JSX.Element =>
             type="application/pdf"
             width="100%"
             style={{ minHeight: '500px', height: '77vh' }}>
-            PDF cannot be displayed, download it
+            PDF nie może zostać wyświetlony, pobierz go
             <a href={pdfDataUrl} download={`${selectedFile.name}.pdf`}>
-              here
+              tutaj
             </a>
             .
           </object>
@@ -98,9 +98,9 @@ const FileContentView = ({ selectedFile }: FileContentViewProps): JSX.Element =>
       default:
         return (
           <p>
-            Unsupported file type.{' '}
+            Typ pliku nie jest wspierany.{' '}
             <a href={`data:text/plain;base64,${selectedFile.content}`} download={selectedFile.name}>
-              Download file
+              Pobierz plik
             </a>
           </p>
         );
@@ -112,7 +112,11 @@ const FileContentView = ({ selectedFile }: FileContentViewProps): JSX.Element =>
       <Grid.Row>
         <Grid.Column width={16}>
           <Segment>
-            {selectedFile ? renderFileContent() : <p>Select a file to view its content.</p>}
+            {selectedFile ? (
+              renderFileContent()
+            ) : (
+              <p>Wybierz plik, żeby zobaczyć jego zawartość.</p>
+            )}
           </Segment>
         </Grid.Column>
       </Grid.Row>

@@ -104,7 +104,7 @@ const EditBar: React.FC<EditBarProps> = ({
   return (
     <Grid>
       <Grid.Row>
-        <Grid.Column width={7}>
+        <Grid.Column width={8}>
           <Button onClick={goBack} icon="arrow left" content="Wróć do przedmiotu" />
           {canEdit && selectedItem && <Button onClick={handleCopy} icon="copy" content="Kopiuj" />}
           {canEdit && selectedItem && <Button onClick={handleCut} icon="cut" content="Wytnij" />}
@@ -130,7 +130,7 @@ const EditBar: React.FC<EditBarProps> = ({
             </div>
           )}
         </Grid.Column>
-        <Grid.Column width={3} textAlign="right">
+        <Grid.Column width={2} textAlign="right">
           <div style={{ marginTop: '10px' }}>
             Edycja: {subjectId} | ID: {editionId}
           </div>
